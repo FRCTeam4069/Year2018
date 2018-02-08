@@ -10,28 +10,40 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // The lateral distance between the robot's wheels in meters
     public static final double ROBOT_TRACK_WIDTH_METERS = 0.6;
-
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
-
+    // The factor by which the reciprocal of the error is multiplied to get a speed multiplier
+    private final double CORRECTION_SCALE = 1.5;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.061;
+    // The number of past distances traveled to retain
+    private final int DISTANCES_TRAVELED_HISTORY = 10;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
     private TalonSRXMotor rightDrive;
-
+    // Low pass filters that smooth steering
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
+    // An array of past distances traveled in rotations by each of the wheels
+    private double[] leftWheelDistancesTraveled;
+    private double[] rightWheelDistancesTraveled;
 
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
         leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 1024, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 1024, 18, 20);
-
+        // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
+        // Initialize the arrays of distances traveled with zeroes
+        leftWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY];
+        rightWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY];
+        for (int i = 0; i < DISTANCES_TRAVELED_HISTORY; i++) {
+            leftWheelDistancesTraveled[i] = 0;
+            rightWheelDistancesTraveled[i] = 0;
+        }
     }
 
     // A public getter for the instance
@@ -65,26 +77,19 @@ public class DriveBaseSubsystem extends SubsystemBase {
         rightDrive.stop();
     }
 
-    public void quickTurn(double turn) {
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, 0);
-        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
-        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
-    }
-
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
-        // Use the cheesy drive algorithm to calculate the necessary speeds
+        // Invert turning if the robot is going backwards
         if (speed < 0) {
             turn = -turn;
         }
+        // Use the cheesy drive algorithm to calculate the necessary speeds
         WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
-
-        System.out.println(
-                "left:" + wheelSpeeds.leftWheelSpeed + " right:" + wheelSpeeds.rightWheelSpeed);
-
-        // Set the motor speeds with the calculated values
-        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
-        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
+        // Correct the wheel speeds based on positional errors
+        WheelSpeeds correctedWheelSpeeds = correctSteering(wheelSpeeds);
+        // Set the motor speeds with the corrected values
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(correctedWheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(correctedWheelSpeeds.rightWheelSpeed));
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
@@ -129,6 +134,48 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Multiply the result of the square root by 2 to increase the turning sensitivity
         return Math.sqrt(speed) * 2;
     }
+
+    // Modify a set of wheel speeds to correct for errors that have accumulated due to friction
+    private WheelSpeeds correctSteering(WheelSpeeds rawSpeeds) {
+        // Shift all of the elements in the history of distances down one place to the end
+        for (int i = 1; i < DISTANCES_TRAVELED_HISTORY; i++) {
+            leftWheelDistancesTraveled[i] = leftWheelDistancesTraveled[i - 1];
+            rightWheelDistancesTraveled[i] = rightWheelDistancesTraveled[i - 1];
+        }
+        // Add the current distances traveled by each of the wheels and set the first element of
+        // each of the lists accordingly
+        leftWheelDistancesTraveled[0] = leftDrive.getDistanceTraveledRotations();
+        rightWheelDistancesTraveled[0] = rightDrive.getDistanceTraveledRotations();
+        // Get the number of rotations traveled by each wheel since the beginning of the recorded
+        // history of distances traveled, and calculate the average
+        double leftWheelRotationsTraveled = leftDrive.getDistanceTraveledRotations()
+                - leftWheelDistancesTraveled[DISTANCES_TRAVELED_HISTORY - 1];
+        double rightWheelRotationsTraveled = rightDrive.getDistanceTraveledRotations()
+                - rightWheelDistancesTraveled[DISTANCES_TRAVELED_HISTORY - 1];
+        double averageRotationsTraveled =
+                (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
+        // Calculate the ratios of the distance traveled by each wheel versus the average
+        double leftWheelDistanceRatio = leftWheelRotationsTraveled / averageRotationsTraveled;
+        double rightWheelDistanceRatio = rightWheelRotationsTraveled / averageRotationsTraveled;
+        // Calculate the average speed of the two wheels
+        double averageWheelSpeed = (rawSpeeds.leftWheelSpeed + rawSpeeds.rightWheelSpeed) / 2;
+        // Calculate the ratios of the speed demanded of each wheel versus the average
+        double leftWheelSpeedRatio = rawSpeeds.leftWheelSpeed / averageWheelSpeed;
+        double rightWheelSpeedRatio = rawSpeeds.rightWheelSpeed / averageWheelSpeed;
+        // Calculate the errors of the distance ratios versus the expected speed ratios
+        double leftWheelError = leftWheelDistanceRatio / leftWheelSpeedRatio;
+        double rightWheelError = rightWheelDistanceRatio / rightWheelSpeedRatio;
+        // Multiply the reciprocals of the errors by a scaling factor to get correction factors
+        double leftWheelCorrection = (1 / leftWheelError) * CORRECTION_SCALE;
+        double rightWheelCorrection = (1 / rightWheelError) * CORRECTION_SCALE;
+        // Return the wheel speeds multiplied by the corresponding correction factors
+        return new WheelSpeeds(
+                rawSpeeds.leftWheelSpeed * leftWheelCorrection,
+                rawSpeeds.rightWheelSpeed * rightWheelCorrection
+        );
+    }
+
+    // Get the distance traveled by each of the wheels since
 
     // A wrapper class that contains a speed value for each of the drive base wheels
     private class WheelSpeeds {

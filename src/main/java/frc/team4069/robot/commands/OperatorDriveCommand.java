@@ -50,8 +50,7 @@ class OperatorDriveCommand extends CommandBase {
                 // Get the sign of the angle in order to calculate the direction to turn the wheels
                 double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-//                driveBase.driveContinuousSpeed(turnDirection, 0);
-                driveBase.quickTurn(turnDirection);
+                driveBase.driveContinuousSpeed(turnDirection, 0);
             }
         }
 

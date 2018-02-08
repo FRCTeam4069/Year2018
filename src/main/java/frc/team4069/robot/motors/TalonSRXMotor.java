@@ -1,7 +1,6 @@
 package frc.team4069.robot.motors;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,11 +54,6 @@ public class TalonSRXMotor extends WPI_TalonSRX {
         }
 
         set(ControlMode.PercentOutput, speed);
-    }
-
-    public void setPositionTarget(double rotations) {
-        double ticks = rotations * encoderTicksPerRotation;
-        set(ControlMode.Position, ticks);
     }
 
     public double getDistanceTraveledRotations() {
