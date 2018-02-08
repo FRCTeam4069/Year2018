@@ -7,9 +7,12 @@ import frc.team4069.robot.motors.TalonSRXMotor;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
+    // The maximum number of ticks that the elevator motor can safely reach
     public static final int MAX_POSITION_TICKS = -26901;
+    // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
+    // Motor to control
     private TalonSRXMotor talon;
 
     public int getPosition() {
@@ -19,7 +22,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     private ElevatorSubsystem() {
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
 
+        // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+
+        // Set the feed-forward gain
         talon.config_kF(0, 0.5, 0);
         talon.setSelectedSensorPosition(0, 0, 0);
 
@@ -37,6 +43,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.set(mode, speed);
     }
 
+    // Set the position of the elevator using one of the presets
     public void setPosition(Position position) {
         set(ControlMode.MotionMagic, position.getTicks());
     }
@@ -54,6 +61,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return instance;
     }
 
+    // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
         INTAKE(0),
         EXCHANGE(-3000),

@@ -21,6 +21,10 @@ public class ArmSubsystem extends SubsystemBase {
         talon.stop();
     }
 
+    public void setPosition(double position) {
+        talon.set(ControlMode.Position, position);
+    }
+
     public static ArmSubsystem getInstance() {
         if(instance == null) {
             instance = new ArmSubsystem();

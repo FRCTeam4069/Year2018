@@ -6,28 +6,31 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TalonSRXMotor extends WPI_TalonSRX {
-    public static final int ENCODER_TICKS_PER_ROTATION = 4096;
 
+    private int encoderTicksPerRotation = 4096;
     private Set<TalonSRXMotor> slaves = new HashSet<>();
 
-    public TalonSRXMotor(int deviceNumber, boolean reversed, int... slaveIds) {
+    public TalonSRXMotor(int deviceNumber, boolean reversed, int encoderTicksPerRotation,
+            int... slaveIds) {
         super(deviceNumber);
 
         this.setInverted(reversed);
 
         for(int slaveNumber : slaveIds) {
-            TalonSRXMotor slave = new TalonSRXMotor(slaveNumber, reversed);
+            TalonSRXMotor slave = new TalonSRXMotor(slaveNumber, reversed, encoderTicksPerRotation);
             slave.follow(this);
             slaves.add(slave);
         }
+
+        this.encoderTicksPerRotation = encoderTicksPerRotation;
     }
 
     public TalonSRXMotor(int deviceNumber) {
-        this(deviceNumber, false);
+        this(deviceNumber, false, 4096);
     }
 
     public TalonSRXMotor(int deviceNumber, int... slaves) {
-        this(deviceNumber, false, slaves);
+        this(deviceNumber, false, 4096, slaves);
     }
 
     public boolean isStarted() {
@@ -51,6 +54,6 @@ public class TalonSRXMotor extends WPI_TalonSRX {
 
     public double getDistanceTraveledRotations() {
         double quadPosition = getSensorCollection().getQuadraturePosition();
-        return quadPosition / ENCODER_TICKS_PER_ROTATION;
+        return quadPosition / encoderTicksPerRotation;
     }
 }

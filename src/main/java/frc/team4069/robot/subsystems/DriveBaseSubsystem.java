@@ -15,7 +15,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private static DriveBaseSubsystem instance;
 
     // The number of meters each wheel travels per motor rotation
-    private final double METERS_PER_ROTATION = 0.244;
+    private final double METERS_PER_ROTATION = 0.061;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
@@ -27,8 +27,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 11, 13);
-        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 18, 20);
+        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 1024, 11, 13);
+        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 1024, 18, 20);
 
         leftSideLpf = new LowPassFilter();
         rightSideLpf = new LowPassFilter();

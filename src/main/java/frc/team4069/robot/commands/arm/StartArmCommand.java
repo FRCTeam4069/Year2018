@@ -10,7 +10,8 @@ public class StartArmCommand extends CommandBase {
 
     @Override
     protected void initialize() {
-        arm.start();
+        arm.setPosition(1230);
+        // 150 is the "down" position
     }
 
     @Override
