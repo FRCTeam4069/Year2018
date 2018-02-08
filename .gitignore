@@ -23,7 +23,12 @@ run/
 gradle/.launch/
 
 # OS Files
+<<<<<<< HEAD
 **/.DS_Store
+=======
+.DS_Store
+.DS_Store?
+>>>>>>> master
 ._*
 .Spotlight-V100
 .AppleDouble
@@ -37,6 +42,3 @@ Thumbs.db
 
 # directory for XML generated after running junit tests through ant
 junit/
-
-# OS files
-.DS_Store
