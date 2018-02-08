@@ -30,8 +30,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 1024, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 1024, 18, 20);
 
-        leftSideLpf = new LowPassFilter();
-        rightSideLpf = new LowPassFilter();
+        leftSideLpf = new LowPassFilter(200);
+        rightSideLpf = new LowPassFilter(200);
     }
 
     // A public getter for the instance
@@ -78,6 +78,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
             turn = -turn;
         }
         WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+
+        System.out.println(
+                "left:" + wheelSpeeds.leftWheelSpeed + " right:" + wheelSpeeds.rightWheelSpeed);
 
         // Set the motor speeds with the calculated values
         leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));

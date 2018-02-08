@@ -11,7 +11,7 @@ public class VacuumSubsystem extends SubsystemBase {
     private TalonSRXMotor talon;
 
     private VacuumSubsystem() {
-        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
+        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true, 4096);
     }
 
     public void start() {

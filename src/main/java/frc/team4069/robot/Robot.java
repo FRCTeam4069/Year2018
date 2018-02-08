@@ -17,6 +17,9 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         super.robotInit();
 
+        // Initialize the subsystems
+        CommandBase.init();
+
         // Set up the input class
         Input.init();
 
@@ -25,8 +28,6 @@ public class Robot extends IterativeRobot {
 
         // Get the scheduler
         scheduler = Scheduler.getInstance();
-        // Initialize the subsystems
-        CommandBase.init();
     }
 
     @Override

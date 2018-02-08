@@ -52,6 +52,11 @@ public class TalonSRXMotor extends WPI_TalonSRX {
         set(ControlMode.PercentOutput, speed);
     }
 
+    public void setPositionTarget(double rotations) {
+        double ticks = rotations * encoderTicksPerRotation;
+        set(ControlMode.Position, ticks);
+    }
+
     public double getDistanceTraveledRotations() {
         double quadPosition = getSensorCollection().getQuadraturePosition();
         return quadPosition / encoderTicksPerRotation;
