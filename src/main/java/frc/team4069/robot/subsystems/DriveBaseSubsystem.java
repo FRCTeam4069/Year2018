@@ -88,8 +88,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Correct the wheel speeds based on positional errors
         WheelSpeeds correctedWheelSpeeds = correctSteering(wheelSpeeds);
         // Set the motor speeds with the corrected values
-        leftDrive.setConstantSpeed(leftSideLpf.calculate(correctedWheelSpeeds.leftWheelSpeed));
-        rightDrive.setConstantSpeed(rightSideLpf.calculate(correctedWheelSpeeds.rightWheelSpeed));
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
