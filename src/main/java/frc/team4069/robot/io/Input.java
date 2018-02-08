@@ -15,43 +15,44 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 // Class that provides accessors for joystick inputs and maps them to commands
 public class Input {
 
-    // The main joystick
-    private static XboxController joystick;
+    private static XboxController driveJoystick;
+    private static XboxController controlJoystick;
 
     // Initializer that handles mapping of the joysticks to commands
     public static void init() {
-        // Create the joystick using the port number
-        joystick = new XboxController(IOMapping.JOYSTICK_NUMBER);
+        // Create the joysticks using the port numbers
+        driveJoystick = new XboxController(IOMapping.DRIVE_JOYSTICK);
+        controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
 
         // Map the elevator controls for scale, switch, and exchange
-        Button elevatorToSwitch = new JoystickButton(joystick, IOMapping.BUTTON_B);
+        Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
         elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
-        Button elevatorToExchange = new JoystickButton(joystick, IOMapping.BUTTON_X);
+        Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
         elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
-        Button elevatorToScale = new JoystickButton(joystick, IOMapping.BUTTON_Y);
+        Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
-        Button elevatorToIntake = new JoystickButton(joystick, IOMapping.BUTTON_A);
+        Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
 //        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
         elevatorToIntake.whenPressed(new DebugCommand()); //TODO: Get rid of me when position values are found
 
-        Button winchForward = new JoystickButton(joystick, IOMapping.BUMPER_RIGHT);
+        Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());
         winchForward.whenReleased(new StopWinchCommand());
 
-        Button winchBackward = new JoystickButton(joystick, IOMapping.BUMPER_LEFT);
+        Button winchBackward = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
         winchBackward.whenPressed(new StartWinchCommand(true));
         winchBackward.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
-        Button toggleVacuum = new JoystickButton(joystick, IOMapping.BUTTON_START);
+        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
     public static double getSteeringAxis() {
         // Use the horizontal axis on the left stick
-        double axis = joystick.getX(Hand.kLeft);
+        double axis = driveJoystick.getX(Hand.kLeft);
         // Deadband on the axis ± 0.2 because of joystick drift
         if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
             return 0;
@@ -63,7 +64,7 @@ public class Input {
     // Accessor for the elevator axis on the drive joystick
     public static double getElevatorAxis() {
         // Use the vertical axis on the right stick
-        double axis = joystick.getY(Hand.kRight);
+        double axis = controlJoystick.getY(Hand.kRight);
 
         // Deadband on the axis ± 0.2 because of joystick drift
         if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
@@ -76,8 +77,8 @@ public class Input {
     // Accessor for the drive speed, using the left and right triggers
     public static double getDriveSpeed() {
         // Right trigger controls forward motion, left trigger controls backward motion
-        double forwardMotion = joystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
-        double backwardMotion = -joystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
+        double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
+        double backwardMotion = -driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
         return backwardMotion + forwardMotion;
     }
 
@@ -86,6 +87,6 @@ public class Input {
     // Returns -1 if no input is registered
     public static int getDirectionalPadAngleDegrees() {
         // This functionality is built into the joystick library exactly as described
-        return joystick.getPOV(IOMapping.POV_NUMBER);
+        return driveJoystick.getPOV(IOMapping.POV_NUMBER);
     }
 }
