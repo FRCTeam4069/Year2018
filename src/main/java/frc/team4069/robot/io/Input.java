@@ -54,7 +54,7 @@ public class Input {
         // Use the horizontal axis on the left stick
         double axis = driveJoystick.getX(Hand.kLeft);
         // Deadband on the axis ± 0.2 because of joystick drift
-        if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
+        if(Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
             return 0;
         } else {
             return axis;
@@ -67,7 +67,7 @@ public class Input {
         double axis = controlJoystick.getY(Hand.kRight);
 
         // Deadband on the axis ± 0.2 because of joystick drift
-        if((axis <= 0.2 && axis > 0) || (axis >= -0.2 && axis < 0)) {
+        if(Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
             return 0;
         }else {
             return axis;
