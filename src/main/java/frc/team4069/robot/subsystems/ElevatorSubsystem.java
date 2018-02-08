@@ -15,10 +15,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Motor to control
     private TalonSRXMotor talon;
 
-    public int getPosition() {
-        return talon.getSelectedSensorPosition(0);
-    }
-
     private ElevatorSubsystem() {
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
 
@@ -31,8 +27,25 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
         talon.configForwardSoftLimitThreshold(0, 0);
-        talon.configReverseSoftLimitEnable(true, 0);
-        talon.configForwardSoftLimitEnable(true, 0);
+        talon.configReverseSoftLimitEnable(false, 0);
+        talon.configForwardSoftLimitEnable(false, 0);
+    }
+
+    public static ElevatorSubsystem getInstance() {
+        if (instance == null) {
+            instance = new ElevatorSubsystem();
+        }
+
+        return instance;
+    }
+
+    public int getPosition() {
+        return talon.getSelectedSensorPosition(0);
+    }
+
+    // Set the position of the elevator using one of the presets
+    public void setPosition(Position position) {
+        set(ControlMode.MotionMagic, position.getTicks());
     }
 
     public void stop() {
@@ -43,22 +56,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.set(mode, speed);
     }
 
-    // Set the position of the elevator using one of the presets
-    public void setPosition(Position position) {
-        set(ControlMode.MotionMagic, position.getTicks());
-    }
-
     public void reset() {
         talon.stop();
         talon.setSelectedSensorPosition(0, 0, 0);
-    }
-
-    public static ElevatorSubsystem getInstance() {
-        if (instance == null) {
-            instance = new ElevatorSubsystem();
-        }
-
-        return instance;
     }
 
     // Enum that holds tick values for the various positions that the elevator must go to
