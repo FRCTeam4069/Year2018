@@ -8,7 +8,6 @@ import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.elevator.DebugCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
-import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
@@ -36,7 +35,8 @@ public class Input {
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
+//        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
+        elevatorToIntake.whenPressed(new DebugCommand());
 
         Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());
@@ -47,7 +47,7 @@ public class Input {
         winchBackward.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
-        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
+        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_BACK);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
 
         Button armUp = new JoystickButton(driveJoystick, IOMapping.BUMPER_RIGHT);

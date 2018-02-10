@@ -34,7 +34,8 @@ class OperatorDriveCommand extends CommandBase {
                 ElevatorSubsystem.MAX_POSITION_TICKS);
 
         // Dampen the drive base input if the elevator is raised ~halfway
-        if(Math.abs(elevatorPosition) <= 14600 && Math.abs(elevatorPosition) > 0) {
+        //TODO: Check the values here
+        if(Math.abs(elevatorPosition) <= 16000 && elevatorPosition > 0) {
             speed *= 0.5;
             turningCoefficient *= 0.5;
         }

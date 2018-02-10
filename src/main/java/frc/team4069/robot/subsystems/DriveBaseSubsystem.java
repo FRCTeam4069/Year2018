@@ -85,6 +85,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
+        // Invert the turn if we're in reverse
+        if(speed < 0) {
+            turn = -turn;
+        }
+
         // Wheel speeds that will be set using the drive algorithms
         WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
         // A special case: if the speed is zero, turn on the spot

@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
         Input.init();
 
         // Configure the vision threads (disabled for now)
-        VisionData.configureVision();
+//        VisionData.configureVision();
 
         // Get the scheduler
         scheduler = Scheduler.getInstance();

@@ -20,25 +20,16 @@ public class OperatorControlElevatorCommand extends CommandBase {
     @Override
     protected void execute() {
         // Get the axis of the elevator, scale it down so that it's easier to control
-        double elevatorAxis = Input.getElevatorAxis() * 0.6;
+        double elevatorAxis = Input.getElevatorAxis() * 0.5;
 
         if (elevatorAxis != 0.0) { // Driver is using it
             elevator.setSpeed(elevatorAxis);
-//            System.out.println(elevatorAxis);
-            average.add(elevator.getVelocity());
             set = false;
         } else {
             if (!set) {
                 elevator.setPosition((double) elevator.getPosition() - 500);
                 set = true;
             }
-        }
-
-        if (Input.getDebugPressed()) {
-            System.out.println(average
-                    .stream()
-                    .mapToDouble(a -> a)
-                    .average().orElse(0.0));
         }
     }
 
