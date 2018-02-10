@@ -33,6 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
+        // Soft limits to avoid destruction of hardware
 //        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
 //        talon.configReverseSoftLimitEnable(false, 0);
@@ -52,14 +53,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         return talon.getSelectedSensorPosition(0);
     }
 
-    // Set the position of the elevator using a custom value
-    public void setPosition(double customPosition) {
-        set(ControlMode.MotionMagic, customPosition);
-    }
-
     // Set the position of the elevator using one of the presets
     public void setPosition(Position position) {
         set(ControlMode.MotionMagic, position.getTicks());
+    }
+
+    // Set the position of the elevator using a custom value
+    public void setPosition(double customPosition) {
+        set(ControlMode.MotionMagic, customPosition);
     }
 
     // Set the position of the elevator using one of the presets

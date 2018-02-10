@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
-import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
+import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.vision.ThreadGyro;
@@ -61,8 +61,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         super.autonomousInit();
-        // Drive forward and turn towards the switch
-        scheduler.add(new ZeroElevatorCommand());
+        // Run the autonomous command group, which handles driving, elevator, and vacuum control
+        scheduler.add(new AutonomousCommandGroup());
     }
 
     @Override
