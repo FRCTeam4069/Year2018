@@ -5,12 +5,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
-<<<<<<< HEAD
-import frc.team4069.robot.commands.autonomous.DriveToSwitchCommand;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
-=======
-import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
->>>>>>> b15ed107d4cdfc71240d8bb5ed4a5be7734b64f9
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
