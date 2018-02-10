@@ -1,6 +1,5 @@
 package frc.team4069.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.team4069.robot.io.Input;
 
 public class OperatorControlElevatorCommand extends CommandBase {
@@ -10,7 +9,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
     // Otherwise we set the position with MM and flip it
     private boolean set = true;
 
-    public OperatorControlElevatorCommand() {
+    OperatorControlElevatorCommand() {
         requires(elevator);
     }
 
@@ -20,11 +19,11 @@ public class OperatorControlElevatorCommand extends CommandBase {
         double elevatorAxis = Input.getElevatorAxis() * 0.6;
         System.out.println(elevatorAxis);
         if (elevatorAxis != 0.0) { // Driver is using it
-            elevator.set(ControlMode.PercentOutput, elevatorAxis);
+            elevator.setSpeed(elevatorAxis);
             set = false;
         } else {
             if (!set) {
-                elevator.set(ControlMode.MotionMagic, (double) elevator.getPosition() - 500);
+                elevator.setPosition((double) elevator.getPosition() - 500);
                 set = true;
             }
         }

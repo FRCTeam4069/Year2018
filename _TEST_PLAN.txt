@@ -1,0 +1,100 @@
+
+Requirements for robot elements.
+
+Drive Base:
+        Teleop:
+                all controls must conform and work the way DRIVERS wish.
+                All tele-op controls must meet basic accuracy and objective goals
+                TESTs:(add to as needed)
+                        Driver will test the following (add to as needed)
+                        1. Drive forward
+                        2. Drive reverse
+                        3. Turn in place left
+                        4. Turn in place right
+                        5. Drive forward with controlable curve to left and or right.
+                        6. Accuratly drive forward > 1 meter and stop within 10 cm of desired position.
+                        7. Accuratly turn 90 degrees in both directions to within 5 degrees of accuracy.
+
+        Auto:
+                1. Drive forward N centimeters, start with 100, accuracy to within 5%
+                2. Turn 90 degrees left/right, accuracy to within 5%
+                3. Drive backwards N centimeters
+                4. Drive forward 2 meter, turn left 90deg drive 2 meter turn left 90 deg, drive 2 meter
+                   turn left 90 deg drive 2 meter. Should end up within 25 cm of start position.
+                5. Same test at 4 but with turn right
+                6. Same tests as 4&5 but in reverse
+                7. Same tests as 4 but doing 45 degree turns and doubling the drive straights
+
+
+Elevator:
+        Elevator must have limit switch at bottom, at startup robot must move elevator SLOWLY to 
+        limit and zero encoder.
+        Teleop:
+                all controls must conform and work the way DRIVERS wish.
+
+               TESTS;
+                1. elevator moves to zero position at rio startup, and zeros encoder.
+                2. elevator can move smoothly and at reasonable speed to 4 pre-defined
+                   positions  POS0 - POS3,controls for these will be determined by drivers/Mr. Monti.
+                3. Upper limit is never exceeded
+
+        Auto:
+                1. Can move between 4 presets POS0-POS4 as commanded
+                   sets flag when it is in position.
+
+Arm:
+        Arm must have limit switch in its retracted (safe) position.
+        At startup robot will SLOWLY move arm to limit switch and zero encoders.
+        Robot must stop arm from moving against limit switch, but allow movement away
+        from switch.
+        Teleop:
+                all controls must conform and work the way DRIVERS wish.
+
+                TESTS:
+                1. Arm should have at least 2 positions, retracted (safe) and deployed.
+                2. Driver controls should move smoothly between these positions.
+
+        Auto:
+                There is no elements for auto with the arm.
+
+Winch:
+        Winch is the one case where we assume a wound position upon startup, there is no
+        safety for this.  It is fully operator controlled.
+
+        Teleop:
+                all controls must conform and work the way DRIVERS wish.
+                1. Wind
+                2. Unwind.
+
+
+
+************** AUTONOMOUS WISHLIST ******************************8
+
+General : 
+        There are 6 possible auto start/destinations,3 starting, 2 ending,
+        we must have code for each start/end position.
+
+        On startup we grab the data from the field control system saying which
+        side our teams switch/scale is set too.
+
+        Given this info and our start position we know which of the 6 auto-routines to
+        do.
+        
+Basic Sequence:
+        At startup, the robot should first engauge the vacuum and pickup cube, moving
+        a mid point on the elevator which is 'good' for driving.
+        the robot should proceed from its position to a location where the
+        reflective tape/lights are visible on the switch.  
+
+        It should then move to the reflective tape within N centimeters, of the reflective
+        barrier.
+
+        It should raise the cube to deploy height if not already there...
+        It should move close enough to drop cube
+        It should drop cube and stop.
+
+Vision:
+        1. Robot can 'see' reflective tape, turn towards it and drive to within 25cm of it.
+
+
+

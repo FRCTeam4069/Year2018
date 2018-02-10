@@ -11,6 +11,8 @@ public class IOMapping {
     // CAN bus ports for the drive motors
     public static final int LEFT_DRIVE_CAN_BUS = 12;
     public static final int RIGHT_DRIVE_CAN_BUS = 19;
+    // Limit switch digital input numbers
+    public static final int ELEVATOR_LIMIT_SWITCH = 1;
 
     // The port numbers of the joysticks
     static final int DRIVE_JOYSTICK = 0;
