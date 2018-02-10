@@ -3,6 +3,11 @@ package frc.team4069.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team4069.robot.commands.CommandBase;
+import frc.team4069.robot.commands.OperatorControlCommandGroup;
+import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
+import frc.team4069.robot.io.Input;
+import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.vision.ThreadGyro;
 import frc.team4069.robot.vision.ThreadLIDAR;
 import frc.team4069.robot.vision.ThreadVideoCapture;
@@ -28,13 +33,10 @@ public class Robot extends IterativeRobot {
         super.robotInit();
 
         // Initialize the subsystems
-//        CommandBase.init();
+        CommandBase.init();
 
         // Set up the input class
-//        Input.init();
-
-        // Configure the vision threads (disabled for now)
-        // VisionData.configureVision();
+        Input.init();
 
         // Get the scheduler
         scheduler = Scheduler.getInstance();
@@ -56,32 +58,32 @@ public class Robot extends IterativeRobot {
         threadVisionProcessorHandle.start();
     }
 
-//    @Override
-//    public void autonomousInit() {
-//        super.autonomousInit();
-//        // Drive forward and turn towards the switch
-//        scheduler.add(new ZeroElevatorCommand());
-//    }
-//
-//    @Override
-//    public void teleopInit() {
-//        super.teleopInit();
-//        // Remove all commands from the scheduler so no autonomous tasks continue running
-//        scheduler.removeAll();
-//        // Add an operator control command group to the scheduler, which should never exit
-//        scheduler.add(new OperatorControlCommandGroup());
-//    }
-//
-//    @Override
-//    public void disabledInit() {
-//        // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
-//        ElevatorSubsystem.getInstance().reset();
-//    }
+    @Override
+    public void autonomousInit() {
+        super.autonomousInit();
+        // Drive forward and turn towards the switch
+        scheduler.add(new ZeroElevatorCommand());
+    }
+
+    @Override
+    public void teleopInit() {
+        super.teleopInit();
+        // Remove all commands from the scheduler so no autonomous tasks continue running
+        scheduler.removeAll();
+        // Add an operator control command group to the scheduler, which should never exit
+        scheduler.add(new OperatorControlCommandGroup());
+    }
+
+    @Override
+    public void disabledInit() {
+        // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
+        ElevatorSubsystem.getInstance().reset();
+    }
 
     // During all phases, run the command scheduler
     private void universalPeriodic() {
         sendDataToSmartDashboard();
-//        scheduler.run();
+        scheduler.run();
     }
 
     @Override
@@ -96,24 +98,20 @@ public class Robot extends IterativeRobot {
         universalPeriodic();
     }
 
-    /**
-     * Update smart dashboard every 1 second
-     */
+    // Update smart dashboard every 1 second
     private void sendDataToSmartDashboard() {
-        long deltat = System.currentTimeMillis() - mLastDashboardUpdateTime;
-        if (deltat > 1000) {
-            SmartDashboard
-                    .putNumber("AUTOTARGET XPOS: ",
-                            threadVisionProcessorInstance.cregions.mXGreenLine);
+        long deltaTime = System.currentTimeMillis() - mLastDashboardUpdateTime;
+        if (deltaTime > 1000) {
+            mLastDashboardUpdateTime = System.currentTimeMillis();
+            SmartDashboard.putNumber("AUTOTARGET XPOS: ",
+                    threadVisionProcessorInstance.cregions.mXGreenLine);
             SmartDashboard.putNumber("Auto TARGET Enabled: ",
                     threadVisionProcessorInstance.cregions.mTargetVisible);
             SmartDashboard.putNumber("XCENTER",
                     threadVisionProcessorInstance.cregions.mXGreenLine);
-            SmartDashboard
-                    .putNumber("NumContours:",
-                            threadVisionProcessorInstance.cregions.mContours.size());
+            SmartDashboard.putNumber("NumContours:",
+                    threadVisionProcessorInstance.cregions.mContours.size());
             SmartDashboard.putNumber("MAPPED:", threadVisionProcessorInstance.lastMapped);
-            mLastDashboardUpdateTime = System.currentTimeMillis();
             SmartDashboard.putNumber("LAST HEADING:", threadGyroInstance.lastHeading);
             SmartDashboard.putNumber("LIDAR Angle:", threadLIDARInstance.lastAngle);
             SmartDashboard.putNumber("LIDAR SS", threadLIDARInstance.lastSignalStrength);
