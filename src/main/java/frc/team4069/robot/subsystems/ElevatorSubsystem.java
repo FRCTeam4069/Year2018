@@ -19,6 +19,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private DigitalInput limitSwitch;
 
     private ElevatorSubsystem() {
+        limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
 
         // Stop the elevator from coasting when the talon is stopped (probably)
