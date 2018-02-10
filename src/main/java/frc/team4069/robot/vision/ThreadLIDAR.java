@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.FlowControl;
 import java.io.UnsupportedEncodingException;
 
-public class LidarThread implements Runnable {
+public class ThreadLIDAR implements Runnable {
 
     public double lastAngle = 0.0;
     public int lastSignalStrength = 0;
@@ -34,12 +34,12 @@ public class LidarThread implements Runnable {
     private Object lock = new Object();
     private LidarSpot[] writeBuffer = new LidarSpot[501];
 
-    public LidarThread() {
+    public ThreadLIDAR() {
         for (int i = 0; i < writeBuffer.length; i++) {
             history[i] = new LidarSpot();
             writeBuffer[i] = new LidarSpot(); // pre-create history array will synchronize on these as written/read from
         }
-    }
+    }// ThreadLIDAR()
 
     /**
      * Get point from history, inited to all zeros, so 'safe' to just pull from
@@ -287,7 +287,7 @@ public class LidarThread implements Runnable {
     /**
      * All packets returned from lidar end with LF (0x10) Except 2 which have LF in the middle too. We want to pull a response upto the end of packet, in streaming mode there could be quite a few packets queued up in the recieve buffer, lets get one at a time.
      *
-     * @param tothis[] array to store packet too
+     * @param tothis array to store packet too
      *
      * in byte[] array must be 32 in length minimum
      */
@@ -508,4 +508,5 @@ public class LidarThread implements Runnable {
             return ls;
         }
     } // class Lidarspot
-}
+
+}// class
