@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 
@@ -14,6 +15,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Motor to control
     private TalonSRXMotor talon;
+    // Limit switch at the bottom, used to zero the elevator
+    private DigitalInput limitSwitch;
 
     private ElevatorSubsystem() {
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
@@ -43,17 +46,33 @@ public class ElevatorSubsystem extends SubsystemBase {
         return talon.getSelectedSensorPosition(0);
     }
 
+    // Set the position of the elevator using a custom value
+    public void setPosition(double customPosition) {
+        set(ControlMode.MotionMagic, customPosition);
+    }
+
     // Set the position of the elevator using one of the presets
     public void setPosition(Position position) {
         set(ControlMode.MotionMagic, position.getTicks());
+    }
+
+    // Set the position of the elevator using one of the presets
+    public void setSpeed(double speed) {
+        set(ControlMode.PercentOutput, speed);
     }
 
     public void stop() {
         talon.stop();
     }
 
-    public void set(ControlMode mode, double speed) {
-        talon.set(mode, speed);
+    private void set(ControlMode mode, double value) {
+        talon.set(mode, value);
+    }
+
+    // Get the state of the limit switch at the bottom of the elevator
+    public boolean getLimitSwitchClosed() {
+        // True represents open and false represents closed; this function should be the opposite
+        return !limitSwitch.get();
     }
 
     public void reset() {
