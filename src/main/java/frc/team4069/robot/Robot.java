@@ -10,15 +10,14 @@ import frc.team4069.robot.vision.ThreadVisionProcessor;
 
 public class Robot extends IterativeRobot {
 
-    public boolean ON_RED_SIDE_OF_FIELD = false;
-    public ThreadGyro gyroThreadInstance;
-    public ThreadLIDAR lidar_instance;
-    private ThreadVideoCapture video_capture_instance;
-    private Thread VideoCaptureThreadHandle;
-    private ThreadVisionProcessor vision_processor_instance;
-    private Thread VisionProcessorThreadHandle;
-    private Thread gyroThreadHandle;
-    private Thread lidarThreadHandle;
+    public ThreadGyro threadGyroInstance;
+    public ThreadLIDAR threadLIDARInstance;
+    private ThreadVideoCapture threadVideoCaptureInstance;
+    private ThreadVisionProcessor threadVisionProcessorInstance;
+    private Thread threadGyroHandle;
+    private Thread threadLIDARHandle;
+    private Thread threadVideoCaptureHandle;
+    private Thread threadVisionProcessorHandle;
 
     private long mLastDashboardUpdateTime = 0;
 
@@ -41,20 +40,20 @@ public class Robot extends IterativeRobot {
         scheduler = Scheduler.getInstance();
 
         // Vision initializers;
-        gyroThreadInstance = new ThreadGyro();
-        gyroThreadHandle = new Thread(gyroThreadInstance);
-        gyroThreadHandle.start();
-        lidar_instance = new ThreadLIDAR();
-        lidarThreadHandle = new Thread(lidar_instance);
-        lidarThreadHandle.start();
-        video_capture_instance = new ThreadVideoCapture();
-        VideoCaptureThreadHandle = new Thread(video_capture_instance);
-        VideoCaptureThreadHandle.start();
-        video_capture_instance.Enable();
-        vision_processor_instance = new ThreadVisionProcessor(video_capture_instance,
-                VideoCaptureThreadHandle, this);
-        VisionProcessorThreadHandle = new Thread(vision_processor_instance);
-        VisionProcessorThreadHandle.start();
+        threadGyroInstance = new ThreadGyro();
+        threadGyroHandle = new Thread(threadGyroInstance);
+        threadGyroHandle.start();
+        threadLIDARInstance = new ThreadLIDAR();
+        threadLIDARHandle = new Thread(threadLIDARInstance);
+        threadLIDARHandle.start();
+        threadVideoCaptureInstance = new ThreadVideoCapture();
+        threadVideoCaptureHandle = new Thread(threadVideoCaptureInstance);
+        threadVideoCaptureHandle.start();
+        threadVideoCaptureInstance.Enable();
+        threadVisionProcessorInstance = new ThreadVisionProcessor(threadVideoCaptureInstance,
+                threadVideoCaptureHandle, this);
+        threadVisionProcessorHandle = new Thread(threadVisionProcessorInstance);
+        threadVisionProcessorHandle.start();
     }
 
 //    @Override
@@ -104,22 +103,24 @@ public class Robot extends IterativeRobot {
         long deltat = System.currentTimeMillis() - mLastDashboardUpdateTime;
         if (deltat > 1000) {
             SmartDashboard
-                    .putNumber("AUTOTARGET XPOS: ", vision_processor_instance.cregions.mXGreenLine);
+                    .putNumber("AUTOTARGET XPOS: ",
+                            threadVisionProcessorInstance.cregions.mXGreenLine);
             SmartDashboard.putNumber("Auto TARGET Enabled: ",
-                    vision_processor_instance.cregions.mTargetVisible);
+                    threadVisionProcessorInstance.cregions.mTargetVisible);
             SmartDashboard.putNumber("XCENTER",
-                    vision_processor_instance.cregions.mXGreenLine);
+                    threadVisionProcessorInstance.cregions.mXGreenLine);
             SmartDashboard
-                    .putNumber("NumContours:", vision_processor_instance.cregions.mContours.size());
-            SmartDashboard.putNumber("MAPPED:", vision_processor_instance.lastMapped);
+                    .putNumber("NumContours:",
+                            threadVisionProcessorInstance.cregions.mContours.size());
+            SmartDashboard.putNumber("MAPPED:", threadVisionProcessorInstance.lastMapped);
             mLastDashboardUpdateTime = System.currentTimeMillis();
-            SmartDashboard.putNumber("LAST HEADING:", gyroThreadInstance.lastHeading);
-            SmartDashboard.putNumber("LIDAR Angle:", lidar_instance.lastAngle);
-            SmartDashboard.putNumber("LIDAR SS", lidar_instance.lastSignalStrength);
-            SmartDashboard.putNumber("LIDAR distance", lidar_instance.lastDistance);
-            SmartDashboard.putNumber("LIDAR status:", lidar_instance.lastStatus);
-            SmartDashboard.putString("LIDAR LAST ERROR", lidar_instance.lastError);
-            SmartDashboard.putString("LIDARMessage:", lidar_instance.lastMessage);
+            SmartDashboard.putNumber("LAST HEADING:", threadGyroInstance.lastHeading);
+            SmartDashboard.putNumber("LIDAR Angle:", threadLIDARInstance.lastAngle);
+            SmartDashboard.putNumber("LIDAR SS", threadLIDARInstance.lastSignalStrength);
+            SmartDashboard.putNumber("LIDAR distance", threadLIDARInstance.lastDistance);
+            SmartDashboard.putNumber("LIDAR status:", threadLIDARInstance.lastStatus);
+            SmartDashboard.putString("LIDAR LAST ERROR", threadLIDARInstance.lastError);
+            SmartDashboard.putString("LIDARMessage:", threadLIDARInstance.lastMessage);
         }
     }
 }

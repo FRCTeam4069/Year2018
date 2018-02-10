@@ -107,10 +107,6 @@ public class ThreadVisionProcessor implements Runnable {
         } // while true
     } // run
 
-    /*
-     * private void CalculateDist() { double targetHeight = 32; if (targets.VerticalTarget != null) { int height = targets.VerticalTarget.height; targets.targetDistance = Y_IMAGE_RES * targetHeight / (height * 12 * 2 * Math.tan(VIEW_ANGLE * Math.PI / (180 * 2))); } }
-     */
-
     private double Lerp(double a1, double a2, double b1, double b2, double num) {
         return ((num - a1) / (a2 - a1)) * (b2 - b1) - b2;
     }
@@ -119,9 +115,9 @@ public class ThreadVisionProcessor implements Runnable {
 
     private void DrawLIDAR(int xp, int yp, double scale, Mat original) {
         LidarSpot ls = null;
-        for (int i = 0; i < mRobot.lidar_instance.history.length; i++) {
-            ls = mRobot.lidar_instance.getHistoryPoint(); // Pull 1st point
-            LidarSpot ls2 = mRobot.lidar_instance
+        for (int i = 0; i < mRobot.threadLIDARInstance.history.length; i++) {
+            ls = mRobot.threadLIDARInstance.getHistoryPoint(); // Pull 1st point
+            LidarSpot ls2 = mRobot.threadLIDARInstance
                     .getHistoryPoint(); // Pull 2nd point (lidar rotates so this point should connect to point above)
 
             double rad = ls.az * (Math.PI / 180); // convert ugly angles to normal radians
@@ -366,7 +362,7 @@ public class ThreadVisionProcessor implements Runnable {
                 Imgproc.line(original, ypt, ypt1, GREEN, 1);
 
                 // Now read last heading from gyro thread
-                lastHeadingTargetSeen = mRobot.gyroThreadInstance.lastHeading;
+                lastHeadingTargetSeen = mRobot.threadGyroInstance.lastHeading;
             } else // no target/contours meet criteria, draw some history to maybe help player
             {
                 mTargetVisible = 0;
@@ -380,14 +376,8 @@ public class ThreadVisionProcessor implements Runnable {
 
             Point centerbtm = new Point(0, 20);
             Point rht = new Point(0, 200);
-            double head = mRobot.gyroThreadInstance.lastHeading;
-            Imgproc.putText(original, "HEADING:" + mRobot.gyroThreadInstance.lastHeading,
-                    centerbtm, 0, 0.5, GREEN);
-            if (mRobot.ON_RED_SIDE_OF_FIELD) {
-                Imgproc.putText(original, "RED", rht, 0, 0.5, RED);
-            } else {
-                Imgproc.putText(original, "BLUE", rht, 0, 0.5, BLUE);
-            }
+            double head = mRobot.threadGyroInstance.lastHeading;
+            Imgproc.putText(original, "HEADING:" + head, centerbtm, 0, 0.5, GREEN);
 
             Point lastsn = new Point(50, 230);
             Imgproc.putText(original, "Target Last Heading:" + lastHeadingTargetSeen, lastsn, 0,
@@ -395,8 +385,8 @@ public class ThreadVisionProcessor implements Runnable {
 
             DrawLIDAR(160, 120, 1, original);
             // set arrow angle and distance to the closest lidar spot to the camera with 265 <= angle <= 275
-            arrowangle = mRobot.lidar_instance.closestToCamera.az;
-            arrowdistance = mRobot.lidar_instance.closestToCamera.dist;
+            arrowangle = mRobot.threadLIDARInstance.closestToCamera.az;
+            arrowdistance = mRobot.threadLIDARInstance.closestToCamera.dist;
 
             DrawArrow(160, 120, arrowangle, arrowdistance / 6, original);
 
