@@ -32,8 +32,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, false, 1024, 11, 13);
-        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, false, 1024, 18, 20);
+        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false,  11, 13);
+        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
@@ -75,6 +75,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Set the motor speeds to zero
         leftDrive.stop();
         rightDrive.stop();
+    }
+
+    public void quickTurn(double turn) {
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, 0);
+        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
+        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
     }
 
     // Start driving with a given turning coefficient and speed from zero to one

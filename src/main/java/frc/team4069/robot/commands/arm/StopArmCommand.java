@@ -2,16 +2,17 @@ package frc.team4069.robot.commands.arm;
 
 import frc.team4069.robot.commands.CommandBase;
 
-//TODO: Move the limit switch to the arm and use it like that
-public class StartArmCommand extends CommandBase {
-    public StartArmCommand() {
+public class StopArmCommand extends CommandBase {
+
+    public StopArmCommand() {
         requires(arm);
     }
 
     @Override
     protected void initialize() {
-        arm.start();
-        // 150 is the "down" position
+        arm.stop();
+        System.out.println("Arm Position: " + arm.getPosition());
+        arm.setPosition(arm.getPosition() - 500);
     }
 
     @Override

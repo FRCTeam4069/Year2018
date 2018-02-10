@@ -4,8 +4,11 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team4069.robot.commands.arm.StartArmCommand;
+import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.elevator.DebugCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
+import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
@@ -33,8 +36,9 @@ public class Input {
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
+        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
 //        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
-        elevatorToIntake.whenPressed(new DebugCommand()); //TODO: Get rid of me when position values are found
+//        elevatorToIntake.whenPressed(new DebugCommand()); //TODO: Get rid of me when position values are found
 
         Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());
@@ -47,6 +51,10 @@ public class Input {
         // Stop the vacuum when the start button is pressed
         Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
+
+        Button armUp = new JoystickButton(driveJoystick, IOMapping.BUMPER_RIGHT);
+        armUp.whenPressed(new StartArmCommand());
+        armUp.whenReleased(new StopArmCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
@@ -80,6 +88,10 @@ public class Input {
         double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
         double backwardMotion = -driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
         return backwardMotion + forwardMotion;
+    }
+
+    public static boolean getDebugPressed() {
+        return driveJoystick.getAButton();
     }
 
     // Accessor for the directional pad on the joystick

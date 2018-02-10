@@ -20,18 +20,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private ElevatorSubsystem() {
         limitSwitch = new DigitalInput(0);
-        talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
+        talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
 
         // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
         // Set the feed-forward gain
         talon.config_kF(0, 0.5, 0);
-        talon.config_kP(0, 0.1, 0);
+        talon.config_kP(0, 0.6, 0);
 
         talon.configMotionCruiseVelocity(1500, 0);
 
-//        talon.setSelectedSensorPosition(0, 0, 0);
+        talon.setSelectedSensorPosition(0, 0, 0);
 
 //        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
@@ -79,6 +79,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     public boolean getLimitSwitchClosed() {
         // True represents open and false represents closed; this function should be the opposite
         return !limitSwitch.get();
+    }
+
+    public int getVelocity() {
+        return talon.getSelectedSensorVelocity(0);
     }
 
     public void reset() {

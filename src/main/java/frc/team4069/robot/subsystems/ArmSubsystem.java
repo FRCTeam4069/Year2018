@@ -11,10 +11,14 @@ public class ArmSubsystem extends SubsystemBase {
     
     private ArmSubsystem() {
         talon = new TalonSRXMotor(IOMapping.ARM_CAN_BUS);
+
+        talon.config_kF(1, 1, 0);
+        talon.config_kP(1, 0.5, 0);
+
     }
     
     public void start() {
-        talon.set(ControlMode.PercentOutput, 0.75);
+        talon.set(ControlMode.PercentOutput, 0.25);
     }
     
     public void stop() {
@@ -22,7 +26,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double position) {
-        talon.set(ControlMode.Position, position);
+        talon.set(ControlMode.MotionMagic, position);
+    }
+
+    public double getPosition() {
+        return talon.getSelectedSensorPosition(0);
     }
 
     public static ArmSubsystem getInstance() {

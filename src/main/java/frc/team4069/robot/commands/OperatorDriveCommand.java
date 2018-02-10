@@ -2,6 +2,7 @@ package frc.team4069.robot.commands;
 
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
+import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
 // The main command for operator control of the drive base
 class OperatorDriveCommand extends CommandBase {
@@ -29,6 +30,15 @@ class OperatorDriveCommand extends CommandBase {
         // Use the negative of the joystick's speed axis as the speed of the drive base
         double speed = Input.getDriveSpeed();
 
+        double elevatorPosition = Math.abs(elevator.getPosition()) - Math.abs(
+                ElevatorSubsystem.MAX_POSITION_TICKS);
+
+        // Dampen the drive base input if the elevator is raised ~halfway
+        if(Math.abs(elevatorPosition) <= 14600 && Math.abs(elevatorPosition) > 0) {
+            speed *= 0.5;
+            turningCoefficient *= 0.5;
+        }
+
         // If quick turn is not currently being used
         if (quickTurnDistanceMeters == 0) {
             // Get output from the directional pad
@@ -50,7 +60,7 @@ class OperatorDriveCommand extends CommandBase {
                 // Get the sign of the angle in order to calculate the direction to turn the wheels
                 double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-                driveBase.driveContinuousSpeed(turnDirection, 0);
+                driveBase.quickTurn(turnDirection);
             }
         }
 

@@ -29,6 +29,10 @@ public class TalonSRXMotor extends WPI_TalonSRX {
         this(deviceNumber, 4096, false);
     }
 
+    public TalonSRXMotor(int deviceNumber, int encoderTicksPerRotation) {
+        this(deviceNumber, encoderTicksPerRotation, false);
+    }
+
     public TalonSRXMotor(int deviceNumber, int... slaves) {
         this(deviceNumber, 4096, false, slaves);
     }
