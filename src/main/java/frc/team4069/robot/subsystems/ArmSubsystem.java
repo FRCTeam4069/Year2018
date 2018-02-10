@@ -17,8 +17,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
     
-    public void start() {
-        talon.set(ControlMode.PercentOutput, 0.25);
+    public void start(boolean reversed) {
+        talon.set(ControlMode.PercentOutput, reversed ? -0.1 : 0.4);
     }
     
     public void stop() {

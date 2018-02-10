@@ -53,6 +53,10 @@ public class Input {
         Button armUp = new JoystickButton(driveJoystick, IOMapping.BUMPER_RIGHT);
         armUp.whenPressed(new StartArmCommand());
         armUp.whenReleased(new StopArmCommand());
+
+        Button armDown = new JoystickButton(driveJoystick, IOMapping.BUMPER_LEFT);
+        armDown.whenPressed(new StartArmCommand(true));
+        armDown.whenReleased(new StopArmCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
