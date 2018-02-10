@@ -68,7 +68,7 @@ Winch:
 
 
 
-************** AUTONOMOUS WISHLIST ******************************8
+************************** AUTONOMOUS WISHLIST ******************************
 
 General : 
         There are 6 possible auto start/destinations,3 starting, 2 ending,
@@ -82,11 +82,12 @@ General :
         
 Basic Sequence:
         At startup, the robot should first engauge the vacuum and pickup cube, moving
-        a mid point on the elevator which is 'good' for driving.
-        the robot should proceed from its position to a location where the
+        the elevator to a mid point which is 'good' for driving.
+
+        The robot should proceed from its position to a location where the
         reflective tape/lights are visible on the switch.  
 
-        It should then move to the reflective tape within N centimeters, of the reflective
+        It should then move to the reflective tape within N centimeters of the reflective
         barrier.
 
         It should raise the cube to deploy height if not already there...
@@ -95,6 +96,13 @@ Basic Sequence:
 
 Vision:
         1. Robot can 'see' reflective tape, turn towards it and drive to within 25cm of it.
+
+Lidar:
+        1. Robot must be able to tell how far a set of pre-defined pixels on the camera frame is.
+
+Gyro:   1. Gyro should be used whenever accurate turns are needed.  Gyro should be assumed to have
+           error and drift, so using delta values from the gyro will always result in more accuracy than
+           assuming values read from the start of the match.
 
 
 
