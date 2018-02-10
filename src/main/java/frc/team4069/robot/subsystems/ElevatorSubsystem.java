@@ -19,6 +19,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private DigitalInput limitSwitch;
 
     private ElevatorSubsystem() {
+        limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS);
 
         // Stop the elevator from coasting when the talon is stopped (probably)
@@ -26,12 +27,17 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Set the feed-forward gain
         talon.config_kF(0, 0.5, 0);
-        talon.setSelectedSensorPosition(0, 0, 0);
+        talon.config_kP(0, 0.1, 0);
 
-        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
-        talon.configForwardSoftLimitThreshold(0, 0);
-        talon.configReverseSoftLimitEnable(false, 0);
-        talon.configForwardSoftLimitEnable(false, 0);
+        talon.configMotionCruiseVelocity(1500, 0);
+
+//        talon.setSelectedSensorPosition(0, 0, 0);
+
+//        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
+//        talon.configForwardSoftLimitThreshold(0, 0);
+//        talon.configReverseSoftLimitEnable(false, 0);
+//        talon.configForwardSoftLimitEnable(false, 0);
+
     }
 
     public static ElevatorSubsystem getInstance() {
@@ -82,7 +88,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
-        INTAKE(0),
+        INTAKE(-6938),
         EXCHANGE(-3000),
         SWITCH(15000),
         SCALE(MAX_POSITION_TICKS);
