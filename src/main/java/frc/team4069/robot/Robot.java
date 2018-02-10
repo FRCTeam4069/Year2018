@@ -1,10 +1,9 @@
 package frc.team4069.robot;
 
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team4069.robot.vision.ThreadArduinoGyro;
+import frc.team4069.robot.vision.ThreadGyro;
 import frc.team4069.robot.vision.ThreadLIDAR;
 import frc.team4069.robot.vision.ThreadVideoCapture;
 import frc.team4069.robot.vision.ThreadVisionProcessor;
@@ -12,13 +11,13 @@ import frc.team4069.robot.vision.ThreadVisionProcessor;
 public class Robot extends IterativeRobot {
 
     public boolean ON_RED_SIDE_OF_FIELD = false;
-    public ThreadArduinoGyro arduino_thread_instance;
+    public ThreadGyro gyroThreadInstance;
     public ThreadLIDAR lidar_instance;
     private ThreadVideoCapture video_capture_instance;
     private Thread VideoCaptureThreadHandle;
     private ThreadVisionProcessor vision_processor_instance;
     private Thread VisionProcessorThreadHandle;
-    private Thread arduinoThreadHandle;
+    private Thread gyroThreadHandle;
     private Thread lidarThreadHandle;
 
     private long mLastDashboardUpdateTime = 0;
@@ -41,7 +40,10 @@ public class Robot extends IterativeRobot {
         // Get the scheduler
         scheduler = Scheduler.getInstance();
 
-        // Vision initializers
+        // Vision initializers;
+        gyroThreadInstance = new ThreadGyro();
+        gyroThreadHandle = new Thread(gyroThreadInstance);
+        gyroThreadHandle.start();
         lidar_instance = new ThreadLIDAR();
         lidarThreadHandle = new Thread(lidar_instance);
         lidarThreadHandle.start();
@@ -53,8 +55,6 @@ public class Robot extends IterativeRobot {
                 VideoCaptureThreadHandle, this);
         VisionProcessorThreadHandle = new Thread(vision_processor_instance);
         VisionProcessorThreadHandle.start();
-        arduino_thread_instance = new ThreadArduinoGyro();
-        arduinoThreadHandle = new Thread(arduino_thread_instance);
     }
 
 //    @Override
@@ -108,20 +108,18 @@ public class Robot extends IterativeRobot {
             SmartDashboard.putNumber("Auto TARGET Enabled: ",
                     vision_processor_instance.cregions.mTargetVisible);
             SmartDashboard.putNumber("XCENTER",
-                    vision_processor_instance.cregions.mXGreenLine); // .lastXCenter);
+                    vision_processor_instance.cregions.mXGreenLine);
             SmartDashboard
                     .putNumber("NumContours:", vision_processor_instance.cregions.mContours.size());
             SmartDashboard.putNumber("MAPPED:", vision_processor_instance.lastMapped);
             mLastDashboardUpdateTime = System.currentTimeMillis();
-            SmartDashboard.putNumber("LAST HEADING:", arduino_thread_instance.lastHeading);
+            SmartDashboard.putNumber("LAST HEADING:", gyroThreadInstance.lastHeading);
             SmartDashboard.putNumber("LIDAR Angle:", lidar_instance.lastAngle);
             SmartDashboard.putNumber("LIDAR SS", lidar_instance.lastSignalStrength);
             SmartDashboard.putNumber("LIDAR distance", lidar_instance.lastDistance);
             SmartDashboard.putNumber("LIDAR status:", lidar_instance.lastStatus);
             SmartDashboard.putString("LIDAR LAST ERROR", lidar_instance.lastError);
             SmartDashboard.putString("LIDARMessage:", lidar_instance.lastMessage);
-            SmartDashboard.putString("GYRO Last Error", arduino_thread_instance.lastError);
-            SmartDashboard.putString("GYRO Message", arduino_thread_instance.lastMessage);
         }
     }
 }

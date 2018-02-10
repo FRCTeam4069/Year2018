@@ -365,11 +365,8 @@ public class ThreadVisionProcessor implements Runnable {
                 Imgproc.line(original, avgpt, avgpt2, GREEN, 1);
                 Imgproc.line(original, ypt, ypt1, GREEN, 1);
 
-                // Now read last heading from gyro (arduino) thread
-                double head = mRobot.arduino_thread_instance.lastHeading;
-                if (head != -1.0) {
-                    lastHeadingTargetSeen = mRobot.arduino_thread_instance.lastHeading;
-                }
+                // Now read last heading from gyro thread
+                lastHeadingTargetSeen = mRobot.gyroThreadInstance.lastHeading;
             } else // no target/contours meet criteria, draw some history to maybe help player
             {
                 mTargetVisible = 0;
@@ -383,15 +380,10 @@ public class ThreadVisionProcessor implements Runnable {
 
             Point centerbtm = new Point(0, 20);
             Point rht = new Point(0, 200);
-            double head = mRobot.arduino_thread_instance.lastHeading;
-            if (head != -1.0) {
-                Imgproc.putText(original, "HEADING:" + mRobot.arduino_thread_instance.lastHeading,
-                        centerbtm, 0, 0.5, GREEN);
-            } else {
-                Imgproc.putText(original, "HEADING:Err No Lock", centerbtm, 0, 0.5, RED);
-            }
-
-            if (mRobot.ON_RED_SIDE_OF_FIELD == true) {
+            double head = mRobot.gyroThreadInstance.lastHeading;
+            Imgproc.putText(original, "HEADING:" + mRobot.gyroThreadInstance.lastHeading,
+                    centerbtm, 0, 0.5, GREEN);
+            if (mRobot.ON_RED_SIDE_OF_FIELD) {
                 Imgproc.putText(original, "RED", rht, 0, 0.5, RED);
             } else {
                 Imgproc.putText(original, "BLUE", rht, 0, 0.5, BLUE);
