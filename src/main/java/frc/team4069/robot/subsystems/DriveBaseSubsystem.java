@@ -86,23 +86,14 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Wheel speeds that will be set using the drive algorithms
-        WheelSpeeds wheelSpeeds;
+        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
         // A special case: if the speed is zero, turn on the spot
-        if (speed == 0) {
-            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
-            // within the range of -1 and 1, and a sharper turn will result in faster rotation
-            wheelSpeeds = new WheelSpeeds(turn, -turn);
-        }
-        // Otherwise, we will use the standard algorithm
-        else {
-            // Use the cheesy drive algorithm to calculate the necessary speeds
-            wheelSpeeds = generalizedCheesyDrive(turn, speed);
-        }
         // Correct the wheel speeds based on positional errors
         WheelSpeeds correctedWheelSpeeds = correctSteering(wheelSpeeds);
         // Run the wheel speeds through corresponding low pass filters
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(correctedWheelSpeeds);
+        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(wheelSpeeds);
         // Set the motor speeds with the calculated values
+
         leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
     }
@@ -111,6 +102,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
+        if(speed == 0) {
+            return new WheelSpeeds(turn, -turn);
+        }
         // Apply a polynomial function to the speed and multiply it by the turning coefficient
         // This adds a non-linearity so that turning is quicker at lower speeds
         // This number will be half of the difference in speed between the two wheels
