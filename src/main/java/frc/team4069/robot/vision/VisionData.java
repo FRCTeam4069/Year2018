@@ -13,6 +13,10 @@ import java.util.List;
 // The static class that contains the vision threads and the data updated by them
 public class VisionData {
 
+    // The dimensions of the image captured by both cameras
+    public static final int imageWidth = 320;
+    public static final int imageHeight = 240;
+
     // The number of lines that will be found and averaged
     private static final int numLines = 4;
 
@@ -30,27 +34,10 @@ public class VisionData {
         // Create the first and second cameras, which are located on the lifting arm and at the
         // front of the robot, respectively
         CameraServer server = CameraServer.getInstance();
-//        UsbCamera armCamera = server.startAutomaticCapture(0);
-//        armCamera.setResolution(320, 240);
-//        UsbCamera frontCamera = server.startAutomaticCapture(1);
         UsbCamera frontCamera = server.startAutomaticCapture(0);
-        frontCamera.setResolution(320, 240);
-
-//        // Initialize the arm camera thread and update the position of the power cube every frame
-//        VisionThread armCameraVisionThread = new VisionThread(armCamera,
-//                new ArmCameraPipeline(),
-//                pipeline -> {
-//                    // If an image is in the field
-//                    if (!pipeline.findContoursOutput().isEmpty()) {
-//                        // Get the maximum extents of the contours
-//                        Rect contourBounds = Imgproc
-//                                .boundingRect(pipeline.findContoursOutput().get(0));
-//                        // Set the public values accordingly
-//                        powerCubeXPos = contourBounds.x + (contourBounds.width / 2);
-//                        powerCubeYPos = contourBounds.x + (contourBounds.height / 2);
-//                    }
-//                }
-//        );
+        frontCamera.setResolution(imageWidth, imageHeight);
+//        UsbCamera armCamera = server.startAutomaticCapture(1);
+//        armCamera.setResolution(imageWidth, imageHeight);
 
         // Initialize the front camera thread, updating the average position of the lines each frame
         VisionThread frontCameraVisionThread = new VisionThread(frontCamera,
@@ -79,9 +66,25 @@ public class VisionData {
                 }
         );
 
+//        // Initialize the arm camera thread and update the position of the power cube every frame
+//        VisionThread armCameraVisionThread = new VisionThread(armCamera,
+//                new ArmCameraPipeline(),
+//                pipeline -> {
+//                    // If an image is in the field
+//                    if (!pipeline.findContoursOutput().isEmpty()) {
+//                        // Get the maximum extents of the contours
+//                        Rect contourBounds = Imgproc
+//                                .boundingRect(pipeline.findContoursOutput().get(0));
+//                        // Set the public values accordingly
+//                        powerCubeXPos = contourBounds.x + (contourBounds.width / 2);
+//                        powerCubeYPos = contourBounds.x + (contourBounds.height / 2);
+//                    }
+//                }
+//        );
+
         // Run the threads
-//        armCameraVisionThread.start();
         frontCameraVisionThread.start();
+//        armCameraVisionThread.start();
 
         // Set up the output stream to the smart dashboard
         outputStream = CameraServer.getInstance().putVideo("ProcessorOutput", 640, 480);

@@ -34,7 +34,8 @@ public class Input {
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
 //        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
-        elevatorToIntake.whenPressed(new DebugCommand()); //TODO: Get rid of me when position values are found
+        elevatorToIntake.whenPressed(
+                new DebugCommand()); //TODO: Get rid of me when position values are found
 
         Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());
@@ -54,7 +55,7 @@ public class Input {
         // Use the horizontal axis on the left stick
         double axis = driveJoystick.getX(Hand.kLeft);
         // Deadband on the axis ± 0.2 because of joystick drift
-        if(Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
+        if (Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
             return 0;
         } else {
             return axis;
@@ -67,9 +68,9 @@ public class Input {
         double axis = controlJoystick.getY(Hand.kRight);
 
         // Deadband on the axis ± 0.2 because of joystick drift
-        if(Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
+        if (Math.abs(axis) > 0 && Math.abs(axis) < 0.2) {
             return 0;
-        }else {
+        } else {
             return axis;
         }
     }
