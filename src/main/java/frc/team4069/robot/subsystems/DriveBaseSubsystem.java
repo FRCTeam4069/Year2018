@@ -15,7 +15,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // The factor by which the reciprocal of the error is multiplied to get a speed multiplier
     private final double CORRECTION_SCALE = 1.5;
     // The number of meters each wheel travels per motor rotation
-    private final double METERS_PER_ROTATION = 0.061;
+    private final double METERS_PER_ROTATION = 0.61;
     // The number of past distances traveled to retain
     private final int DISTANCES_TRAVELED_HISTORY = 10;
 
@@ -85,51 +85,47 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
-        // Invert turning if the robot is going backwards
-        if (speed < 0) {
-            turn = -turn;
+        // Wheel speeds that will be set using the drive algorithms
+        WheelSpeeds wheelSpeeds;
+        // A special case: if the speed is zero, turn on the spot
+        if (speed == 0) {
+            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
+            // within the range of -1 and 1, and a sharper turn will result in faster rotation
+            wheelSpeeds = new WheelSpeeds(turn, -turn);
         }
-        // Use the cheesy drive algorithm to calculate the necessary speeds
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+        // Otherwise, we will use the standard algorithm
+        else {
+            // Use the cheesy drive algorithm to calculate the necessary speeds
+            wheelSpeeds = generalizedCheesyDrive(turn, speed);
+        }
         // Correct the wheel speeds based on positional errors
         WheelSpeeds correctedWheelSpeeds = correctSteering(wheelSpeeds);
-        // Set the motor speeds with the corrected values
-        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
-        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
+        // Run the wheel speeds through corresponding low pass filters
+        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(correctedWheelSpeeds);
+        // Set the motor speeds with the calculated values
+        leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
+        rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
-        // First, a special case: if the speed is zero, turn on the spot
-        if (speed == 0) {
-            // Simply use the turn coefficient and its negative for the wheel speeds, since it is
-            // within the range of -1 and 1, and a sharper turn will result in faster rotation
-            if (turn == 0) {
-                return new WheelSpeeds(0, 0);
-            } else {
-                return new WheelSpeeds(turn, -turn);
-            }
-        }
-        // Otherwise, we will use the standard algorithm
-        else {
-            // Apply a polynomial function to the speed and multiply it by the turning coefficient
-            // This adds a non-linearity so that turning is quicker at lower speeds
-            // This number will be half of the difference in speed between the two wheels
-            // Get the sign of the speed and use the absolute value because the polynomial may give
-            // imaginary numbers for negative speed values
-            double speedSign = speed > 0 ? 1 : -1;
-            // Use the absolute value in the polynomial calculation
-            // and multiply the result by the sign
-            double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
-            // Add this difference to the overall speed to get the left wheel speed and subtract it
-            // from the overall speed to get the right wheel speed
-            return new WheelSpeeds(
-                    speed + wheelSpeedDifference,
-                    speed - wheelSpeedDifference
-            );
-        }
+        // Apply a polynomial function to the speed and multiply it by the turning coefficient
+        // This adds a non-linearity so that turning is quicker at lower speeds
+        // This number will be half of the difference in speed between the two wheels
+        // Get the sign of the speed and use the absolute value because the polynomial may give
+        // imaginary numbers for negative speed values
+        double speedSign = speed > 0 ? 1 : -1;
+        // Use the absolute value in the polynomial calculation
+        // and multiply the result by the sign
+        double wheelSpeedDifference = speedPolynomial(Math.abs(speed)) * turn * speedSign;
+        // Add this difference to the overall speed to get the left wheel speed and subtract it
+        // from the overall speed to get the right wheel speed
+        return new WheelSpeeds(
+                speed + wheelSpeedDifference,
+                speed - wheelSpeedDifference
+        );
     }
 
     // The polynomial function applied to the speed during turn computation
@@ -181,7 +177,13 @@ public class DriveBaseSubsystem extends SubsystemBase {
         );
     }
 
-    // Get the distance traveled by each of the wheels since
+    // A function to run wheel speeds through the corresponding low pass filters
+    private WheelSpeeds lowPassFilter(WheelSpeeds speeds) {
+        return new WheelSpeeds(
+                leftSideLpf.calculate(speeds.leftWheelSpeed),
+                rightSideLpf.calculate(speeds.rightWheelSpeed)
+        );
+    }
 
     // A wrapper class that contains a speed value for each of the drive base wheels
     private class WheelSpeeds {
