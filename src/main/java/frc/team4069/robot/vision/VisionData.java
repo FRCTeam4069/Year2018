@@ -87,7 +87,8 @@ public class VisionData {
 //        armCameraVisionThread.start();
 
         // Set up the output stream to the smart dashboard
-        outputStream = CameraServer.getInstance().putVideo("ProcessorOutput", 640, 480);
+        outputStream = CameraServer.getInstance()
+                .putVideo("ProcessorOutput", 640, 480);
     }
 
     // Comparator that allows comparing the lengths of Line objects

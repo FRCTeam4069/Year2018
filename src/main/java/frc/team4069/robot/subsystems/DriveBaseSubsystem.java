@@ -15,7 +15,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // The factor by which the reciprocal of the error is multiplied to get a speed multiplier
     private final double CORRECTION_SCALE = 1.5;
     // The number of meters each wheel travels per motor rotation
-    private final double METERS_PER_ROTATION = 0.061;
+    private final double METERS_PER_ROTATION = 0.61;
     // The number of past distances traveled to retain
     private final int DISTANCES_TRAVELED_HISTORY = 10;
 
