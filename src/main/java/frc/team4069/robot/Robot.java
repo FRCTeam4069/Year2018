@@ -8,6 +8,7 @@ import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
+import frc.team4069.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
 
@@ -24,7 +25,7 @@ public class Robot extends IterativeRobot {
         Input.init();
 
         // Configure the vision threads (disabled for now)
-        // VisionData.configureVision();
+        VisionData.configureVision();
 
         // Get the scheduler
         scheduler = Scheduler.getInstance();
