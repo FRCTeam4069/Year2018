@@ -19,8 +19,8 @@ Drive Base:
                 1. Drive forward N centimeters, start with 100, accuracy to within 5%
                 2. Turn 90 degrees left/right, accuracy to within 5%
                 3. Drive backwards N centimeters
-                4. Drive forward 2 meter, turn left 45deg drive 2 meter turn left 45 deg, drive 2 meter
-                   turn left 45 deg drive 2 meter. Should end up within 25 cm of start position.
+                4. Drive forward 2 meter, turn left 90deg drive 2 meter turn left 90 deg, drive 2 meter
+                   turn left 905 deg drive 2 meter. Should end up within 25 cm of start position.
                 5. Same test at 4 but with turn right
                 6. Same tests as 4&5 but in reverse
 
