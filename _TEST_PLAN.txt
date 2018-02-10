@@ -74,8 +74,24 @@ General :
         There are 6 possible auto start/destinations,3 starting, 2 ending,
         we must have code for each start/end position.
 
+        On startup we grab the data from the field control system saying which
+        side our teams switch/scale is set too.
 
+        Given this info and our start position we know which of the 6 auto-routines to
+        do.
+        
+Basic Sequence:
+        At startup, the robot should first engauge the vacuum and pickup cube, moving
+        a mid point on the elevator which is 'good' for driving.
+        the robot should proceed from its position to a location where the
+        reflective tape/lights are visible on the switch.  
 
+        It should then move to the reflective tape within N centimeters, of the reflective
+        barrier.
+
+        It should raise the cube to deploy height if not already there...
+        It should move close enough to drop cube
+        It should drop cube and stop.
 
 Vision:
         1. Robot can 'see' reflective tape, turn towards it and drive to within 25cm of it.
