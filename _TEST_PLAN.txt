@@ -23,7 +23,7 @@ Drive Base:
                    turn left 90 deg drive 2 meter. Should end up within 25 cm of start position.
                 5. Same test at 4 but with turn right
                 6. Same tests as 4&5 but in reverse
-                7. Same tests as 4 but doing 45 degree turns and doubling the drive straigh
+                7. Same tests as 4 but doing 45 degree turns and doubling the drive straights
 
 
 Elevator:
@@ -65,6 +65,20 @@ Winch:
                 all controls must conform and work the way DRIVERS wish.
                 1. Wind
                 2. Unwind.
+
+
+
+************** AUTONOMOUS WISHLIST ******************************8
+
+General : 
+        There are 6 possible auto start/destinations,3 starting, 2 ending,
+        we must have code for each start/end position.
+
+
+
+
+Vision:
+        1. Robot can 'see' reflective tape, turn towards it and drive to within 25cm of it.
 
 
 
