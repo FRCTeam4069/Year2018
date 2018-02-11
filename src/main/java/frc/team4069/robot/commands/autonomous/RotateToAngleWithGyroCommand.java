@@ -5,7 +5,7 @@ import frc.team4069.robot.commands.CommandBase;
 // Using the gyroscope, rotate the robot to a specific angle
 class RotateToAngleWithGyroCommand extends CommandBase {
 
-    private final double turnSpeedAbsolute = 0.6;
+    private final double turnSpeedAbsolute = 0.2;
     private boolean turnRight;
     private double endAngle;
 
@@ -19,6 +19,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
         turnRight = (endAngle - getGyroAngle()) < 180;
         // Turn on the spot in the calculated direction
         driveBase.rotate(turnRight ? turnSpeedAbsolute : -turnSpeedAbsolute);
+        System.out.println(endAngle);
     }
 
     protected boolean isFinished() {
