@@ -1,6 +1,7 @@
 package frc.team4069.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.Robot;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
@@ -46,4 +47,9 @@ public abstract class CommandBase extends Command {
     protected static double getDistanceAheadCentimeters() {
         return mRobot.threadLIDARInstance.lastDistance;
     }
+	
+	// Accessor for the power distribution panel
+	protected static PowerDistributionPanel getPowerDistributionPanel(){
+		return mRobot.powerDistributionPanel;
+	}
 }

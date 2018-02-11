@@ -1,6 +1,8 @@
 package frc.team4069.robot.commands;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.io.Input;
+import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
@@ -9,9 +11,13 @@ class OperatorDriveCommand extends CommandBase {
 
     // The distance that the current quick turn should travel (0 means quick turn is not being used)
     private double quickTurnDistanceMeters = 0;
-
+	
+	// Reference to the power distribution panel
+	private PowerDistributionPanel pdp;
+	
     // Constructor, used to claim subsystems
     OperatorDriveCommand() {
+		pdp = getPowerDistributionPanel();
         // Claim exclusive use of the drive base
         requires(driveBase);
     }
@@ -24,6 +30,7 @@ class OperatorDriveCommand extends CommandBase {
 
     // Called frequently while this command is being run
     protected void execute() {
+		System.out.println("Elevator current: " + pdp.getCurrent(IOMapping.ELEVATOR_POWER_CHANNEL));
         // Set drive base speeds using the joystick inputs
         // The turning coefficient should be equal to the steering axis
         double turningCoefficient = Input.getSteeringAxis();

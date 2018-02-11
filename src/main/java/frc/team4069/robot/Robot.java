@@ -3,6 +3,7 @@ package frc.team4069.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
@@ -23,6 +24,8 @@ public class Robot extends IterativeRobot {
     private Thread threadLIDARHandle;
     private Thread threadVideoCaptureHandle;
     private Thread threadVisionProcessorHandle;
+	
+	public PowerDistributionPanel powerDistributionPanel;
 
     private long mLastDashboardUpdateTime = 0;
 
@@ -31,7 +34,10 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         super.robotInit();
-
+		
+		// Instantiate PowerDistributionPanel
+		powerDistributionPanel = new PowerDistributionPanel(1);
+		
         // Initialize the subsystems
         CommandBase.init(this);
 

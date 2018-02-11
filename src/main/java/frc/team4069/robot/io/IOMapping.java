@@ -3,6 +3,8 @@ package frc.team4069.robot.io;
 // A class containing static constants that contain the port numbers for connected devices
 public class IOMapping {
 
+	// Power distribution channel for elevator
+	public static final int ELEVATOR_POWER_CHANNEL = 9;
     // CAN bus port for the climber hook motor
     public static final int ELEVATOR_CAN_BUS = 16;
     public static final int VACUUM_CAN_BUS = 21;
