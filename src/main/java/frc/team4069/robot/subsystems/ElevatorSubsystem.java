@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
+import frc.team4069.robot.util.LowPassFilter;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -28,8 +29,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Set the feed-forward gain
         talon.config_kF(0, 0.5, 0);
         talon.config_kP(0, 0.6, 0);
-
-        talon.configMotionCruiseVelocity(1500, 0);
+//
+//        talon.configMotionCruiseVelocity(1500, 0);
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
@@ -65,6 +66,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Set the position of the elevator using one of the presets
     public void setSpeed(double speed) {
+        // Store the sign and multiply it by the low pass filter output to keep the direction
         set(ControlMode.PercentOutput, speed);
     }
 
@@ -79,7 +81,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Get the state of the limit switch at the bottom of the elevator
     public boolean getLimitSwitchClosed() {
         // True represents open and false represents closed; this function should be the opposite
-        return !limitSwitch.get();
+        return false;
     }
 
     public int getVelocity() {
