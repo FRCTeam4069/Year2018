@@ -4,7 +4,7 @@ import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.vision.ThreadVisionProcessor.ColourRegions;
 
 // Drive straight until the tape is found, and then follow it
-public class DriveTowardTapeCommand extends CommandBase {
+class DriveTowardTapeCommand extends CommandBase {
 
     // Scaling factor for the horizontal error of the tape off the center of the screen
     // It is multiplied by a value from 1 to -1
@@ -15,7 +15,7 @@ public class DriveTowardTapeCommand extends CommandBase {
 
     private final double driveSpeed = 0.2;
 
-    public DriveTowardTapeCommand() {
+    DriveTowardTapeCommand() {
         requires(driveBase);
     }
 

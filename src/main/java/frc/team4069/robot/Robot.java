@@ -1,12 +1,12 @@
 package frc.team4069.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
-import frc.team4069.robot.commands.autonomous.DriveTowardTapeCommand;
+import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.vision.ThreadGyro;
@@ -19,14 +19,12 @@ public class Robot extends IterativeRobot {
     public ThreadGyro threadGyroInstance;
     public ThreadLIDAR threadLIDARInstance;
     public ThreadVisionProcessor threadVisionProcessorInstance;
+    public PowerDistributionPanel powerDistributionPanel;
     private ThreadVideoCapture threadVideoCaptureInstance;
     private Thread threadGyroHandle;
     private Thread threadLIDARHandle;
     private Thread threadVideoCaptureHandle;
     private Thread threadVisionProcessorHandle;
-	
-	public PowerDistributionPanel powerDistributionPanel;
-
     private long mLastDashboardUpdateTime = 0;
 
     private Scheduler scheduler;
@@ -34,10 +32,10 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         super.robotInit();
-		
-		// Instantiate PowerDistributionPanel
-		powerDistributionPanel = new PowerDistributionPanel(1);
-		
+
+        // Instantiate PowerDistributionPanel
+        powerDistributionPanel = new PowerDistributionPanel(1);
+
         // Initialize the subsystems
         CommandBase.init(this);
 
@@ -70,7 +68,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         super.autonomousInit();
         // Run the autonomous command group, which handles driving, elevator, and vacuum control
-        scheduler.add(new DriveTowardTapeCommand());
+        scheduler.add(new AutonomousCommandGroup());
     }
 
     @Override
