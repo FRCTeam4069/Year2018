@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
+import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
@@ -27,6 +28,7 @@ public class AutonomousCommandGroup extends CommandGroup {
         double drivingDistance = drivingDistancesMeters[index];
         // Run the commands in sequence
         addSequential(new StartVacuumCommand());
+        addParallel(new ZeroElevatorCommand());
         addSequential(new WaitCommand(1));
         addSequential(new SetElevatorPositionCommand(Position.SWITCH));
         addSequential(new RotateToAngleWithGyroCommand(turningAngle));
