@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
+import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 // Command group that does everything involved in autonomous mode
@@ -31,6 +32,8 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(turningAngle));
         addSequential(new DriveStraightForDistanceCommand(drivingDistance));
         addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
+        addSequential(new DriveTowardTapeCommand());
+        addSequential(new StopVacuumCommand());
     }
 
     // Read the game data and get the direction to drive
