@@ -34,7 +34,7 @@ class OperatorDriveCommand extends CommandBase {
                 ElevatorSubsystem.MAX_POSITION_TICKS);
 
         // Dampen the drive base input if the elevator is raised ~halfway
-        if(Math.abs(elevatorPosition) <= 14600 && Math.abs(elevatorPosition) > 0) {
+        if (Math.abs(elevatorPosition) <= 14600 && Math.abs(elevatorPosition) > 0) {
             speed *= 0.5;
             turningCoefficient *= 0.5;
         }
@@ -60,7 +60,7 @@ class OperatorDriveCommand extends CommandBase {
                 // Get the sign of the angle in order to calculate the direction to turn the wheels
                 double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-                driveBase.quickTurn(turnDirection);
+                driveBase.rotate(turnDirection);
             }
         }
 

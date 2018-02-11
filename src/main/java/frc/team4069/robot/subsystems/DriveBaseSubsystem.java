@@ -32,7 +32,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false,  11, 13);
+        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
@@ -77,23 +77,31 @@ public class DriveBaseSubsystem extends SubsystemBase {
         rightDrive.stop();
     }
 
-    public void quickTurn(double turn) {
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn, 0);
-        leftDrive.setConstantSpeed(leftSideLpf.calculate(wheelSpeeds.leftWheelSpeed));
-        rightDrive.setConstantSpeed(rightSideLpf.calculate(wheelSpeeds.rightWheelSpeed));
-    }
-
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
-        // Wheel speeds that will be set using the drive algorithms
-        WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
-        // A special case: if the speed is zero, turn on the spot
-        // Correct the wheel speeds based on positional errors
-        WheelSpeeds correctedWheelSpeeds = correctSteering(wheelSpeeds);
-        // Run the wheel speeds through corresponding low pass filters
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(wheelSpeeds);
-        // Set the motor speeds with the calculated values
+        // If the speed is zero, turn on the spot
+        if (speed == 0) {
+            rotate(turn * 0.6);
+        }
+        // Otherwise, use the regular algorithm
+        else {
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+            driveFiltered(wheelSpeeds);
+        }
+    }
 
+    // Turn on the spot with the given left wheel speed
+    public void rotate(double leftWheelSpeed) {
+        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+    }
+
+    // Drive at the given wheel speeds, applying correction and a low pass filter
+    private void driveFiltered(WheelSpeeds speeds) {
+        // Correct the wheel speeds based on positional errors
+        WheelSpeeds correctedWheelSpeeds = correctSteering(speeds);
+        // Run the wheel speeds through corresponding low pass filters
+        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(correctedWheelSpeeds);
+        // Set the motor speeds with the calculated values
         leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
     }
@@ -102,7 +110,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
-        if(speed == 0) {
+        if (speed == 0) {
             return new WheelSpeeds(turn, -turn);
         }
         // Apply a polynomial function to the speed and multiply it by the turning coefficient

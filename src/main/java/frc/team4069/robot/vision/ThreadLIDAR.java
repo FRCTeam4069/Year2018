@@ -174,7 +174,7 @@ public class ThreadLIDAR implements Runnable {
                 addPointToHistory(angle, dist, ss, stat);
 
                 // set distance from target to closest lidar point in front of camera
-                if (angle >= 265 && angle <= 275) {
+                if (angle >= 355 && angle <= 5) {
                     if (dist < closestToCamera.dist || shouldResetClosestToCamera) {
                         closestToCamera.az = angle;
                         closestToCamera.dist = dist;

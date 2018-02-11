@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
         super.robotInit();
 
         // Initialize the subsystems
-        CommandBase.init();
+        CommandBase.init(this);
 
         // Set up the input class
         Input.init();

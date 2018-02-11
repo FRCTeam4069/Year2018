@@ -1,6 +1,7 @@
 package frc.team4069.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.team4069.robot.Robot;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
@@ -17,13 +18,22 @@ public abstract class CommandBase extends Command {
     protected static VacuumSubsystem vacuum;
     protected static WinchSubsystem winch;
 
+    private static Robot mRobot;
+
     // An function that handles initialization of subsystems
-    public static void init() {
+    public static void init(Robot robot) {
+        mRobot = robot;
+
         // Get the singleton instance of each of the subsystems
         driveBase = DriveBaseSubsystem.getInstance();
         elevator = ElevatorSubsystem.getInstance();
         arm = ArmSubsystem.getInstance();
         vacuum = VacuumSubsystem.getInstance();
         winch = WinchSubsystem.getInstance();
+    }
+
+    // Accessor for the gyro angle
+    protected static double getGyroAngle() {
+        return mRobot.threadGyroInstance.lastHeading;
     }
 }
