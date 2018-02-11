@@ -106,6 +106,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
+    // Do not touch. 
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
         if(speed == 0) {
             return new WheelSpeeds(turn, -turn);
