@@ -7,6 +7,7 @@ import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.subsystems.VacuumSubsystem;
 import frc.team4069.robot.subsystems.WinchSubsystem;
+import frc.team4069.robot.vision.ThreadVisionProcessor.ColourRegions;
 
 // A generic command class that contains references to all of the subsystems and initializes them
 public abstract class CommandBase extends Command {
@@ -17,10 +18,9 @@ public abstract class CommandBase extends Command {
     protected static ArmSubsystem arm;
     protected static VacuumSubsystem vacuum;
     protected static WinchSubsystem winch;
-
     private static Robot mRobot;
 
-    // An function that handles initialization of subsystems
+    // A function that handles initialization of subsystems
     public static void init(Robot robot) {
         mRobot = robot;
 
@@ -35,5 +35,15 @@ public abstract class CommandBase extends Command {
     // Accessor for the gyro angle
     protected static double getGyroAngle() {
         return mRobot.threadGyroInstance.lastHeading;
+    }
+
+    // Accessor for the colour regions of the vision processor
+    protected static ColourRegions getColourRegions() {
+        return mRobot.threadVisionProcessorInstance.cregions;
+    }
+
+    // Accessor for the Lidar distance directly ahead
+    protected static double getDistanceAheadCentimeters() {
+        return mRobot.threadLIDARInstance.lastDistance;
     }
 }
