@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
-import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
+import frc.team4069.robot.commands.autonomous.DriveTowardTapeCommand;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.vision.ThreadGyro;
@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         super.autonomousInit();
         // Run the autonomous command group, which handles driving, elevator, and vacuum control
-        scheduler.add(new AutonomousCommandGroup());
+        scheduler.add(new DriveTowardTapeCommand());
     }
 
     @Override

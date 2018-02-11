@@ -4,7 +4,7 @@ import frc.team4069.robot.commands.CommandBase;
 
 class DriveStraightForDistanceCommand extends CommandBase {
 
-    private final double speed = 0.8;
+    private final double speed = 0.2;
 
     private double distanceMeters;
     private double endDistance;

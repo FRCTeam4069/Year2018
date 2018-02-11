@@ -12,12 +12,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public static final double ROBOT_TRACK_WIDTH_METERS = 0.6;
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
-    // The factor by which the reciprocal of the error is multiplied to get a speed multiplier
-    private final double CORRECTION_SCALE = 1.5;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.61;
-    // The number of past distances traveled to retain
-    private final int DISTANCES_TRAVELED_HISTORY = 10;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
@@ -25,9 +21,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Low pass filters that smooth steering
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
-    // An array of past distances traveled in rotations by each of the wheels
-    private double[] leftWheelDistancesTraveled;
-    private double[] rightWheelDistancesTraveled;
 
     // Initialize the drive motors
     private DriveBaseSubsystem() {
@@ -37,15 +30,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
-        // Initialize the arrays of distances traveled with zeroes
-        leftWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY]; //FIXME: HORRIBLE, DO NOT USE ARRAYS FOR THIS.
-        rightWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY]; //USE ARRAYLIST<DOUBLE> AND TO ADD DO A .ADD(N)
-
-        for (int i = 0; i < DISTANCES_TRAVELED_HISTORY;
-                i++) { //ARRAYS ARE INITED TO 0 AUTOMAGICALLY IN JAVA
-            leftWheelDistancesTraveled[i] = 0;  //IN JAVA ALL ELEMENTS ARE AUTO SET TO ZERO UPON CREATION
-            rightWheelDistancesTraveled[i] = 0;
-        }
     }
 
     // A public getter for the instance
@@ -81,6 +65,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
+        // Invert the turn if we're moving backwards
+        if(speed < 0) {
+            turn = -turn;
+        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
             rotate(turn * 0.6);
@@ -97,12 +85,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
         driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
     }
 
-    // Drive at the given wheel speeds, applying correction and a low pass filter
+    // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds) {
-        // Correct the wheel speeds based on positional errors
-        WheelSpeeds correctedWheelSpeeds = correctSteering(speeds);
         // Run the wheel speeds through corresponding low pass filters
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(correctedWheelSpeeds);
+        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(speeds);
         // Set the motor speeds with the calculated values
         leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
@@ -139,53 +125,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // because the square root is relatively large in magnitude for values close to zero
         // Multiply the result of the square root by 2 to increase the turning sensitivity
         return Math.sqrt(speed) * 2;
-    }
-
-    // Modify a set of wheel speeds to correct for errors that have accumulated due to friction
-    //FIXME: THIS CODE IS HORRIBLE, YOU DO NOT ADD ELEMENTS TO ARRAYS BY 'SHIFTING DOWN' EVERY ELEMENT
-    //WHAT HAPPENS WHEN ITS 1 BILLION ELEMENTS? YOU SPEND ALL ETERNITY MOVING ELEMENTS.
-    //USE ARRAYLIST OF DOUBLES AND USE .ADD FUNCTION TO ADD TO IT.
-    //OR IF YOU WANT A FIXED ARRAY, USE A QUEUE STRUCTURE, DO NOT MOVE HUGE AMOUNTS 
-    //OF MEMORY PER CALL!!!
-    //A USE IN AND OUT INDEXES IN A FIXED ARRAY WITH MODULUSES TO WRAP
-
-    private WheelSpeeds correctSteering(WheelSpeeds rawSpeeds) {
-        // Shift all of the elements in the history of distances down one place to the end
-        for (int i = 1; i < DISTANCES_TRAVELED_HISTORY; i++) {
-            leftWheelDistancesTraveled[i] = leftWheelDistancesTraveled[i - 1];
-            rightWheelDistancesTraveled[i] = rightWheelDistancesTraveled[i - 1];
-        }
-        // Add the current distances traveled by each of the wheels and set the first element of
-        // each of the lists accordingly
-        leftWheelDistancesTraveled[0] = leftDrive.getDistanceTraveledRotations();
-        rightWheelDistancesTraveled[0] = rightDrive.getDistanceTraveledRotations();
-        // Get the number of rotations traveled by each wheel since the beginning of the recorded
-        // history of distances traveled, and calculate the average
-        double leftWheelRotationsTraveled = leftDrive.getDistanceTraveledRotations()
-                - leftWheelDistancesTraveled[DISTANCES_TRAVELED_HISTORY - 1];
-        double rightWheelRotationsTraveled = rightDrive.getDistanceTraveledRotations()
-                - rightWheelDistancesTraveled[DISTANCES_TRAVELED_HISTORY - 1];
-        double averageRotationsTraveled =
-                (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
-        // Calculate the ratios of the distance traveled by each wheel versus the average
-        double leftWheelDistanceRatio = leftWheelRotationsTraveled / averageRotationsTraveled;
-        double rightWheelDistanceRatio = rightWheelRotationsTraveled / averageRotationsTraveled;
-        // Calculate the average speed of the two wheels
-        double averageWheelSpeed = (rawSpeeds.leftWheelSpeed + rawSpeeds.rightWheelSpeed) / 2;
-        // Calculate the ratios of the speed demanded of each wheel versus the average
-        double leftWheelSpeedRatio = rawSpeeds.leftWheelSpeed / averageWheelSpeed;
-        double rightWheelSpeedRatio = rawSpeeds.rightWheelSpeed / averageWheelSpeed;
-        // Calculate the errors of the distance ratios versus the expected speed ratios
-        double leftWheelError = leftWheelDistanceRatio / leftWheelSpeedRatio;
-        double rightWheelError = rightWheelDistanceRatio / rightWheelSpeedRatio;
-        // Multiply the reciprocals of the errors by a scaling factor to get correction factors
-        double leftWheelCorrection = (1 / leftWheelError) * CORRECTION_SCALE;
-        double rightWheelCorrection = (1 / rightWheelError) * CORRECTION_SCALE;
-        // Return the wheel speeds multiplied by the corresponding correction factors
-        return new WheelSpeeds(
-                rawSpeeds.leftWheelSpeed * leftWheelCorrection,
-                rawSpeeds.rightWheelSpeed * rightWheelCorrection
-        );
     }
 
     // A function to run wheel speeds through the corresponding low pass filters
