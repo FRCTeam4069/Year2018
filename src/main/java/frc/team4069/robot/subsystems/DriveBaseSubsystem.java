@@ -38,10 +38,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
         // Initialize the arrays of distances traveled with zeroes
-        leftWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY];
-        rightWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY];
-        for (int i = 0; i < DISTANCES_TRAVELED_HISTORY; i++) {
-            leftWheelDistancesTraveled[i] = 0;
+        leftWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY]; //FIXME: HORRIBLE, DO NOT USE ARRAYS FOR THIS.
+        rightWheelDistancesTraveled = new double[DISTANCES_TRAVELED_HISTORY]; //USE ARRAYLIST<DOUBLE> AND TO ADD DO A .ADD(N)
+
+        for (int i = 0; i < DISTANCES_TRAVELED_HISTORY; i++) { //ARRAYS ARE INITED TO 0 AUTOMAGICALLY IN JAVA
+            leftWheelDistancesTraveled[i] = 0;  //IN JAVA ALL ELEMENTS ARE AUTO SET TO ZERO UPON CREATION
             rightWheelDistancesTraveled[i] = 0;
         }
     }
@@ -107,6 +108,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // left and right wheel speeds using a generalized cheesy drive algorithm
     // Credit to Team 254 for the original algorithm
     // Do not touch. 
+    //
+    //This routine just takes speed and turn  sqrt(speed)*2 * turn
     private WheelSpeeds generalizedCheesyDrive(double turn, double speed) {
         if(speed == 0) {
             return new WheelSpeeds(turn, -turn);
@@ -138,6 +141,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 
     // Modify a set of wheel speeds to correct for errors that have accumulated due to friction
+    //FIXME: THIS CODE IS HORRIBLE, YOU DO NOT ADD ELEMENTS TO ARRAYS BY 'SHIFTING DOWN' EVERY ELEMENT
+    //WHAT HAPPENS WHEN ITS 1 BILLION ELEMENTS? YOU SPEND ALL ETERNITY MOVING ELEMENTS.
+    //USE ARRAYLIST OF DOUBLES AND USE .ADD FUNCTION TO ADD TO IT.
+
     private WheelSpeeds correctSteering(WheelSpeeds rawSpeeds) {
         // Shift all of the elements in the history of distances down one place to the end
         for (int i = 1; i < DISTANCES_TRAVELED_HISTORY; i++) {
