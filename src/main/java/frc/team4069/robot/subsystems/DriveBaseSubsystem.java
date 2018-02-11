@@ -144,6 +144,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     //FIXME: THIS CODE IS HORRIBLE, YOU DO NOT ADD ELEMENTS TO ARRAYS BY 'SHIFTING DOWN' EVERY ELEMENT
     //WHAT HAPPENS WHEN ITS 1 BILLION ELEMENTS? YOU SPEND ALL ETERNITY MOVING ELEMENTS.
     //USE ARRAYLIST OF DOUBLES AND USE .ADD FUNCTION TO ADD TO IT.
+    //OR IF YOU WANT A FIXED ARRAY, USE A QUEUE STRUCTURE, DO NOT MOVE HUGE AMOUNTS 
+    //OF MEMORY PER CALL!!!
+    //A USE IN AND OUT INDEXES IN A FIXED ARRAY WITH MODULUSES TO WRAP
 
     private WheelSpeeds correctSteering(WheelSpeeds rawSpeeds) {
         // Shift all of the elements in the history of distances down one place to the end
