@@ -65,6 +65,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
+        // Invert the turn if we're moving backwards
+        if(speed < 0) {
+            turn = -turn;
+        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
             rotate(turn * 0.6);
