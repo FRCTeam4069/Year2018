@@ -17,8 +17,8 @@ public class Robot extends IterativeRobot {
 
     public ThreadGyro threadGyroInstance;
     public ThreadLIDAR threadLIDARInstance;
+    public ThreadVisionProcessor threadVisionProcessorInstance;
     private ThreadVideoCapture threadVideoCaptureInstance;
-    private ThreadVisionProcessor threadVisionProcessorInstance;
     private Thread threadGyroHandle;
     private Thread threadLIDARHandle;
     private Thread threadVideoCaptureHandle;

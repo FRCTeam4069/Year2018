@@ -25,4 +25,9 @@ class DriveStraightForDistanceCommand extends CommandBase {
     protected boolean isFinished() {
         return driveBase.getDistanceTraveledMeters() >= endDistance;
     }
+
+    @Override
+    protected void end() {
+        driveBase.stop();
+    }
 }
