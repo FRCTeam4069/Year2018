@@ -10,16 +10,27 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     private double relativeAngle;
     private double endAngle;
 
-    RotateToAngleWithGyroCommand(double relativeAngle) {
+    //Note: relativeAngle can be negative or positive angle
+    RotateToAngleWithGyroCommand(double relativeAngle) 
+    {
         requires(driveBase);
         this.relativeAngle = relativeAngle;
     }
 
-    protected void initialize() {
+
+    
+    
+    protected void initialize() 
+    {
         double currentAngle = getGyroAngle();
-        endAngle = currentAngle + relativeAngle;
+        endAngle = (currentAngle + relativeAngle) % 360; //javas % is not modulus, its remainder so it can be negative
+        												//true modulus can never be negative
+        if (endAngle < 0) endAngle += 360;				//so if it goes negative, blow it positive
+        
+        turnRight = relativeAngle > 0 ? true : false;  //if passed angle to turn is positive, turn right 
+        
         // Turn right if the distance from the end angle to the current angle is between 0 and 180
-        turnRight = (endAngle - currentAngle) < 180;
+        //turnRight = (endAngle - currentAngle) < 180;
         // Turn on the spot in the calculated direction
         driveBase.rotate(turnRight ? turnSpeedAbsolute : -turnSpeedAbsolute);
         System.out.println(turnRight ? turnSpeedAbsolute : -turnSpeedAbsolute);
