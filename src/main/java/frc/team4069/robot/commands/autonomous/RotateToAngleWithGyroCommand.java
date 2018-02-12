@@ -5,7 +5,7 @@ import frc.team4069.robot.commands.CommandBase;
 // Using the gyroscope, rotate the robot to a specific angle
 class RotateToAngleWithGyroCommand extends CommandBase {
 
-    private final double turnSpeedAbsolute = 0.2;
+    private final double turnSpeedAbsolute = 0.15;
     private boolean turnRight;
     private double startAngle;
     private double relativeAngle;
