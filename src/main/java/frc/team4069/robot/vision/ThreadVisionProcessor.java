@@ -54,6 +54,10 @@ public class ThreadVisionProcessor implements Runnable {
 
     private LowPassFilter xLowPass;
     private LowPassFilter yLowPass;
+	
+	// If enabled, normalizes the brightness of the image around an average brightness value
+	private boolean valueScaling = false;
+	private int baseValue = 100;
 
     public ThreadVisionProcessor(ThreadVideoCapture vidcapinstance, Thread vcap_handle,
             Robot irobot) {
@@ -91,6 +95,33 @@ public class ThreadVisionProcessor implements Runnable {
             if (mProcessFrames) {
                 img = vcap_thread_instance
                         .GetFrame(); // pull frame from ThreadVideoCapture.java safely
+				
+				if(valueScaling){
+					Mat imgCopy = new Mat();
+					Imgproc.cvtColor(img, imgCopy, Imgproc.COLOR_RGB2HSV);
+					double averageValue = 0;
+					for(int x = 0; x < img.cols(); x++){
+						for(int y = 0; y < img.rows(); y++){
+							averageValue += imgCopy.get(x, y)[2];
+						}
+					}
+					averageValue /= img.cols() * img.rows();
+					double averageDifference = averageValue - baseValue;
+					for(int x = 0; x < img.cols(); x++){
+						for(int y = 0; y < img.rows(); y++){
+							double[] pixel = imgCopy.get(x, y);
+							double modifiedValue = pixel[2] + averageDifference;
+							if(modifiedValue > 255){
+								modifiedValue = 255;
+							}
+							if(modifiedValue < 0){
+								modifiedValue = 0;
+							}
+							imgCopy.put(x, y, pixel[0], pixel[1], modifiedValue);
+						}
+					}
+					Imgproc.cvtColor(imgCopy, img, Imgproc.COLOR_HSV2RGB);
+				}
 
                 if (img != null) {
                     cregions.CalcAll(img); // look for stuff, calc things
