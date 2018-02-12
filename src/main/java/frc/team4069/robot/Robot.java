@@ -34,7 +34,7 @@ public class Robot extends IterativeRobot {
         super.robotInit();
 
         // Instantiate PowerDistributionPanel
-        powerDistributionPanel = new PowerDistributionPanel(1);
+//        powerDistributionPanel = new PowerDistributionPanel(1);
 
         // Initialize the subsystems
         CommandBase.init(this);

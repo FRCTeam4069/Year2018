@@ -89,7 +89,7 @@ public class ThreadVisionProcessor implements Runnable {
         //cregions.addRange(0x07, 0x77, 0x38, 0x30, 0x94, 0x51);
 
         // Lower gym
-        cregions.addRange(0x00, 0x90, 0x65, 0x24, 0xff, 85);
+        cregions.addRange(0x00, 0x80, 0x30, 0x24, 0xff, 0x85);
 
         while ((true) && (mExitThread == false)) {
             if (mProcessFrames) {
