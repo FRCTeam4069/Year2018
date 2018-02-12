@@ -8,7 +8,7 @@ class DriveTowardTapeCommand extends CommandBase {
 
     // Scaling factor for the horizontal error of the tape off the center of the screen
     // It is multiplied by a value from 1 to -1
-    private final double errorScalingFactor = 0.25;
+    private final double errorScalingFactor = 0.5;
 
     // Distance in centimeters ahead at which the command stops
     private final double stopDistanceCentimeters = 5;
