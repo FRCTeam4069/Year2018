@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutonomousCommandGroup extends CommandGroup {
 
     // Turning angles and driving distances for each possible starting configuration
-    private final double[] turningAngles = {10, -10, -30, 30, 10, -10};
+    private final double[] turningAngles = {10, -10, -45, 30, 10, -10};
     private final double[] drivingDistancesMeters = {4, 6, 9, 9, 6, 4};
 
     // The robot's starting position for autonomous mode
@@ -25,10 +25,10 @@ public class AutonomousCommandGroup extends CommandGroup {
 //        addParallel(new ZeroElevatorCommand());
 //        addSequential(new WaitCommand(1));
 //        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
-//        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
+        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
 //        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
 //        addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
-        addSequential(new DriveTowardTapeCommand());
+//        addSequential(new DriveTowardTapeCommand());
 //        addSequential(new StopVacuumCommand());
     }
 

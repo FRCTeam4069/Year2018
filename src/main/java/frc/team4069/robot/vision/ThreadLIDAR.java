@@ -83,7 +83,7 @@ public class ThreadLIDAR implements Runnable {
         lastError = "Startup...";
         lastMessage = "Startup...";
         connectToSerial();
-        System.out.println("Sending RR Reset command...");
+//        System.out.println("Sending RR Reset command...");
         mSerpt.writeString("RR\r\n");
         doSleep(5000);
 
@@ -261,7 +261,7 @@ public class ThreadLIDAR implements Runnable {
             gotrsp = readNonStreamingResponse(response, numlf); // -1 is timeout
             resp = "NoResponseTimeout";
             if (gotrsp == -1) {
-                System.out.println("No Response Timeout");
+//                System.out.println("No Response Timeout");
                 // return resp; // no response timeout
                 doSleep(500);
                 doPrint("Trying Command " + cmd + " Again");
@@ -304,7 +304,7 @@ public class ThreadLIDAR implements Runnable {
         lastlooptime = System.currentTimeMillis();
         while ((finished == 0) && (idx < maxsize)) {
             if (System.currentTimeMillis() - lastlooptime > 1000) {
-                System.out.println("ReadNonStream TIMEOUT");
+//                System.out.println("ReadNonStream TIMEOUT");
                 return -1;
             }
 
@@ -320,11 +320,11 @@ public class ThreadLIDAR implements Runnable {
                         idx++;
                         if (abyte[0] == 10) {
                             numlffnd++;
-                            System.out.println("GOTLF num=" + numlffnd);
+//                            System.out.println("GOTLF num=" + numlffnd);
                             if (numlffnd == numlf) {
                                 finished = 1;
                             } else {
-                                System.out.println("ADDING _");
+//                                System.out.println("ADDING _");
                                 tothis[idx - 1] = '_';
                             }
                         } // if LF found
@@ -332,12 +332,12 @@ public class ThreadLIDAR implements Runnable {
 
                     } // if abyte.len . 0
                     else {
-                        System.out.println("failed read 1 byte len=" + abyte.length);
+//                        System.out.println("failed read 1 byte len=" + abyte.length);
                     }
                 } // if bytes waiting
             } // try
             catch (Exception e) {
-                System.out.println("Reading packet exception: " + e.getMessage());
+//                System.out.println("Reading packet exception: " + e.getMessage());
             }
         } // while
         return idx;
@@ -429,7 +429,7 @@ public class ThreadLIDAR implements Runnable {
                         SerialPort.StopBits.kOne);
                 mSerpt.disableTermination();
                 success = 1;
-                System.out.println("LIDAR Connected to port " + lastUSBRetry);
+//                System.out.println("LIDAR Connected to port " + lastUSBRetry);
             } catch (Exception e) {
                 switch (lastUSBRetry) {
                     case kMXP:
@@ -447,8 +447,8 @@ public class ThreadLIDAR implements Runnable {
                         break;
                 } // switch
                 lastError = e.getMessage() + ", retrying port " + lastUSBRetry;
-                System.out.println(
-                        "SERIAL_ERR:" + e.getMessage() + ", retrying port " + lastUSBRetry);
+//                System.out.println(
+//                        "SERIAL_ERR:" + e.getMessage() + ", retrying port " + lastUSBRetry);
                 doSleep(1000);
             }
         }
@@ -475,7 +475,7 @@ public class ThreadLIDAR implements Runnable {
     void doPrint(String s) {
         s.replace('\n', '_');
         s.replace('\r', '_');
-        System.out.println(s);
+//        System.out.println(s);
     }
 
     public class LidarSpot {
