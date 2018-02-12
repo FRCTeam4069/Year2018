@@ -14,7 +14,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     RotateToAngleWithGyroCommand(double relativeAngle) 
     {
         requires(driveBase);
-        this.relativeAngle = relativeAngle % 180;
+        this.relativeAngle = relativeAngle;
     }
 
 
