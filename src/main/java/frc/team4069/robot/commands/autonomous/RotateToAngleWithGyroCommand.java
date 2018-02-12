@@ -14,6 +14,9 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     RotateToAngleWithGyroCommand(double relativeAngle) {
         requires(driveBase);
         this.relativeAngle = relativeAngle;
+		if(this.relativeAngle > 180){
+			this.relativeAngle -= 360;
+		}
     }
 
 
@@ -28,14 +31,18 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     protected boolean isFinished() {
         System.out.println("get: " + getGyroAngle());
         System.out.println("turnright:" + turnRight);
-        double delta = getGyroAngle() - startAngle;
-        if (delta > 180) {
-            delta -= 360;
-        }
+		double gyroAngle = getGyroAngle();
+		if(gyroAngle < startAngle && this.turnRight){
+			gyroAngle += 360;
+		}
+		else if(gyroAngle > startAngle && !this.turnRight){
+			gyroAngle -= 360;
+		}
+        double delta = gyroAngle - startAngle;
         if (turnRight) {
-            return delta <= relativeAngle;
-        } else {
             return delta >= relativeAngle;
+        } else {
+            return delta <= relativeAngle;
         }
     }
 
