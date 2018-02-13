@@ -3,6 +3,7 @@ package frc.team4069.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
@@ -11,7 +12,7 @@ import frc.team4069.robot.util.LowPassFilter;
 public class ElevatorSubsystem extends SubsystemBase {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    public static final int MAX_POSITION_TICKS = -26901;
+    public static final int MAX_POSITION_TICKS = -29741;
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
@@ -25,6 +26,16 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
 
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+
+        limitSwitch.requestInterrupts(new InterruptHandlerFunction<Object>() {
+            @Override
+            public void interruptFired(int interruptAssertedMask, Object param) {
+                talon.setSelectedSensorPosition(0, 0, 0);
+                System.out.println("Elevator zeroed");
+            }
+        });
+
+        limitSwitch.enableInterrupts();
 
         // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
@@ -103,10 +114,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
-        INTAKE(-6938),
+        INTAKE(-5500),
         EXCHANGE(-3000),
-        SWITCH(15000),
-        SCALE(MAX_POSITION_TICKS);
+        SWITCH(-15000),
+        SCALE(MAX_POSITION_TICKS + 100);
 
         private int ticks;
 

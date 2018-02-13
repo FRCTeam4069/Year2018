@@ -1,6 +1,7 @@
 package frc.team4069.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
@@ -11,8 +12,7 @@ public class ElevatorIntakeCommandGroup extends CommandGroup {
 
     // Constructor that runs the four commands sequentially
     public ElevatorIntakeCommandGroup() {
-        addSequential(new StartVacuumCommand());
+//        addSequential(new StartVacuumCommand());
         addSequential(new SetElevatorPositionCommand(Position.INTAKE));
-        addSequential(new SetElevatorPositionCommand(Position.EXCHANGE));
     }
 }

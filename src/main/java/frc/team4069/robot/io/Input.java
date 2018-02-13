@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.elevator.DebugCommand;
@@ -35,7 +36,7 @@ public class Input {
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
+        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
 
         Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());
@@ -56,6 +57,9 @@ public class Input {
         Button armDown = new JoystickButton(driveJoystick, IOMapping.BUMPER_LEFT);
         armDown.whenPressed(new StartArmCommand(true));
         armDown.whenReleased(new StopArmCommand());
+
+        Button debug = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
+        debug.whenPressed(new DebugCommand());
     }
 
     // Accessor for the steering axis on the drive joystick
