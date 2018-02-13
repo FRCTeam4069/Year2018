@@ -24,15 +24,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
 
-        // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
         // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
         talon.config_kP(0, 0.6, 0);
         talon.config_kD(0, 0.1, 0);
-//
-//        talon.configMotionCruiseVelocity(1500, 0);
 
         // Configure motion magic acceleration and cruise velocity so that it actually works
         talon.configMotionCruiseVelocity(3000, 0);
