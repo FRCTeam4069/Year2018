@@ -30,7 +30,7 @@ class OperatorDriveCommand extends CommandBase {
 
     // Called frequently while this command is being run
     protected void execute() {
-		System.out.println("Elevator current: " + pdp.getCurrent(IOMapping.ELEVATOR_POWER_CHANNEL));
+//		System.out.println("Elevator current: " + pdp.getCurrent(IOMapping.ELEVATOR_POWER_CHANNEL));
         // Set drive base speeds using the joystick inputs
         // The turning coefficient should be equal to the steering axis
         double turningCoefficient = Input.getSteeringAxis();

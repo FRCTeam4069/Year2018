@@ -35,8 +35,7 @@ public class Input {
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-//        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
-        elevatorToIntake.whenPressed(new DebugCommand());
+        elevatorToIntake.whenPressed(new SetElevatorPositionCommand(Position.INTAKE));
 
         Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         winchForward.whenPressed(new StartWinchCommand());

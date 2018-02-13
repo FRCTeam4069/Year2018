@@ -3,6 +3,7 @@ package frc.team4069.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 import frc.team4069.robot.util.LowPassFilter;
@@ -26,11 +27,16 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
-        // Set the feed-forward gain
+        // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
         talon.config_kP(0, 0.6, 0);
+        talon.config_kD(0, 0.1, 0);
 //
 //        talon.configMotionCruiseVelocity(1500, 0);
+
+        // Configure motion magic acceleration and cruise velocity so that it actually works
+        talon.configMotionCruiseVelocity(3000, 0);
+        talon.configMotionAcceleration(1500, 0);
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
@@ -91,6 +97,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void reset() {
         talon.stop();
         talon.setSelectedSensorPosition(0, 0, 0);
+    }
+    
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new OperatorControlElevatorCommand());
     }
 
     // Enum that holds tick values for the various positions that the elevator must go to
