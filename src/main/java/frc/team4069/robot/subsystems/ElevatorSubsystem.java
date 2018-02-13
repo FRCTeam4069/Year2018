@@ -31,7 +31,6 @@ public class ElevatorSubsystem extends SubsystemBase {
             @Override
             public void interruptFired(int interruptAssertedMask, Object param) {
                 talon.setSelectedSensorPosition(0, 0, 0);
-                System.out.println("Elevator zeroed");
             }
         });
 
@@ -114,6 +113,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
+        MINIMUM(0),
         INTAKE(-5500),
         EXCHANGE(-3000),
         SWITCH(-15000),

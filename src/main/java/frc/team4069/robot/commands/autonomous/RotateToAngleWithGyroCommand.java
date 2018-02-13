@@ -29,8 +29,6 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     }
 
     protected boolean isFinished() {
-        System.out.println("get: " + getGyroAngle());
-        System.out.println("turnright:" + turnRight);
 		double gyroAngle = getGyroAngle();
 		if(gyroAngle < startAngle && this.turnRight){
 			gyroAngle += 360;
