@@ -12,7 +12,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
     private boolean set = true;
     private List<Integer> average;
 
-    OperatorControlElevatorCommand() {
+    public OperatorControlElevatorCommand() {
         requires(elevator);
         average = new ArrayList<>();
     }

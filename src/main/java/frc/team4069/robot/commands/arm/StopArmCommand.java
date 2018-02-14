@@ -11,7 +11,6 @@ public class StopArmCommand extends CommandBase {
     @Override
     protected void initialize() {
         arm.stop();
-        System.out.println("Arm Position: " + arm.getPosition());
         arm.setPosition(arm.getPosition() - 500);
     }
 

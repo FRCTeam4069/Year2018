@@ -12,9 +12,8 @@ public class ZeroElevatorCommand extends CommandBase {
 
     @Override
     protected void initialize() {
-        // Run the elevator upward slowly
-        elevator.setSpeed(-0.2);
-        System.out.println("zero");
+        // Run the elevator downward slowly
+        elevator.setSpeed(0.2);
     }
 
     @Override

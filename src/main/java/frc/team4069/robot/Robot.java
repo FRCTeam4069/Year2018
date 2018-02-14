@@ -8,6 +8,7 @@ import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.io.Input;
+import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.vision.ThreadGyro;
 import frc.team4069.robot.vision.ThreadLIDAR;
@@ -84,6 +85,7 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
         // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
         ElevatorSubsystem.getInstance().reset();
+        ArmSubsystem.getInstance().reset();
     }
 
     // During all phases, run the command scheduler

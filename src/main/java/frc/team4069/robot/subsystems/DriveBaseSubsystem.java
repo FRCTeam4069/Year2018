@@ -1,5 +1,6 @@
 package frc.team4069.robot.subsystems;
 
+import frc.team4069.robot.commands.OperatorDriveCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 import frc.team4069.robot.util.LowPassFilter;
@@ -28,8 +29,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
         // Initialize the low pass filters with a time period of 200 milliseconds
-        leftSideLpf = new LowPassFilter(200);
-        rightSideLpf = new LowPassFilter(200);
+        leftSideLpf = new LowPassFilter(250);
+        rightSideLpf = new LowPassFilter(250);
     }
 
     // A public getter for the instance
@@ -71,7 +72,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.6);
+            rotate(turn * 0.4);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -82,10 +83,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-//        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
         // Low pass filter is giving us trouble. Bypass it.
-        leftDrive.setConstantSpeed(leftWheelSpeed);
-        rightDrive.setConstantSpeed(-leftWheelSpeed);
+//        leftDrive.setConstantSpeed(leftWheelSpeed);
+//        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
 
     // Drive at the given wheel speeds, applying a low pass filter
@@ -136,6 +137,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 leftSideLpf.calculate(speeds.leftWheelSpeed),
                 rightSideLpf.calculate(speeds.rightWheelSpeed)
         );
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new OperatorDriveCommand());
     }
 
     // A wrapper class that contains a speed value for each of the drive base wheels

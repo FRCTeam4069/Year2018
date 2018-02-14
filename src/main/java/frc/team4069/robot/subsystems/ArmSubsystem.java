@@ -33,6 +33,10 @@ public class ArmSubsystem extends SubsystemBase {
         return talon.getSelectedSensorPosition(0);
     }
 
+    public void reset() {
+        talon.stop();
+    }
+
     public static ArmSubsystem getInstance() {
         if(instance == null) {
             instance = new ArmSubsystem();
