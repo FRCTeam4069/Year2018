@@ -23,8 +23,12 @@ run/
 gradle/.launch/
 
 # OS Files
+<<<<<<< HEAD
+**/.DS_Store
+=======
 .DS_Store
 .DS_Store?
+>>>>>>> master
 ._*
 .Spotlight-V100
 .AppleDouble

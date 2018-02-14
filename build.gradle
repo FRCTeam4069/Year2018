@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.06b"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
 }
 
 def TEAM = 4069
@@ -21,6 +21,12 @@ deploy {
             targets << "roborio"
         }
     }
+}
+
+// Central is required to fetch Kotlin
+repositories {
+    mavenCentral()
+    jcenter()
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
