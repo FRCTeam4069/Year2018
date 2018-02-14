@@ -94,7 +94,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Get the state of the limit switch at the bottom of the elevator
     public boolean getLimitSwitchClosed() {
         // True represents open and false represents closed; this function should be the opposite
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
 
     public int getVelocity() {
