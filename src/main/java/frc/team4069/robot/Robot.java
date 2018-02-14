@@ -10,7 +10,7 @@ import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
-import frc.team4069.robot.vision.ArmCameraData;
+import frc.team4069.robot.vision.ThreadArmCamera;
 import frc.team4069.robot.vision.ThreadGyro;
 import frc.team4069.robot.vision.ThreadLIDAR;
 import frc.team4069.robot.vision.ThreadVideoCapture;
@@ -27,6 +27,8 @@ public class Robot extends IterativeRobot {
     private Thread threadLIDARHandle;
     private Thread threadVideoCaptureHandle;
     private Thread threadVisionProcessorHandle;
+    private ThreadArmCamera threadArmCamera;
+    private Thread threadArmCameraHandle;
     private long mLastDashboardUpdateTime = 0;
 
     private Scheduler scheduler;
@@ -44,13 +46,10 @@ public class Robot extends IterativeRobot {
         // Set up the input class
         Input.init();
 
-        // Configure the arm camera vision pipeline
-        ArmCameraData.configureVision();
-
         // Get the scheduler
         scheduler = Scheduler.getInstance();
 
-        // Vision initializers;
+        // Vision initializers
         threadGyroInstance = new ThreadGyro();
         threadGyroHandle = new Thread(threadGyroInstance);
         threadGyroHandle.start();
@@ -65,6 +64,9 @@ public class Robot extends IterativeRobot {
                 threadVideoCaptureHandle, this);
         threadVisionProcessorHandle = new Thread(threadVisionProcessorInstance);
         threadVisionProcessorHandle.start();
+        threadArmCamera = new ThreadArmCamera();
+        threadArmCameraHandle = new Thread(threadArmCamera);
+        threadArmCameraHandle.start();
     }
 
     @Override
