@@ -22,13 +22,13 @@ public class Robot extends IterativeRobot {
     public ThreadLIDAR threadLIDARInstance;
     public ThreadVisionProcessor threadVisionProcessorInstance;
     public PowerDistributionPanel powerDistributionPanel;
+    public ThreadArmCamera threadArmCamera;
+    public Thread threadArmCameraHandle;
     private ThreadVideoCapture threadVideoCaptureInstance;
     private Thread threadGyroHandle;
     private Thread threadLIDARHandle;
     private Thread threadVideoCaptureHandle;
     private Thread threadVisionProcessorHandle;
-    private ThreadArmCamera threadArmCamera;
-    private Thread threadArmCameraHandle;
     private long mLastDashboardUpdateTime = 0;
 
     private Scheduler scheduler;

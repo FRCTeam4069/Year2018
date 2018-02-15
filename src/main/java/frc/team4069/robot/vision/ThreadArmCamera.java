@@ -8,22 +8,22 @@ import org.opencv.videoio.Videoio;
 
 public class ThreadArmCamera implements Runnable {
 
-    // The dimensions of the image captured by the camera
-    public static final int imageWidth = 320;
-    public static final int imageHeight = 240;
+    // Dimensions of the image
+    public final int width = 320;
+    public final int height = 240;
     // The X and Y positions of the center of the power cube found on screen
-    public static int powerCubeXPos;
-    public static int powerCubeYPos;
-    private static ArmCameraPipeline pipeline;
-    private static VideoCapture vcap;
+    public int powerCubeXPos;
+    public int powerCubeYPos;
+    private ArmCameraPipeline pipeline;
+    private VideoCapture vcap;
 
     // Set up the vision threads and set them to run as the camera captures frames
     public ThreadArmCamera() {
         pipeline = new ArmCameraPipeline();
         vcap = new VideoCapture();
         vcap.open(1);
-        vcap.set(Videoio.CAP_PROP_FRAME_WIDTH, 320);
-        vcap.set(Videoio.CAP_PROP_FRAME_HEIGHT, 240);
+        vcap.set(Videoio.CAP_PROP_FRAME_WIDTH, width);
+        vcap.set(Videoio.CAP_PROP_FRAME_HEIGHT, height);
 
     }
 
