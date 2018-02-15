@@ -21,7 +21,3 @@ We are using the GradleRIO build system, which allows easy building and deployin
 
 ## Style Guide
 Team members are asked to import `FRC4069-Style-Guide-Eclipse.xml` or `FRC4069-Style-Guide-IntelliJ.xml` (depending on whether they are using Eclipse or IntelliJ IDEA) into their IDEs and format code files appropriately.
-
-## Kotlin
-Some portions of this year's code are written in the Kotlin programming language.
-To familiarize yourself with the language, take some time to run through [The Kotlin Koans](https://kotlinlang.org/docs/tutorials/koans.html)
