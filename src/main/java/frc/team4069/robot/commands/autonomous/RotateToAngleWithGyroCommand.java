@@ -118,7 +118,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
         driveBase.stop();
     }
 
-    private double linearInterpolation(double a, double b, double a2, double b2, double c) {
+    private double lerp(double a, double b, double a2, double b2, double c) {
         double x = (c - a2) / (b2 - a2);
         return x * b + (1 - x) * a;
     }
