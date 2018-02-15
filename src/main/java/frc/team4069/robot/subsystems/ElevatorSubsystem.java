@@ -48,10 +48,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.setSelectedSensorPosition(0, 0, 0);
 
         // Soft limits to avoid destruction of hardware
-//        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
+        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
-//        talon.configReverseSoftLimitEnable(false, 0);
-//        talon.configForwardSoftLimitEnable(false, 0);
+        talon.configReverseSoftLimitEnable(false, 0);
+//        talon.configForwardSoftLimitEnable(true, 0);
 
     }
 

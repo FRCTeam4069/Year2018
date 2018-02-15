@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
+import frc.team4069.robot.commands.autonomous.GrabCubeCommand;
+import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
