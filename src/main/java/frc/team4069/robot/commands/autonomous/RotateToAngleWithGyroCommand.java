@@ -62,8 +62,8 @@ class RotateToAngleWithGyroCommand extends CommandBase {
      */
     private double calculateDelta() {
         double gyroAngle = calculateGyroAngle();
-        double delta = gyroAngle - startAngle;
-        return delta;
+
+        return gyroAngle - startAngle;
     }
 
     protected void initialize() {
@@ -85,7 +85,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
         double delta = calculateDelta();
         double gyroAngle = calculateGyroAngle();
         System.out.println("Gyro delta: " + delta);
-        // The constant has the effect of narrowing the lerp to a small range around the desired angle and keeping motor output to a max everywhere else
+        // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
         double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
