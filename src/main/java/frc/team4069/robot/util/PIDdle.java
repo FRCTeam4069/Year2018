@@ -126,6 +126,21 @@ public class PIDdle
     }
   } // SetTunings
 
+  public double getP()
+  {
+    return mKP;
+  }
+  
+  public double getI()
+  {
+    return mKI;    
+  }
+  
+  public double getD()
+  {
+    return mKD;
+  }
+  
   
   /**
    * SetMinimumSampleTime : New minimum sample time in milliseconds
