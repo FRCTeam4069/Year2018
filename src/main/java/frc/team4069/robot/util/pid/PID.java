@@ -1,6 +1,5 @@
 package frc.team4069.robot.util.pid;
 
-// Known working implementation of PID
 // Thanks to 1458 for the original implementation
 public class PID {
 
