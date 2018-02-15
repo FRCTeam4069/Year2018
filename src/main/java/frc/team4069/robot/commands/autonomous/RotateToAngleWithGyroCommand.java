@@ -87,7 +87,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
         System.out.println("Gyro delta: " + delta);
         // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
-        double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
+        double motorOutput = linearInterpolation(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
         System.out.println("Derivative value: " + robotSpeed);
         System.out.println("Base motor output: " + motorOutput);
@@ -118,7 +118,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
         driveBase.stop();
     }
 
-    private double lerp(double a, double b, double a2, double b2, double c) {
+    private double linearInterpolation(double a, double b, double a2, double b2, double c) {
         double x = (c - a2) / (b2 - a2);
         return x * b + (1 - x) * a;
     }
