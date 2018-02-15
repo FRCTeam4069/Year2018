@@ -84,7 +84,6 @@ public class PIDdle {
         return mPIDOutput;
     }
 
-
     /**
      * getCurrentOutput
      *
@@ -92,8 +91,19 @@ public class PIDdle {
      */
     double getCurrentOutput() {
         return mPIDOutput;
+    } // SetTunings
+
+    public double getP() {
+        return mKP;
     }
 
+    public double getI() {
+        return mKI;
+    }
+
+    public double getD() {
+        return mKD;
+    }
 
     /**
      * getTunings : Kp,Ki,kD parameters, NOTE NEVER send negative values for these.  If you want the PID
@@ -121,9 +131,8 @@ public class PIDdle {
         }
     } // setTunings
 
-
     /**
-     * SetMinimumSampleTime : New minimum sample time in milliseconds
+     * setMinimumSampleTime : New minimum sample time in milliseconds
      * if compute() is called faster than this, it will do nothing until at LEAST this amount of
      * time has passed.
      *
@@ -139,7 +148,6 @@ public class PIDdle {
             mMinimumTimeBetweenComputeCalls = newSampleTime;
         }
     }
-
 
     /**
      * SetOutputLimits : It is STRONGLY encouraged that you set these to reasonable values.
@@ -168,7 +176,6 @@ public class PIDdle {
         }
     }
 
-
     /**
      * SetMode : Set the PID controller to PIDDLE_AUTOMATIC or PIDDLE_MANUAL
      * in Manual mode compute() will do nothing.
@@ -183,7 +190,6 @@ public class PIDdle {
         }
         mAutomaticMode = newAuto;
     }
-
 
     /**
      * initialize : This is called by SetMode when Automatic is enabled to resume PID operations without
@@ -200,7 +206,6 @@ public class PIDdle {
             mIntegralAccumulator = mOutputMinimumValue;
         }
     }
-
 
     /**
      * setControllerDirection : If the PID output should be positive PIDDLE_DIRECT should be set
