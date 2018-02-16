@@ -6,7 +6,7 @@ import frc.team4069.robot.commands.autonomous.DriveStraightForDistanceCommand;
 public class HookArmCommandGroup extends CommandGroup {
     public HookArmCommandGroup() {
 //        addSequential(new DeployArmCommand());
-        addSequential(new DriveStraightForDistanceCommand(0.3));
+        addSequential(new DriveStraightForDistanceCommand(2));
 //        addSequential(new DriveStraightForDistanceCommand(-0.1));
 //        addSequential(new RetractArmCommand());
 //        addSequential(new DriveStraightForDistanceCommand(0.1));

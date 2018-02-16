@@ -20,12 +20,16 @@ public class DriveStraightForDistanceCommand extends CommandBase {
     protected void initialize() {
         super.initialize();
         endDistance = driveBase.getDistanceTraveledMeters() + distanceMeters;
-        driveBase.driveContinuousSpeed(0, signedSpeed);
+        driveBase.driveContinuousSpeed(0, signedSpeed, true);
     }
 
     @Override
     protected boolean isFinished() {
-        return driveBase.getDistanceTraveledMeters() >= endDistance;
+        double distance = Math.abs(driveBase.getDistanceTraveledMeters());
+        System.out.println("Distance is " + distance);
+        System.out.println("End distance is " + endDistance);
+//        return driveBase.getDistanceTraveledMeters() >= endDistance;
+        return distance >= endDistance;
     }
 
     @Override

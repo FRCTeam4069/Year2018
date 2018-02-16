@@ -91,7 +91,6 @@ public class OperatorDriveCommand extends CommandBase {
             driveBase.driveContinuousSpeed(turningCoefficient, speed);
         }
 
-        System.out.println("DriveBase distance traveled" + driveBase.getDistanceTraveledMeters());
     }
 
     // Called to check whether this command has completed

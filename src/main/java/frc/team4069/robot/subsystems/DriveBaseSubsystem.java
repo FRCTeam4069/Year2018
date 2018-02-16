@@ -70,8 +70,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
         precision = !precision;
     }
 
-    // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
+        driveContinuousSpeed(turn, speed, false);
+    }
+
+    // Start driving with a given turning coefficient and speed from zero to one
+    public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // Invert the turn if we're moving backwards
         if (speed < 0) {
             turn = -turn;
@@ -83,26 +87,33 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Otherwise, use the regular algorithm
         else {
             WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
-            driveFiltered(wheelSpeeds);
+
+            driveFiltered(wheelSpeeds, auto);
         }
     }
 
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed), false);
         // Low pass filter is giving us trouble. Bypass it.
 //        leftDrive.setConstantSpeed(leftWheelSpeed);
 //        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
 
     // Drive at the given wheel speeds, applying a low pass filter
-    private void driveFiltered(WheelSpeeds speeds) {
+    private void driveFiltered(WheelSpeeds speeds, boolean auto) {
         // Run the wheel speeds through corresponding low pass filters
         WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
-        // Set the motor speeds with the calculated values
-        leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
-        rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+
+        if(auto) {
+            leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
+            rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
+        }else {
+            WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
+            // Set the motor speeds with the calculated values
+            leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
+            rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+        }
     }
 
     private WheelSpeeds preciseFilterSpeeds(WheelSpeeds speeds) {
