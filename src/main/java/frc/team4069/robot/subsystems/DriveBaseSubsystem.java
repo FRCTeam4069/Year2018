@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.4);
+            rotate(turn * 0.4, auto);
         }
         // Otherwise, use the regular algorithm
         else {

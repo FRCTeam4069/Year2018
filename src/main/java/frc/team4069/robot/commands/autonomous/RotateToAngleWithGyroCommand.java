@@ -100,7 +100,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
             motorOutput = -turnSpeedAbsolute;
         }
         System.out.println("Final motor output: " + motorOutput);
-        driveBase.rotate(turnRight ? motorOutput : -motorOutput);
+        driveBase.rotate(turnRight ? motorOutput : -motorOutput, true);
         // If robot is in range of acceptable error, increment the in range counter, otherwise zero it
         if (delta >= relativeAngle - acceptableError && delta <= relativeAngle + acceptableError) {
             inRangeCounter++;
