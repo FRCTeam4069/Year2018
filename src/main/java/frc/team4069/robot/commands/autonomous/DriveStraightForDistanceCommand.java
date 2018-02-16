@@ -8,17 +8,19 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 
     private double distanceMeters;
     private double endDistance;
+    private double signedSpeed;
 
     public DriveStraightForDistanceCommand(double distanceMeters) {
         requires(driveBase);
         this.distanceMeters = distanceMeters;
+        signedSpeed = distanceMeters > 0 ? speed : -speed;
     }
 
     @Override
     protected void initialize() {
         super.initialize();
         endDistance = driveBase.getDistanceTraveledMeters() + distanceMeters;
-        driveBase.driveContinuousSpeed(0, speed);
+        driveBase.driveContinuousSpeed(0, signedSpeed);
     }
 
     @Override

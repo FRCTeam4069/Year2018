@@ -56,7 +56,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
         // Multiply the average rotations by the number of wheels per rotation to get the average
         // distance traveled in meters
-        return averageRotationsTraveled * METERS_PER_ROTATION;
+        return -averageRotationsTraveled * METERS_PER_ROTATION;
     }
 
     // Stop moving immediately
@@ -73,7 +73,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Invert the turn if we're moving backwards
-        if(speed < 0) {
+        if (speed < 0) {
             turn = -turn;
         }
         // If the speed is zero, turn on the spot
@@ -106,7 +106,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 
     private WheelSpeeds preciseFilterSpeeds(WheelSpeeds speeds) {
-        if(this.precision) {
+        if (this.precision) {
             return new WheelSpeeds(
                     speeds.leftWheelSpeed * 0.5,
                     speeds.rightWheelSpeed * 0.5
