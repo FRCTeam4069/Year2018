@@ -22,7 +22,12 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Current and previous wheel positions, used for calculating derivative
     private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
+	
+	// Timeout the command after this many milliseconds
+	private final int timeout = 4000;
 
+	private long startTime = 0;
+	
     // Current and previous times, used for calculating derivative
     private long currentTime = 0;
     private long prevTime = currentTime;
@@ -71,7 +76,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         // If passed angle to turn is positive, turn right
         turnRight = relativeAngle > 0;
         prevGyroscope = currentGyroscope = getGyroAngle();
-        prevTime = currentTime = System.currentTimeMillis();
+        prevTime = currentTime = startTime = System.currentTimeMillis();
     }
 
     @Override
@@ -92,7 +97,12 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         System.out.println("Start gyroscope position: " + startAngle + ", current gyroscope position: " + gyroAngle);
 		System.out.println("Gyro delta: " + delta);
 		System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
-        motorOutput += degPerSecond * derivativeMultiplier;
+		if(relativeAngle < 0){
+			motorOutput += degPerSecond * derivativeMultiplier;
+		}
+		else{
+			motorOutput -= degPerSecond * derivativeMultiplier;
+		}
         // Restrict speed to +/- turnSpeedAbsolute
         if (motorOutput > turnSpeedAbsolute) {
             motorOutput = turnSpeedAbsolute;
@@ -111,7 +121,8 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
 
     protected boolean isFinished() {
         // Turning is complete once robot has been within the acceptable degree of error for counterThreshold ticks
-        return inRangeCounter >= counterThreshold;
+		System.out.println((int)(currentTime - startTime));
+        return inRangeCounter >= counterThreshold || (int)(currentTime - startTime) >= timeout;
     }
 
     @Override

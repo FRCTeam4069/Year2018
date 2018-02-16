@@ -8,11 +8,11 @@ public class DriveSquareCommandGroup extends CommandGroup {
         addSequential(new DriveStraightForDistanceCommand(1));
         addSequential(new RotateToAngleWithGyroCommand(90));
         addSequential(new DriveStraightForDistanceCommand(1));
-        addSequential(new RotateToAngleWithGyroCommand(180));
+        addSequential(new RotateToAngleWithGyroCommand(90));
         addSequential(new DriveStraightForDistanceCommand(1));
-        addSequential(new RotateToAngleWithGyroCommand(270));
+        addSequential(new RotateToAngleWithGyroCommand(90));
         addSequential(new DriveStraightForDistanceCommand(1));
-        addSequential(new RotateToAngleWithGyroCommand(0));
+        addSequential(new RotateToAngleWithGyroCommand(90));
     }
 
 }
