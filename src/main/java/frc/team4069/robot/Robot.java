@@ -11,7 +11,10 @@ import frc.team4069.robot.commands.autonomous.GrabCubeCommand;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ArmSubsystem;
+import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
+import frc.team4069.robot.subsystems.VacuumSubsystem;
+import frc.team4069.robot.subsystems.WinchSubsystem;
 import frc.team4069.robot.vision.ThreadArmCamera;
 import frc.team4069.robot.vision.ThreadGyro;
 import frc.team4069.robot.vision.ThreadLIDAR;
@@ -92,6 +95,9 @@ public class Robot extends IterativeRobot {
         // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
         ElevatorSubsystem.getInstance().reset();
         ArmSubsystem.getInstance().reset();
+        DriveBaseSubsystem.getInstance().reset();
+        VacuumSubsystem.getInstance().reset();
+        WinchSubsystem.getInstance().reset();
     }
 
     // During all phases, run the command scheduler

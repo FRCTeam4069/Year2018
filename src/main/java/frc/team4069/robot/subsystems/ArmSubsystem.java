@@ -8,6 +8,9 @@ public class ArmSubsystem extends SubsystemBase {
     private TalonSRXMotor talon;
     
     private static ArmSubsystem instance;
+
+
+    public static final int MAX_POSITION_TICKS = 2700;
     
     private ArmSubsystem() {
         talon = new TalonSRXMotor(IOMapping.ARM_CAN_BUS);
@@ -15,10 +18,12 @@ public class ArmSubsystem extends SubsystemBase {
         talon.config_kF(1, 1, 0);
         talon.config_kP(1, 0.5, 0);
 
+        talon.configMotionCruiseVelocity(800, 0);
+        talon.configMotionAcceleration(400, 0);
     }
     
     public void start(boolean reversed) {
-        talon.set(ControlMode.PercentOutput, reversed ? -0.1 : 0.4);
+        talon.set(ControlMode.PercentOutput, reversed ? -0.1 : 0.2);
     }
     
     public void stop() {
@@ -33,8 +38,10 @@ public class ArmSubsystem extends SubsystemBase {
         return talon.getSelectedSensorPosition(0);
     }
 
+    @Override
     public void reset() {
         talon.stop();
+        talon.setSelectedSensorPosition(0, 0, 0);
     }
 
     public static ArmSubsystem getInstance() {

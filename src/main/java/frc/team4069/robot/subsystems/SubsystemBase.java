@@ -9,4 +9,6 @@ public abstract class SubsystemBase extends Subsystem {
     // configured in the main robot class, as opposed to on a subsystem-by-subsystem basis
     protected void initDefaultCommand() {
     }
+
+    public abstract void reset();
 }

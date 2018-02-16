@@ -15,6 +15,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.61;
+    // Toggleable precision mode by driver
+    private boolean precision = false;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
@@ -64,6 +66,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
         rightDrive.stop();
     }
 
+    public void togglePrecisionMode() {
+        precision = !precision;
+    }
+
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed) {
         // Invert the turn if we're moving backwards
@@ -92,10 +98,22 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds) {
         // Run the wheel speeds through corresponding low pass filters
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(speeds);
+        WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
+        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
         // Set the motor speeds with the calculated values
         leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+    }
+
+    private WheelSpeeds preciseFilterSpeeds(WheelSpeeds speeds) {
+        if(this.precision) {
+            return new WheelSpeeds(
+                    speeds.leftWheelSpeed * 0.5,
+                    speeds.rightWheelSpeed * 0.5
+            );
+        }
+
+        return speeds;
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
@@ -142,6 +160,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
     @Override
     protected void initDefaultCommand() {
         setDefaultCommand(new OperatorDriveCommand());
+    }
+
+    @Override
+    public void reset() {
+        leftDrive.stop();
+        rightDrive.stop();
     }
 
     // A wrapper class that contains a speed value for each of the drive base wheels

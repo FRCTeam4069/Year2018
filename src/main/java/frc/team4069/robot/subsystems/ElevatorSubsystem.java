@@ -101,6 +101,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return talon.getSelectedSensorVelocity(0);
     }
 
+    @Override
     public void reset() {
         talon.stop();
         talon.setSelectedSensorPosition(0, 0, 0);

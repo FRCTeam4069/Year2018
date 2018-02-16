@@ -4,13 +4,13 @@ import frc.team4069.robot.commands.CommandBase;
 
 public class DebugCommand extends CommandBase {
 
-    public DebugCommand() {
+    public DebugCommand(){
         requires(elevator);
     }
 
     @Override
     protected void initialize() {
-        System.out.println("elevator position: " + elevator.getPosition());
+        System.out.println("Elevator position: " + elevator.getPosition());
     }
 
     @Override

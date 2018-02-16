@@ -5,8 +5,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
+import frc.team4069.robot.commands.arm.DeployArmCommand;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
+import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
 import frc.team4069.robot.commands.elevator.DebugCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
@@ -38,13 +40,9 @@ public class Input {
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
         elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
 
-        Button winchForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
-        winchForward.whenPressed(new StartWinchCommand());
-        winchForward.whenReleased(new StopWinchCommand());
-
-        Button winchBackward = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
-        winchBackward.whenPressed(new StartWinchCommand(true));
-        winchBackward.whenReleased(new StopWinchCommand());
+        Button startWinch = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
+        startWinch.whenPressed(new StartWinchCommand());
+        startWinch.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
         Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_BACK);
@@ -60,6 +58,12 @@ public class Input {
 
         Button debug = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
         debug.whenPressed(new DebugCommand());
+
+        Button deployArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_Y);
+        deployArm.whenPressed(new DeployArmCommand());
+
+        Button togglePrecisionMode = new JoystickButton(driveJoystick, IOMapping.BUTTON_START);
+        togglePrecisionMode.whenPressed(new ToggleDrivePrecisionModeCommand());
     }
 
     // Accessor for the steering axis on the drive joystick

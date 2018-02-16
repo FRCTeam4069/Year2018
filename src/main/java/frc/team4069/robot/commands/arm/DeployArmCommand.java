@@ -1,17 +1,17 @@
 package frc.team4069.robot.commands.arm;
 
 import frc.team4069.robot.commands.CommandBase;
+import frc.team4069.robot.subsystems.ArmSubsystem;
 
-public class StopArmCommand extends CommandBase {
+public class DeployArmCommand extends CommandBase {
 
-    public StopArmCommand() {
+    public DeployArmCommand() {
         requires(arm);
     }
 
     @Override
     protected void initialize() {
-        arm.stop();
-        arm.setPosition(arm.getPosition());
+        arm.setPosition(ArmSubsystem.MAX_POSITION_TICKS - 100);
     }
 
     @Override
