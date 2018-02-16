@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.arm.DeployArmCommand;
+import frc.team4069.robot.commands.arm.HookArmCommandGroup;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
@@ -61,6 +62,9 @@ public class Input {
 
         Button deployArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_Y);
         deployArm.whenPressed(new DeployArmCommand());
+
+        Button hookArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_B);
+        hookArm.whenPressed(new HookArmCommandGroup());
 
         Button togglePrecisionMode = new JoystickButton(driveJoystick, IOMapping.BUTTON_START);
         togglePrecisionMode.whenPressed(new ToggleDrivePrecisionModeCommand());

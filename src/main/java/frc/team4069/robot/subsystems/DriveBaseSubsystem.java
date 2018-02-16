@@ -166,6 +166,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void reset() {
         leftDrive.stop();
         rightDrive.stop();
+        leftDrive.setSelectedSensorPosition(0, 0, 0);
+        rightDrive.setSelectedSensorPosition(0, 0, 0);
     }
 
     // A wrapper class that contains a speed value for each of the drive base wheels

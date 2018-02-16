@@ -3,7 +3,7 @@ package frc.team4069.robot.commands.autonomous;
 import frc.team4069.robot.commands.CommandBase;
 
 // Using the gyroscope, rotate the robot to a specific angle
-class RotateToAngleWithGyroCommand extends CommandBase {
+public class RotateToAngleWithGyroCommand extends CommandBase {
 
     // Max turn speed
     private final double turnSpeedAbsolute = 0.3;
@@ -34,7 +34,7 @@ class RotateToAngleWithGyroCommand extends CommandBase {
     private double turningSpeed;
 
     //Note: relativeAngle can be negative or positive angle
-    RotateToAngleWithGyroCommand(double relativeAngle) {
+    public RotateToAngleWithGyroCommand(double relativeAngle) {
         requires(driveBase);
         this.relativeAngle = relativeAngle;
         if (this.relativeAngle > 180) {

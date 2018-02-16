@@ -1,17 +1,16 @@
 package frc.team4069.robot.commands.arm;
 
 import frc.team4069.robot.commands.CommandBase;
-import frc.team4069.robot.subsystems.ArmSubsystem;
 
-public class DeployArmCommand extends CommandBase {
+public class RetractArmCommand extends CommandBase {
 
-    public DeployArmCommand() {
+    public RetractArmCommand() {
         requires(arm);
     }
 
     @Override
     protected void initialize() {
-        arm.setPosition(ArmSubsystem.MAX_POSITION_TICKS - 300);
+        arm.setPosition(50);
     }
 
     @Override

@@ -2,14 +2,14 @@ package frc.team4069.robot.commands.autonomous;
 
 import frc.team4069.robot.commands.CommandBase;
 
-class DriveStraightForDistanceCommand extends CommandBase {
+public class DriveStraightForDistanceCommand extends CommandBase {
 
     private final double speed = 0.2;
 
     private double distanceMeters;
     private double endDistance;
 
-    DriveStraightForDistanceCommand(double distanceMeters) {
+    public DriveStraightForDistanceCommand(double distanceMeters) {
         requires(driveBase);
         this.distanceMeters = distanceMeters;
     }

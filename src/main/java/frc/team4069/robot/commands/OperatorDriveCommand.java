@@ -2,7 +2,6 @@ package frc.team4069.robot.commands;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.io.Input;
-import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
@@ -91,6 +90,8 @@ public class OperatorDriveCommand extends CommandBase {
             // Set the speed of the robot
             driveBase.driveContinuousSpeed(turningCoefficient, speed);
         }
+
+        System.out.println("DriveBase distance traveled" + driveBase.getDistanceTraveledMeters());
     }
 
     // Called to check whether this command has completed
