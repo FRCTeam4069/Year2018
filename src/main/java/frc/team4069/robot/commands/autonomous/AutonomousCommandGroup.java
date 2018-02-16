@@ -25,8 +25,8 @@ public class AutonomousCommandGroup extends CommandGroup {
 //        addParallel(new ZeroElevatorCommand());
 //        addSequential(new WaitCommand(1));
 //        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
-//        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
-        addSequential(new GrabCubeCommand());
+        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
+//        addSequential(new GrabCubeCommand());
 //        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
 //        addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
 //        addSequential(new DriveTowardTapeCommand());

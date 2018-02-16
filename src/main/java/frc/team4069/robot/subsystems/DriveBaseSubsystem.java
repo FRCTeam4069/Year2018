@@ -94,11 +94,16 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed), false);
+        driveUnfiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
         // Low pass filter is giving us trouble. Bypass it.
 //        leftDrive.setConstantSpeed(leftWheelSpeed);
 //        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
+	
+	private void driveUnfiltered(WheelSpeeds speeds){
+		leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
+        rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
+	}
 
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds, boolean auto) {

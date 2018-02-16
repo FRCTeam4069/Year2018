@@ -16,19 +16,19 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Desired relative angle
     private double relativeAngle;
     // Gyroscope angle will be confined to +/- acceptableError degrees from the desired angle
-    private double acceptableError = 5;
+    private double acceptableError = 1;
     // Counter for tracking how many ticks the gyroscope angle has been in the acceptable range of error
     private int inRangeCounter = 0;
     // Current and previous wheel positions, used for calculating derivative
-    private double wheelPosition = 0;
-    private double prevWheelPosition = wheelPosition;
+    private double currentGyroscope = 0;
+    private double prevGyroscope = currentGyroscope;
 
     // Current and previous times, used for calculating derivative
     private long currentTime = 0;
     private long prevTime = currentTime;
 
     // Lower derivativeMultiplier -> derivative has lesser effect on turning speed
-    private double derivativeMultiplier = 0.0;
+    private double derivativeMultiplier = 0.0075;
 
     // Current speed at which the robot's wheels are turning
     private double turningSpeed;
@@ -49,9 +49,9 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
      */
     private double calculateGyroAngle() {
         double gyroAngle = getGyroAngle();
-        if (gyroAngle - startAngle < -10 && this.turnRight) {
+        if (gyroAngle - startAngle < -1 && this.turnRight) {
             gyroAngle += 360;
-        } else if (gyroAngle - startAngle > 10 && !this.turnRight) {
+        } else if (gyroAngle - startAngle > 1 && !this.turnRight) {
             gyroAngle -= 360;
         }
         return gyroAngle;
@@ -70,28 +70,29 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         startAngle = getGyroAngle();
         // If passed angle to turn is positive, turn right
         turnRight = relativeAngle > 0;
-        prevWheelPosition = wheelPosition = driveBase.getDistanceTraveledMeters();
+        prevGyroscope = currentGyroscope = getGyroAngle();
         prevTime = currentTime = System.currentTimeMillis();
     }
 
     @Override
     protected void execute() {
-        prevWheelPosition = wheelPosition;
-        wheelPosition = driveBase.getDistanceTraveledMeters();
+        prevGyroscope = currentGyroscope;
+        currentGyroscope = calculateGyroAngle();
         prevTime = currentTime;
         currentTime = System.currentTimeMillis();
         System.out.println("Delta time: " + (int) (currentTime - prevTime));
-        double robotSpeed = (wheelPosition - prevWheelPosition) / (double) (currentTime - prevTime);
         double delta = calculateDelta();
         double gyroAngle = calculateGyroAngle();
-        System.out.println("Gyro delta: " + delta);
+		double degPerSecond = (currentGyroscope - prevGyroscope) / ((double)(currentTime - prevTime) / 1000.0);
+		System.out.println("Degrees per second: " + degPerSecond);
         // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
         double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
-        System.out.println("Derivative value: " + robotSpeed);
-        System.out.println("Base motor output: " + motorOutput);
-        motorOutput -= robotSpeed * derivativeMultiplier;
+        System.out.println("Start gyroscope position: " + startAngle + ", current gyroscope position: " + gyroAngle);
+		System.out.println("Gyro delta: " + delta);
+		System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
+        motorOutput += degPerSecond * derivativeMultiplier;
         // Restrict speed to +/- turnSpeedAbsolute
         if (motorOutput > turnSpeedAbsolute) {
             motorOutput = turnSpeedAbsolute;
