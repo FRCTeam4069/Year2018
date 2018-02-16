@@ -83,15 +83,18 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         System.out.println("Delta time: " + (int) (currentTime - prevTime));
         double delta = calculateDelta();
         double gyroAngle = calculateGyroAngle();
-		double degPerSecond = (currentGyroscope - prevGyroscope) / ((double)(currentTime - prevTime) / 1000.0);
-		System.out.println("Degrees per second: " + degPerSecond);
+        double degPerSecond =
+                (currentGyroscope - prevGyroscope) / ((double) (currentTime - prevTime) / 1000.0);
+        System.out.println("Degrees per second: " + degPerSecond);
         // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
         double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
-        System.out.println("Start gyroscope position: " + startAngle + ", current gyroscope position: " + gyroAngle);
-		System.out.println("Gyro delta: " + delta);
-		System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
+        System.out.println(
+                "Start gyroscope position: " + startAngle + ", current gyroscope position: "
+                        + gyroAngle);
+        System.out.println("Gyro delta: " + delta);
+        System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
         motorOutput += degPerSecond * derivativeMultiplier;
         // Restrict speed to +/- turnSpeedAbsolute
         if (motorOutput > turnSpeedAbsolute) {
@@ -100,7 +103,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
             motorOutput = -turnSpeedAbsolute;
         }
         System.out.println("Final motor output: " + motorOutput);
-        driveBase.rotate(turnRight ? motorOutput : -motorOutput, true);
+        driveBase.rotate(turnRight ? motorOutput : -motorOutput);
         // If robot is in range of acceptable error, increment the in range counter, otherwise zero it
         if (delta >= relativeAngle - acceptableError && delta <= relativeAngle + acceptableError) {
             inRangeCounter++;

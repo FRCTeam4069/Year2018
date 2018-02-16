@@ -10,13 +10,13 @@ public class OperatorDriveCommand extends CommandBase {
 
     // The distance that the current quick turn should travel (0 means quick turn is not being used)
     private double quickTurnDistanceMeters = 0;
-	
-	// Reference to the power distribution panel
-	private PowerDistributionPanel pdp;
-	
+
+    // Reference to the power distribution panel
+    private PowerDistributionPanel pdp;
+
     // Constructor, used to claim subsystems
     public OperatorDriveCommand() {
-		pdp = getPowerDistributionPanel();
+        pdp = getPowerDistributionPanel();
         // Claim exclusive use of the drive base
         requires(driveBase);
     }
@@ -66,7 +66,7 @@ public class OperatorDriveCommand extends CommandBase {
                 // Get the sign of the angle in order to calculate the direction to turn the wheels
                 double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-                driveBase.rotate(turnDirection, false);
+                driveBase.rotate(turnDirection);
             }
         }
 

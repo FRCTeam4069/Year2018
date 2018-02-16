@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.4, auto);
+            rotate(turn * 0.4);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -99,21 +99,21 @@ public class DriveBaseSubsystem extends SubsystemBase {
 //        leftDrive.setConstantSpeed(leftWheelSpeed);
 //        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
-	
-	private void driveUnfiltered(WheelSpeeds speeds){
-		leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
+
+    private void driveUnfiltered(WheelSpeeds speeds) {
+        leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
-	}
+    }
 
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds, boolean auto) {
         // Run the wheel speeds through corresponding low pass filters
         WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
 
-        if(auto) {
+        if (auto) {
             leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
             rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
-        }else {
+        } else {
             WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
             // Set the motor speeds with the calculated values
             leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
