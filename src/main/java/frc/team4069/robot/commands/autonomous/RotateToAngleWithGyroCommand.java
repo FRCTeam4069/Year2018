@@ -9,6 +9,8 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     private final double turnSpeedAbsolute = 0.3;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
     private final int counterThreshold = 50;
+    // Timeout the command after this many milliseconds
+    private final int timeout = 4000;
     // True if the robot is turning right
     private boolean turnRight;
     // Initial gyroscope angle
@@ -22,12 +24,8 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Current and previous wheel positions, used for calculating derivative
     private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
-	
-	// Timeout the command after this many milliseconds
-	private final int timeout = 4000;
+    private long startTime = 0;
 
-	private long startTime = 0;
-	
     // Current and previous times, used for calculating derivative
     private long currentTime = 0;
     private long prevTime = currentTime;
@@ -88,21 +86,23 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         System.out.println("Delta time: " + (int) (currentTime - prevTime));
         double delta = calculateDelta();
         double gyroAngle = calculateGyroAngle();
-		double degPerSecond = (currentGyroscope - prevGyroscope) / ((double)(currentTime - prevTime) / 1000.0);
-		System.out.println("Degrees per second: " + degPerSecond);
+        double degPerSecond =
+                (currentGyroscope - prevGyroscope) / ((double) (currentTime - prevTime) / 1000.0);
+        System.out.println("Degrees per second: " + degPerSecond);
         // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
         double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
-        System.out.println("Start gyroscope position: " + startAngle + ", current gyroscope position: " + gyroAngle);
-		System.out.println("Gyro delta: " + delta);
-		System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
-		if(relativeAngle < 0){
-			motorOutput += degPerSecond * derivativeMultiplier;
-		}
-		else{
-			motorOutput -= degPerSecond * derivativeMultiplier;
-		}
+        System.out.println(
+                "Start gyroscope position: " + startAngle + ", current gyroscope position: "
+                        + gyroAngle);
+        System.out.println("Gyro delta: " + delta);
+        System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
+        if (relativeAngle < 0) {
+            motorOutput += degPerSecond * derivativeMultiplier;
+        } else {
+            motorOutput -= degPerSecond * derivativeMultiplier;
+        }
         // Restrict speed to +/- turnSpeedAbsolute
         if (motorOutput > turnSpeedAbsolute) {
             motorOutput = turnSpeedAbsolute;
@@ -121,8 +121,8 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
 
     protected boolean isFinished() {
         // Turning is complete once robot has been within the acceptable degree of error for counterThreshold ticks
-		System.out.println((int)(currentTime - startTime));
-        return inRangeCounter >= counterThreshold || (int)(currentTime - startTime) >= timeout;
+        System.out.println((int) (currentTime - startTime));
+        return inRangeCounter >= counterThreshold || (int) (currentTime - startTime) >= timeout;
     }
 
     @Override
