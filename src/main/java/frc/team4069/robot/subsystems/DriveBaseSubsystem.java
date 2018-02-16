@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.4);
+            rotate(turn * 0.4, auto);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -93,8 +93,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 
     // Turn on the spot with the given left wheel speed
-    public void rotate(double leftWheelSpeed) {
-        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed), false);
+    public void rotate(double leftWheelSpeed, boolean auto) {
+        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed), auto);
         // Low pass filter is giving us trouble. Bypass it.
 //        leftDrive.setConstantSpeed(leftWheelSpeed);
 //        rightDrive.setConstantSpeed(-leftWheelSpeed);
