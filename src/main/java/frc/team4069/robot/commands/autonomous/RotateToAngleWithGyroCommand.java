@@ -16,7 +16,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Desired relative angle
     private double relativeAngle;
     // Gyroscope angle will be confined to +/- acceptableError degrees from the desired angle
-    private double acceptableError = 2.5;
+    private double acceptableError = 5;
     // Counter for tracking how many ticks the gyroscope angle has been in the acceptable range of error
     private int inRangeCounter = 0;
     // Current and previous wheel positions, used for calculating derivative
