@@ -11,7 +11,7 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 
     public DriveStraightForDistanceCommand(double distanceMeters) {
         requires(driveBase);
-        this.distanceMeters = distanceMeters;
+        this.distanceMeters = Math.abs(distanceMeters);
         signedSpeed = distanceMeters > 0 ? speed : -speed;
     }
 
