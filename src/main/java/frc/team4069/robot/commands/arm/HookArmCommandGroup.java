@@ -1,15 +1,18 @@
 package frc.team4069.robot.commands.arm;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.team4069.robot.commands.autonomous.DriveStraightForDistanceCommand;
+import frc.team4069.robot.commands.autonomous.RotateToAngleWithGyroCommand;
 
 public class HookArmCommandGroup extends CommandGroup {
     public HookArmCommandGroup() {
-//        addSequential(new DeployArmCommand());
-        addSequential(new DriveStraightForDistanceCommand(-2));
-//        addSequential(new DriveStraightForDistanceCommand(-0.1));
-//        addSequential(new RetractArmCommand());
-//        addSequential(new DriveStraightForDistanceCommand(0.1));
-//        addSequential(new RotateToAngleWithGyroCommand(30));
+        addSequential(new DeployArmCommand());
+        addSequential(new DriveStraightForDistanceCommand(1.5));
+        addSequential(new WaitCommand(1.5));
+        addSequential(new DriveStraightForDistanceCommand(-1.5));
+        addSequential(new RetractArmCommand());
+        addSequential(new DriveStraightForDistanceCommand(1.5));
+        addSequential(new RotateToAngleWithGyroCommand(30));
     }
 }

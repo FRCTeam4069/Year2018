@@ -1,20 +1,13 @@
 package frc.team4069.robot.commands.arm;
 
-import frc.team4069.robot.commands.CommandBase;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class RetractArmCommand extends CommandBase {
+public class RetractArmCommand extends CommandGroup {
 
     public RetractArmCommand() {
-        requires(arm);
-    }
-
-    @Override
-    protected void initialize() {
-        arm.setPosition(50);
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return true;
+        addSequential(new StartArmCommand(true));
+        addSequential(new WaitCommand(2));
+        addSequential(new StopArmCommand());
     }
 }
