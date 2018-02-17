@@ -7,12 +7,11 @@ import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
-import frc.team4069.robot.util.LowPassFilter;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    public static final int MAX_POSITION_TICKS = -29741;
+    public static final int MAX_POSITION_TICKS = -30530;
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
@@ -50,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Soft limits to avoid destruction of hardware
         talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
-        talon.configReverseSoftLimitEnable(false, 0);
+        talon.configReverseSoftLimitEnable(true, 0);
 //        talon.configForwardSoftLimitEnable(true, 0);
 
     }

@@ -31,8 +31,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
         // Initialize the low pass filters with a time period of 200 milliseconds
-        leftSideLpf = new LowPassFilter(250);
-        rightSideLpf = new LowPassFilter(250);
+        leftSideLpf = new LowPassFilter(200);
+        rightSideLpf = new LowPassFilter(200);
     }
 
     // A public getter for the instance
@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.4);
+            rotate(turn * 0.6);
         }
         // Otherwise, use the regular algorithm
         else {
