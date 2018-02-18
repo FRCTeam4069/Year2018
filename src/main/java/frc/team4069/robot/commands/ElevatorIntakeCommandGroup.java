@@ -14,5 +14,7 @@ public class ElevatorIntakeCommandGroup extends CommandGroup {
     public ElevatorIntakeCommandGroup() {
         addSequential(new StartVacuumCommand());
         addSequential(new SetElevatorPositionCommand(Position.INTAKE));
+        addSequential(new WaitCommand(0.5));
+        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
     }
 }

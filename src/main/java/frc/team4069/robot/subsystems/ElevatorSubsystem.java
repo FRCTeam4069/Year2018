@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -106,6 +109,35 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.setSelectedSensorPosition(0, 0, 0);
     }
 
+    public double higherPreset() {
+        double pos = getPosition();
+
+        for(Position position : Position.values()) {
+            double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
+
+            if(tolerance >= 500 && Math.abs(position.getTicks()) > Math.abs(pos)) {
+                return position.getTicks();
+            }
+        }
+
+        return pos;
+    }
+
+    public double lowerPreset() {
+        double pos = getPosition();
+
+        List<Position> positions = Arrays.asList(Position.values());
+        Collections.reverse(positions);
+
+        for(Position position : positions) {
+            if(Math.abs(position.getTicks()) < Math.abs(pos)) {
+                return position.getTicks();
+            }
+        }
+
+        return pos;
+    }
+
     @Override
     protected void initDefaultCommand() {
         setDefaultCommand(new OperatorControlElevatorCommand());
@@ -114,8 +146,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
         MINIMUM(0),
-        INTAKE(-5500),
         EXCHANGE(-3000),
+        INTAKE(-5500),
         SWITCH(-15000),
         SCALE(MAX_POSITION_TICKS + 100);
 

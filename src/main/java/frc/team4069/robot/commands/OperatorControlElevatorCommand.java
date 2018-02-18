@@ -31,6 +31,17 @@ public class OperatorControlElevatorCommand extends CommandBase {
                 set = true;
             }
         }
+
+        double dpadValue = Input.getOperatorDirectionalPad();
+        if(dpadValue == 0.0) {
+            double newPosition = elevator.higherPreset();
+            elevator.setPosition(newPosition);
+        }
+
+        if(dpadValue == 180.0) {
+            double newPosition = elevator.lowerPreset();
+            elevator.setPosition(newPosition);
+        }
     }
 
     @Override

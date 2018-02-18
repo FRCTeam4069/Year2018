@@ -31,6 +31,7 @@ public class IOMapping {
     // The number of the POV (directional pad)
     static final int POV_NUMBER = 0;
 
+
     // Joystick buttons
     static final int BUTTON_A = 1;
     static final int BUTTON_B = 2;

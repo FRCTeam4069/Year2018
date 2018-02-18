@@ -10,7 +10,6 @@ import frc.team4069.robot.commands.arm.HookArmCommandGroup;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
-import frc.team4069.robot.commands.elevator.DebugCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
@@ -49,16 +48,9 @@ public class Input {
         Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_BACK);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
 
-        Button armUp = new JoystickButton(driveJoystick, IOMapping.BUMPER_RIGHT);
-        armUp.whenPressed(new StartArmCommand());
-        armUp.whenReleased(new StopArmCommand());
-
-        Button armDown = new JoystickButton(driveJoystick, IOMapping.BUMPER_LEFT);
+        Button armDown = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
         armDown.whenPressed(new StartArmCommand(true));
         armDown.whenReleased(new StopArmCommand());
-
-        Button debug = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
-        debug.whenPressed(new DebugCommand());
 
         Button deployArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_Y);
         deployArm.whenPressed(new DeployArmCommand());
@@ -107,10 +99,14 @@ public class Input {
         return driveJoystick.getAButton();
     }
 
+    public static int getOperatorDirectionalPad() {
+        return controlJoystick.getPOV(IOMapping.POV_NUMBER);
+    }
+
     // Accessor for the directional pad on the joystick
     // Returns an angle in degrees, clockwise from the top of the pad
     // Returns -1 if no input is registered
-    public static int getDirectionalPadAngleDegrees() {
+    public static int getDriveDirectionalPadDegrees() {
         // This functionality is built into the joystick library exactly as described
         return driveJoystick.getPOV(IOMapping.POV_NUMBER);
     }

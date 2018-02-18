@@ -48,7 +48,7 @@ public class OperatorDriveCommand extends CommandBase {
         // If quick turn is not currently being used
         if (quickTurnDistanceMeters == 0) {
             // Get output from the directional pad
-            int directionalPadAngle = Input.getDirectionalPadAngleDegrees();
+            int directionalPadAngle = Input.getDriveDirectionalPadDegrees();
             // If the directional pad is being used (the output is not -1) and the up direction is not
             // being pressed (an output of 0)
             if (directionalPadAngle != -1 && directionalPadAngle != 0) {
