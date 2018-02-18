@@ -93,21 +93,14 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
 			angleAccumulator += 360.0;
 		}
         currentTime = System.currentTimeMillis();
-        System.out.println("Delta time: " + (int) (currentTime - prevTime));
         double delta = calculateDelta();
         double gyroAngle = calculateGyroAngle();
         double degPerSecond =
                 (currentGyroscope - prevGyroscope) / ((double) (currentTime - prevTime) / 1000.0);
-        System.out.println("Degrees per second: " + degPerSecond);
         // The constant has the effect of narrowing the linearInterpolation to a small range around the desired angle and keeping motor output to a max everywhere else
         double speedConstant = Math.abs(relativeAngle) * (1.0 / 6);
         double motorOutput = lerp(turnSpeedAbsolute * speedConstant, 0, 0, relativeAngle,
                 gyroAngle - startAngle);
-        System.out.println(
-                "Start gyroscope position: " + startAngle + ", current gyroscope position: "
-                        + gyroAngle);
-        System.out.println("Gyro delta: " + delta);
-        System.out.println("Derivative: " + (degPerSecond * derivativeMultiplier));
         if (relativeAngle < 0) {
             motorOutput += degPerSecond * derivativeMultiplier;
         } else {
@@ -119,7 +112,6 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         } else if (motorOutput < -turnSpeedAbsolute) {
             motorOutput = -turnSpeedAbsolute;
         }
-        System.out.println("Final motor output: " + motorOutput);
         driveBase.rotate(turnRight ? motorOutput : -motorOutput);
         // If robot is in range of acceptable error, increment the in range counter, otherwise zero it
         if (delta >= relativeAngle - acceptableError && delta <= relativeAngle + acceptableError) {
@@ -131,7 +123,6 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
 
     protected boolean isFinished() {
         // Turning is complete once robot has been within the acceptable degree of error for counterThreshold ticks
-        System.out.println((int) (currentTime - startTime));
         return inRangeCounter >= counterThreshold || (int) (currentTime - startTime) >= timeout;
     }
 

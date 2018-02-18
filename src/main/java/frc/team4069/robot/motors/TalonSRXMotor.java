@@ -64,4 +64,9 @@ public class TalonSRXMotor extends WPI_TalonSRX {
         double quadPosition = getSensorCollection().getQuadraturePosition();
         return quadPosition / encoderTicksPerRotation;
     }
+
+    public void reset() {
+        stop();
+        getSensorCollection().setQuadraturePosition(0, 10);
+    }
 }
