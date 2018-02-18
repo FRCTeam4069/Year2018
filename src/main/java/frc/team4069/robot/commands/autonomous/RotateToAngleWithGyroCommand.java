@@ -73,7 +73,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     }
 
     protected void initialize() {
-        startAngle = getGyroAngle();
+		startAngle = getGyroAngle();
         // If passed angle to turn is positive, turn right
         turnRight = relativeAngle > 0;
         prevGyroscope = currentGyroscope = getGyroAngle();
