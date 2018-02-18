@@ -13,7 +13,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Turning angles and driving distances for each possible starting configuration
     private final double[] turningAngles = {10, -10, -45, 30, 10, -10};
-    private final double[] drivingDistancesMeters = {4, 6, 9, 9, 6, 4};
+    private final double[] drivingDistancesMeters = {4, 6, 2, 9, 6, 4};
 
     // The robot's starting position for autonomous mode
     // 0 is left, 1 is center, and 2 is right
@@ -30,10 +30,10 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new ZeroElevatorCommand());
         addSequential(new WaitCommand(1));
         addSequential(new SetElevatorPositionCommand(Position.SWITCH));
-        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
         addSequential(new GrabCubeCommand());
-//        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
-//        addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
+        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
+        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
+        addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
 //        addSequential(new DriveTowardTapeCommand());
 //        addSequential(new StopVacuumCommand());
     }
