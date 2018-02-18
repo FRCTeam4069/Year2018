@@ -14,7 +14,9 @@ public class AutonomousCommandGroup extends CommandGroup {
     // Turning angles and driving distances for each possible starting configuration
     private final double[] turningAngles = {10, -10, -45, 30, 10, -10};
     private final double[] drivingDistancesMeters = {4, 6, 2, 9, 6, 4};
-
+    // The number of milliseconds after which to stop searching for the game data and choose a
+    // reasonable default
+    private final int gameDataTimeoutMilliseconds = 250;
     // The robot's starting position for autonomous mode
     // 0 is left, 1 is center, and 2 is right
     private int startingPosition = 2;
@@ -40,14 +42,20 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Read the game data and get the direction to drive
     private int getTurningParametersIndex() {
-        // Get the game data as a string
-        String gameData = DriverStation.getInstance().getGameSpecificMessage();
+        String gameData = "";
+        long startingTime = System.currentTimeMillis();
         // Assume that the left switch is the one to go to
         boolean isRight = false;
-        // If the length of the game data string is 3 as it should be
-        if (gameData.length() == 3) {
-            // Check if the first character is left or right
-            isRight = gameData.charAt(0) == 'R';
+        // Loop until the timeout period is up
+        while (System.currentTimeMillis() - startingTime < gameDataTimeoutMilliseconds) {
+            // Get the game data as a string
+            gameData = DriverStation.getInstance().getGameSpecificMessage();
+            // If the length of the game data string is 3 as it should be
+            if (gameData.length() == 3) {
+                // Check if the first character is left or right
+                isRight = gameData.charAt(0) == 'R';
+                break;
+            }
         }
         // Get the index of the turning parameters by taking the starting position and adding 3 if
         // the right switch is being used
