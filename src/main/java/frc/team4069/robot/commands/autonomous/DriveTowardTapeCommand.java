@@ -13,10 +13,19 @@ class DriveTowardTapeCommand extends CommandBase {
     // Distance in centimeters ahead at which the command stops
     private final double stopDistanceCentimeters = 5;
 
+    private final int timeoutMilliseconds = 5000;
+
     private final double driveSpeed = 0.2;
+
+    private long endTime;
 
     DriveTowardTapeCommand() {
         requires(driveBase);
+    }
+
+    @Override
+    protected void initialize() {
+        endTime = System.currentTimeMillis() + timeoutMilliseconds;
     }
 
     @Override
@@ -40,7 +49,7 @@ class DriveTowardTapeCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
-        return false; // getDistanceAheadCentimeters() <= stopDistanceCentimeters;
+        return System.currentTimeMillis() >= endTime;
     }
 
     @Override
