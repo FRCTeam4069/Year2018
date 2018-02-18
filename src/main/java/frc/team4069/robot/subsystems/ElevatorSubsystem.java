@@ -30,7 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             @Override
             public void interruptFired(int interruptAssertedMask, Object param) {
                 talon.setSelectedSensorPosition(0, 0, 0);
-                talon.stop();
+//                talon.stop();
             }
         });
 
