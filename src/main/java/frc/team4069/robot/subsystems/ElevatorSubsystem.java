@@ -30,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             @Override
             public void interruptFired(int interruptAssertedMask, Object param) {
                 talon.setSelectedSensorPosition(0, 0, 0);
+//                talon.stop();
             }
         });
 
@@ -44,13 +45,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.configMotionCruiseVelocity(3000, 0);
         talon.configMotionAcceleration(1500, 0);
 
-        talon.setSelectedSensorPosition(0, 0, 0);
+//        talon.setSelectedSensorPosition(0, 0, 0);
 
         // Soft limits to avoid destruction of hardware
         talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
         talon.configReverseSoftLimitEnable(true, 0);
-//        talon.configForwardSoftLimitEnable(true, 0);
+        talon.configForwardSoftLimitEnable(false, 0);
 
     }
 
@@ -92,8 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Get the state of the limit switch at the bottom of the elevator
     public boolean getLimitSwitchClosed() {
-        // True represents open and false represents closed; this function should be the opposite
-        return !limitSwitch.get();
+        return limitSwitch.get();
     }
 
     public int getVelocity() {
@@ -105,7 +105,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.stop();
         talon.setSelectedSensorPosition(0, 0, 0);
     }
-    
+
     @Override
     protected void initDefaultCommand() {
         setDefaultCommand(new OperatorControlElevatorCommand());

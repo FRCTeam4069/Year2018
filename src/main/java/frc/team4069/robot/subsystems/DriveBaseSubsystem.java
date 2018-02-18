@@ -77,9 +77,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // Invert the turn if we're moving backwards
-        if (speed < 0) {
-            turn = -turn;
-        }
+//        if (speed < 0) {
+//            turn = -turn;
+//        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
             rotate(turn * 0.6);
@@ -94,26 +94,27 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-        driveUnfiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        driveUnfiltered(speeds);
         // Low pass filter is giving us trouble. Bypass it.
 //        leftDrive.setConstantSpeed(leftWheelSpeed);
 //        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
-	
-	private void driveUnfiltered(WheelSpeeds speeds){
-		leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
+
+    private void driveUnfiltered(WheelSpeeds speeds) {
+        leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
-	}
+    }
 
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds, boolean auto) {
         // Run the wheel speeds through corresponding low pass filters
         WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
 
-        if(auto) {
+        if (auto) {
             leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
             rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
-        }else {
+        } else {
             WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
             // Set the motor speeds with the calculated values
             leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
@@ -180,10 +181,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     @Override
     public void reset() {
-        leftDrive.stop();
-        rightDrive.stop();
-        leftDrive.setSelectedSensorPosition(0, 0, 0);
-        rightDrive.setSelectedSensorPosition(0, 0, 0);
     }
 
     // A wrapper class that contains a speed value for each of the drive base wheels
