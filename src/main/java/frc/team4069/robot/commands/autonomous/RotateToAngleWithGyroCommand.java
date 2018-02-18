@@ -8,7 +8,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Max turn speed
     private final double turnSpeedAbsolute = 0.3;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
-    private final int counterThreshold = 50;
+    private final int counterThreshold = 25;
     // Timeout the command after this many milliseconds
     private final int timeout = 4000;
     // True if the robot is turning right
@@ -18,13 +18,15 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Desired relative angle
     private double relativeAngle;
     // Gyroscope angle will be confined to +/- acceptableError degrees from the desired angle
-    private double acceptableError = 1;
+    private double acceptableError = 2.5;
     // Counter for tracking how many ticks the gyroscope angle has been in the acceptable range of error
     private int inRangeCounter = 0;
     // Current and previous wheel positions, used for calculating derivative
     private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
     private long startTime = 0;
+	
+	private double angleAccumulator = 0.0;
 
     // Current and previous times, used for calculating derivative
     private long currentTime = 0;
@@ -51,13 +53,15 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
      * Calculate relative gyro angle, accounting for jump from 360 to 0
      */
     private double calculateGyroAngle() {
-        double gyroAngle = getGyroAngle();
+        /*double gyroAngle = getGyroAngle();
         if (gyroAngle - startAngle < -1 && this.turnRight) {
             gyroAngle += 360;
         } else if (gyroAngle - startAngle > 1 && !this.turnRight) {
             gyroAngle -= 360;
         }
-        return gyroAngle;
+        return gyroAngle;*/
+		double gyroAngle = getGyroAngle();
+		return gyroAngle + angleAccumulator;
     }
 
     /**
@@ -65,7 +69,6 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
      */
     private double calculateDelta() {
         double gyroAngle = calculateGyroAngle();
-
         return gyroAngle - startAngle;
     }
 
@@ -82,6 +85,13 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         prevGyroscope = currentGyroscope;
         currentGyroscope = calculateGyroAngle();
         prevTime = currentTime;
+		// Detect jump between 0 and 360 and adjust angle accumulator accordingly
+		if(currentGyroscope - prevGyroscope > 180){
+			angleAccumulator -= 360.0;
+		}
+		else if(currentGyroscope - prevGyroscope < -180){
+			angleAccumulator += 360.0;
+		}
         currentTime = System.currentTimeMillis();
         System.out.println("Delta time: " + (int) (currentTime - prevTime));
         double delta = calculateDelta();
