@@ -11,12 +11,6 @@ public class ZeroElevatorCommand extends CommandBase {
     }
 
     @Override
-    protected void initialize() {
-        // Run the elevator downward slowly
-        elevator.setSpeed(0.4);
-    }
-
-    @Override
     protected boolean isFinished() {
         // Run until the limit switch has been pressed
         return elevator.getLimitSwitchClosed();
