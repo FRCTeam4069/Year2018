@@ -1,11 +1,11 @@
 package frc.team4069.robot.motors;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TalonSRXMotor extends WPI_TalonSRX {
+public class TalonSRXMotor extends TalonSRX {
 
     private int encoderTicksPerRotation = 4096;
     private Set<TalonSRXMotor> slaves = new HashSet<>();
@@ -63,10 +63,5 @@ public class TalonSRXMotor extends WPI_TalonSRX {
     public double getDistanceTraveledRotations() {
         double quadPosition = getSensorCollection().getQuadraturePosition();
         return quadPosition / encoderTicksPerRotation;
-    }
-
-    public void reset() {
-        stop();
-        getSensorCollection().setQuadraturePosition(0, 10);
     }
 }
