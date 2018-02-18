@@ -47,6 +47,11 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         } else if (this.relativeAngle < -180) {
             this.relativeAngle += 360;
         }
+		startAngle = getGyroAngle();
+        // If passed angle to turn is positive, turn right
+        turnRight = relativeAngle > 0;
+        prevGyroscope = currentGyroscope = getGyroAngle();
+        prevTime = currentTime = startTime = System.currentTimeMillis();
     }
 
     /**
@@ -73,11 +78,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     }
 
     protected void initialize() {
-        startAngle = getGyroAngle();
-        // If passed angle to turn is positive, turn right
-        turnRight = relativeAngle > 0;
-        prevGyroscope = currentGyroscope = getGyroAngle();
-        prevTime = currentTime = startTime = System.currentTimeMillis();
+		
     }
 
     @Override
