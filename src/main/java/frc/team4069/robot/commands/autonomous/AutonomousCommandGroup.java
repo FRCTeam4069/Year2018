@@ -2,7 +2,11 @@ package frc.team4069.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
+import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
+import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 // Command group that does everything involved in autonomous mode
 public class AutonomousCommandGroup extends CommandGroup {
@@ -22,10 +26,10 @@ public class AutonomousCommandGroup extends CommandGroup {
         double turningAngle = turningAngles[index];
         double drivingDistance = drivingDistancesMeters[index];
         // Run the commands in sequence
-//        addSequential(new StartVacuumCommand());
+        addSequential(new StartVacuumCommand());
         addParallel(new ZeroElevatorCommand());
-//        addSequential(new WaitCommand(1));
-//        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
+        addSequential(new WaitCommand(1));
+        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
 //        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
 //        addSequential(new GrabCubeCommand());
 //        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
