@@ -1,13 +1,6 @@
 # Year2018
 This repository contains FIRST Robotics Competition Team 4069's robot code for the 2018 Power Up season.
 
-## Build Status
-Master:
-[![Build Status](https://travis-ci.org/team4069/Year2018.svg?branch=master)](https://travis-ci.org/team4069/Year2018)
-
-Develop:
-[![Build Status](https://travis-ci.org/team4069/Year2018.svg?branch=develop)](https://travis-ci.org/team4069/Year2018)
-
 ## Contributing
 * All team members wishing to contribute should commit directly to the `develop` branch, where code will be tested.
 * Code from `develop` that has been tested and guaranteed to be stable and as bug-free as possible is merged into `master`.

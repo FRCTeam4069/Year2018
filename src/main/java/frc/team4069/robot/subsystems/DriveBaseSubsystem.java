@@ -1,5 +1,6 @@
 package frc.team4069.robot.subsystems;
 
+import frc.team4069.robot.commands.OperatorDriveCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 import frc.team4069.robot.util.LowPassFilter;
@@ -14,6 +15,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.61;
+    // Toggleable precision mode by driver
+    private boolean precision = false;
 
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
@@ -53,7 +56,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
         // Multiply the average rotations by the number of wheels per rotation to get the average
         // distance traveled in meters
-        return averageRotationsTraveled * METERS_PER_ROTATION;
+        return -averageRotationsTraveled * METERS_PER_ROTATION;
     }
 
     // Stop moving immediately
@@ -63,12 +66,20 @@ public class DriveBaseSubsystem extends SubsystemBase {
         rightDrive.stop();
     }
 
-    // Start driving with a given turning coefficient and speed from zero to one
+    public void togglePrecisionMode() {
+        precision = !precision;
+    }
+
     public void driveContinuousSpeed(double turn, double speed) {
+        driveContinuousSpeed(turn, speed, false);
+    }
+
+    // Start driving with a given turning coefficient and speed from zero to one
+    public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // Invert the turn if we're moving backwards
-        if(speed < 0) {
-            turn = -turn;
-        }
+//        if (speed < 0) {
+//            turn = -turn;
+//        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
             rotate(turn * 0.6);
@@ -76,22 +87,50 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Otherwise, use the regular algorithm
         else {
             WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
-            driveFiltered(wheelSpeeds);
+
+            driveFiltered(wheelSpeeds, auto);
         }
     }
 
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-        driveFiltered(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        driveUnfiltered(speeds);
+        // Low pass filter is giving us trouble. Bypass it.
+//        leftDrive.setConstantSpeed(leftWheelSpeed);
+//        rightDrive.setConstantSpeed(-leftWheelSpeed);
+    }
+
+    private void driveUnfiltered(WheelSpeeds speeds) {
+        leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
+        rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
     }
 
     // Drive at the given wheel speeds, applying a low pass filter
-    private void driveFiltered(WheelSpeeds speeds) {
+    private void driveFiltered(WheelSpeeds speeds, boolean auto) {
         // Run the wheel speeds through corresponding low pass filters
-        WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(speeds);
-        // Set the motor speeds with the calculated values
-        leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
-        rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+        WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
+
+        if (auto) {
+            leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
+            rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
+        } else {
+            WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
+            // Set the motor speeds with the calculated values
+            leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
+            rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+        }
+    }
+
+    private WheelSpeeds preciseFilterSpeeds(WheelSpeeds speeds) {
+        if (this.precision) {
+            return new WheelSpeeds(
+                    speeds.leftWheelSpeed * 0.5,
+                    speeds.rightWheelSpeed * 0.5
+            );
+        }
+
+        return speeds;
     }
 
     // A function that takes a turning coefficient from -1 to 1 and a speed and calculates the
@@ -133,6 +172,15 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 leftSideLpf.calculate(speeds.leftWheelSpeed),
                 rightSideLpf.calculate(speeds.rightWheelSpeed)
         );
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new OperatorDriveCommand());
+    }
+
+    @Override
+    public void reset() {
     }
 
     // A wrapper class that contains a speed value for each of the drive base wheels

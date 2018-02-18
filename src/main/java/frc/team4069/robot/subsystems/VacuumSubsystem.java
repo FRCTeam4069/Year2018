@@ -33,4 +33,9 @@ public class VacuumSubsystem extends SubsystemBase {
 
         return instance;
     }
+
+    @Override
+    public void reset() {
+        talon.stop();
+    }
 }

@@ -2,28 +2,31 @@ package frc.team4069.robot.commands.autonomous;
 
 import frc.team4069.robot.commands.CommandBase;
 
-class DriveStraightForDistanceCommand extends CommandBase {
+public class DriveStraightForDistanceCommand extends CommandBase {
 
     private final double speed = 0.2;
 
     private double distanceMeters;
-    private double endDistance;
+    private double signedSpeed;
+    private double initialPosition;
 
-    DriveStraightForDistanceCommand(double distanceMeters) {
+    public DriveStraightForDistanceCommand(double distanceMeters) {
         requires(driveBase);
-        this.distanceMeters = distanceMeters;
+        this.distanceMeters = Math.abs(distanceMeters);
+        signedSpeed = distanceMeters > 0 ? speed : -speed;
     }
 
     @Override
     protected void initialize() {
         super.initialize();
-        endDistance = driveBase.getDistanceTraveledMeters() + distanceMeters;
-        driveBase.driveContinuousSpeed(0, speed);
+        initialPosition = driveBase.getDistanceTraveledMeters();
+        driveBase.driveContinuousSpeed(0, signedSpeed, true);
     }
 
     @Override
     protected boolean isFinished() {
-        return driveBase.getDistanceTraveledMeters() >= endDistance;
+        double distance = Math.abs(initialPosition - driveBase.getDistanceTraveledMeters());
+        return distance >= distanceMeters;
     }
 
     @Override

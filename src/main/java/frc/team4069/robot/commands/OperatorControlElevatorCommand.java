@@ -12,7 +12,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
     private boolean set = true;
     private List<Integer> average;
 
-    OperatorControlElevatorCommand() {
+    public OperatorControlElevatorCommand() {
         requires(elevator);
         average = new ArrayList<>();
     }
@@ -30,6 +30,17 @@ public class OperatorControlElevatorCommand extends CommandBase {
                 elevator.setPosition((double) elevator.getPosition() - 500);
                 set = true;
             }
+        }
+
+        double dpadValue = Input.getOperatorDirectionalPad();
+        if(dpadValue == 0.0) {
+            double newPosition = elevator.higherPreset();
+            elevator.setPosition(newPosition);
+        }
+
+        if(dpadValue == 180.0) {
+            double newPosition = elevator.lowerPreset();
+            elevator.setPosition(newPosition);
         }
     }
 

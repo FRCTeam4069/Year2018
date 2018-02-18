@@ -2,12 +2,11 @@ package frc.team4069.robot.commands;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.io.Input;
-import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
 // The main command for operator control of the drive base
-class OperatorDriveCommand extends CommandBase {
+public class OperatorDriveCommand extends CommandBase {
 
     // The distance that the current quick turn should travel (0 means quick turn is not being used)
     private double quickTurnDistanceMeters = 0;
@@ -16,7 +15,7 @@ class OperatorDriveCommand extends CommandBase {
 	private PowerDistributionPanel pdp;
 	
     // Constructor, used to claim subsystems
-    OperatorDriveCommand() {
+    public OperatorDriveCommand() {
 		pdp = getPowerDistributionPanel();
         // Claim exclusive use of the drive base
         requires(driveBase);
@@ -30,7 +29,6 @@ class OperatorDriveCommand extends CommandBase {
 
     // Called frequently while this command is being run
     protected void execute() {
-		System.out.println("Elevator current: " + pdp.getCurrent(IOMapping.ELEVATOR_POWER_CHANNEL));
         // Set drive base speeds using the joystick inputs
         // The turning coefficient should be equal to the steering axis
         double turningCoefficient = Input.getSteeringAxis();
@@ -50,7 +48,7 @@ class OperatorDriveCommand extends CommandBase {
         // If quick turn is not currently being used
         if (quickTurnDistanceMeters == 0) {
             // Get output from the directional pad
-            int directionalPadAngle = Input.getDirectionalPadAngleDegrees();
+            int directionalPadAngle = Input.getDriveDirectionalPadDegrees();
             // If the directional pad is being used (the output is not -1) and the up direction is not
             // being pressed (an output of 0)
             if (directionalPadAngle != -1 && directionalPadAngle != 0) {
@@ -92,6 +90,7 @@ class OperatorDriveCommand extends CommandBase {
             // Set the speed of the robot
             driveBase.driveContinuousSpeed(turningCoefficient, speed);
         }
+
     }
 
     // Called to check whether this command has completed

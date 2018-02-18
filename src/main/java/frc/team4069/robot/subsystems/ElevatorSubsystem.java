@@ -3,14 +3,18 @@ package frc.team4069.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.InterruptHandlerFunction;
+import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
-import frc.team4069.robot.util.LowPassFilter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    public static final int MAX_POSITION_TICKS = -26901;
+    public static final int MAX_POSITION_TICKS = -30530;
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
@@ -23,22 +27,34 @@ public class ElevatorSubsystem extends SubsystemBase {
         limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
 
-        // Stop the elevator from coasting when the talon is stopped (probably)
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
-        // Set the feed-forward gain
+        limitSwitch.requestInterrupts(new InterruptHandlerFunction<Object>() {
+            @Override
+            public void interruptFired(int interruptAssertedMask, Object param) {
+                talon.setSelectedSensorPosition(0, 0, 0);
+//                talon.stop();
+            }
+        });
+
+        limitSwitch.enableInterrupts();
+
+        // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
         talon.config_kP(0, 0.6, 0);
-//
-//        talon.configMotionCruiseVelocity(1500, 0);
+        talon.config_kD(0, 0.1, 0);
 
-        talon.setSelectedSensorPosition(0, 0, 0);
+        // Configure motion magic acceleration and cruise velocity so that it actually works
+        talon.configMotionCruiseVelocity(3000, 0);
+        talon.configMotionAcceleration(1500, 0);
+
+//        talon.setSelectedSensorPosition(0, 0, 0);
 
         // Soft limits to avoid destruction of hardware
-//        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
+        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
-//        talon.configReverseSoftLimitEnable(false, 0);
-//        talon.configForwardSoftLimitEnable(false, 0);
+        talon.configReverseSoftLimitEnable(true, 0);
+        talon.configForwardSoftLimitEnable(false, 0);
 
     }
 
@@ -80,25 +96,60 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Get the state of the limit switch at the bottom of the elevator
     public boolean getLimitSwitchClosed() {
-        // True represents open and false represents closed; this function should be the opposite
-        return false;
+        return limitSwitch.get();
     }
 
     public int getVelocity() {
         return talon.getSelectedSensorVelocity(0);
     }
 
+    @Override
     public void reset() {
         talon.stop();
         talon.setSelectedSensorPosition(0, 0, 0);
     }
 
+    public double higherPreset() {
+        double pos = getPosition();
+
+        for(Position position : Position.values()) {
+            double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
+
+            if(tolerance >= 500 && Math.abs(position.getTicks()) > Math.abs(pos)) {
+                return position.getTicks();
+            }
+        }
+
+        return pos;
+    }
+
+    public double lowerPreset() {
+        double pos = getPosition();
+
+        List<Position> positions = Arrays.asList(Position.values());
+        Collections.reverse(positions);
+
+        for(Position position : positions) {
+            if(Math.abs(position.getTicks()) < Math.abs(pos)) {
+                return position.getTicks();
+            }
+        }
+
+        return pos;
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new OperatorControlElevatorCommand());
+    }
+
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
-        INTAKE(-6938),
+        MINIMUM(0),
         EXCHANGE(-3000),
-        SWITCH(15000),
-        SCALE(MAX_POSITION_TICKS);
+        INTAKE(-5500),
+        SWITCH(-15000),
+        SCALE(MAX_POSITION_TICKS + 100);
 
         private int ticks;
 

@@ -18,7 +18,7 @@ public class ThreadGyro implements Runnable {
         while (true) {
             lastHeading = gyro.getAngle();
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
