@@ -2,7 +2,6 @@ package frc.team4069.robot.commands.elevator;
 
 import frc.team4069.robot.commands.CommandBase;
 
-// Use our enum values with MotionMagic to move the elevator to predefined locations passed in the constructor
 public class ZeroElevatorCommand extends CommandBase {
 
     // Initializer in which this command requires the elevator subsystem
@@ -12,8 +11,7 @@ public class ZeroElevatorCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
-        // Run until the limit switch has been pressed
-        return elevator.getLimitSwitchClosed();
+        return true;
     }
 
     @Override
