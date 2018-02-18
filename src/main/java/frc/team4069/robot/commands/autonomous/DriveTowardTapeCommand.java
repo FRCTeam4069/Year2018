@@ -13,7 +13,7 @@ class DriveTowardTapeCommand extends CommandBase {
     // Distance in centimeters ahead at which the command stops
     private final double stopDistanceCentimeters = 5;
 
-    private final int timeoutMilliseconds = 5000;
+    private final int timeoutMilliseconds = 3000;
 
     private final double driveSpeed = 0.2;
 
@@ -42,7 +42,6 @@ class DriveTowardTapeCommand extends CommandBase {
         } else {
             // Otherwise, drive straight
             turn = 0;
-            System.out.println("Straight");
         }
         driveBase.driveContinuousSpeed(turn, driveSpeed);
     }

@@ -10,9 +10,6 @@ import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 // Command group that does everything involved in autonomous mode
 public class AutonomousCommandGroup extends CommandGroup {
 
-    // Turning angles and driving distances for each possible starting configuration
-    private final double[] turningAngles = {10, -10, -60, 30, 10, -10};
-    private final double[] drivingDistancesMeters = {4, 6, 7, 9, 6, 4};
     // The number of milliseconds after which to stop searching for the game data and choose a
     // reasonable default
     private final int gameDataTimeoutMilliseconds = 250;
@@ -22,19 +19,24 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-        // Get the angle to turn and the distance to travel before turning back the same angle
-        int index = getTurningParametersIndex();
-        double turningAngle = turningAngles[index];
-        double drivingDistance = drivingDistancesMeters[index];
-        // Run the commands in sequence
         addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new WaitCommand(1));
         addSequential(new GrabCubeCommand());
-        addSequential(new RotateToAngleWithGyroCommand(turningAngle));
-        addSequential(new DriveStraightForDistanceCommand(drivingDistance));
-        addSequential(new RotateToAngleWithGyroCommand(-turningAngle));
+        addSequential(new RotateToAngleWithGyroCommand(-60));
+        addSequential(new DriveStraightForDistanceCommand(9));
+        addSequential(new RotateToAngleWithGyroCommand(60));
         addSequential(new DriveTowardTapeCommand());
+        addSequential(new StopVacuumCommand());
+        addSequential(new WaitCommand(2));
+        addSequential(new StartVacuumCommand());
+        addSequential(new DriveStraightForDistanceCommand(-1));
+        addSequential(new RotateToAngleWithGyroCommand(90));
+        addSequential(new DriveStraightForDistanceCommand(1));
+        addSequential(new GrabCubeCommand());
+        addSequential(new DriveStraightForDistanceCommand(-1));
+        addSequential(new RotateToAngleWithGyroCommand(-90));
+        addSequential(new DriveStraightForDistanceCommand(1));
         addSequential(new StopVacuumCommand());
     }
 
