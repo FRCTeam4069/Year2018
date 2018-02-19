@@ -25,6 +25,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
 
+    public static final double SLOW_SPEED = 0.2;
+
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers

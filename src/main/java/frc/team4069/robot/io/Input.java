@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.arm.DeployArmCommand;
-import frc.team4069.robot.commands.arm.HookArmCommandGroup;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
@@ -14,6 +13,7 @@ import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
+import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 
@@ -30,10 +30,8 @@ public class Input {
         controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
 
         // Map the elevator controls for scale, switch, and exchange
-        Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+        Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
         elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
-        Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
         Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
         elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
@@ -45,7 +43,7 @@ public class Input {
         startWinch.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
-        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_BACK);
+        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
 
         Button armDown = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
@@ -55,11 +53,9 @@ public class Input {
         Button deployArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_Y);
         deployArm.whenPressed(new DeployArmCommand());
 
-        Button hookArm = new JoystickButton(driveJoystick, IOMapping.BUTTON_B);
-        hookArm.whenPressed(new HookArmCommandGroup());
-
         Button togglePrecisionMode = new JoystickButton(driveJoystick, IOMapping.BUTTON_START);
         togglePrecisionMode.whenPressed(new ToggleDrivePrecisionModeCommand());
+
     }
 
     // Accessor for the steering axis on the drive joystick
@@ -90,6 +86,12 @@ public class Input {
     // Accessor for the drive speed, using the left and right triggers
     public static double getDriveSpeed() {
         // Right trigger controls forward motion, left trigger controls backward motion
+        if(driveJoystick.getRawButton(IOMapping.BUMPER_LEFT)) {
+            return -DriveBaseSubsystem.SLOW_SPEED;
+        }
+        if(driveJoystick.getRawButton(IOMapping.BUMPER_RIGHT)) {
+            return DriveBaseSubsystem.SLOW_SPEED;
+        }
         double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
         double backwardMotion = -driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
         return backwardMotion + forwardMotion;

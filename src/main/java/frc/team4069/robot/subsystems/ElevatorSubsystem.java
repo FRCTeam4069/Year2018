@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -36,6 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 //                talon.stop();
             }
         });
+
+        talon.setSelectedSensorPosition(0, 0, 0);
 
         limitSwitch.enableInterrupts();
 
@@ -112,30 +113,36 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double higherPreset() {
         double pos = getPosition();
 
-        for(Position position : Position.values()) {
-            double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
-
-            if(tolerance >= 500 && Math.abs(position.getTicks()) > Math.abs(pos)) {
-                return position.getTicks();
-            }
-        }
-
-        return pos;
+        return Stream.of(Position.values())
+                .filter(position -> {
+                    double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
+                    return tolerance >= 500 && Math.abs(position.getTicks()) > Math.abs(pos);
+                })
+                .findFirst()
+                .map(Position::getTicks)
+                .orElse((int)pos);
     }
 
     public double lowerPreset() {
         double pos = getPosition();
 
-        List<Position> positions = Arrays.asList(Position.values());
-        Collections.reverse(positions);
+//        List<Position> positions = Arrays.asList(Position.values());
+//        Collections.reverse(positions);
+//
+//        for(Position position : positions) {
+//            if(Math.abs(position.getTicks()) < Math.abs(pos)) {
+//                return position.getTicks();
+//            }
+//        }
 
-        for(Position position : positions) {
-            if(Math.abs(position.getTicks()) < Math.abs(pos)) {
-                return position.getTicks();
-            }
-        }
+        return Stream.of(Position.values())
+                .sorted(Collections.reverseOrder())
+                .filter(position -> Math.abs(position.getTicks()) < Math.abs(pos))
+                .findFirst()
+                .map(Position::getTicks)
+                .orElse((int)pos);
 
-        return pos;
+//        return pos;
     }
 
     @Override
