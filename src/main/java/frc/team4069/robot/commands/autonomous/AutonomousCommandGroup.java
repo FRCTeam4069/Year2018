@@ -28,16 +28,6 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(60));
         addSequential(new DriveTowardTapeCommand());
         addSequential(new StopVacuumCommand());
-        addSequential(new WaitCommand(2));
-        addSequential(new StartVacuumCommand());
-        addSequential(new DriveStraightForDistanceCommand(-0.3, 0.2));
-        addSequential(new RotateToAngleWithGyroCommand(90));
-        addSequential(new DriveStraightForDistanceCommand(0.5, 0.2));
-        addSequential(new GrabCubeCommandGroup());
-        addSequential(new DriveStraightForDistanceCommand(-0.5, 0.2));
-        addSequential(new RotateToAngleWithGyroCommand(-90));
-        addSequential(new DriveStraightForDistanceCommand(0.5, 0.2));
-        addSequential(new StopVacuumCommand());
     }
 
     // Read the game data and get the direction to drive
