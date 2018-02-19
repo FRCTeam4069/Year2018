@@ -8,9 +8,9 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Max turn speed
     private final double turnSpeedAbsolute = 0.3;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
-    private final int counterThreshold = 25;
+    private final int counterThreshold = 10;
     // Timeout the command after this many milliseconds
-    private final int timeout = 4000;
+    private final int timeout = 1500;
     // True if the robot is turning right
     private boolean turnRight;
     // Initial gyroscope angle
@@ -18,7 +18,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Desired relative angle
     private double relativeAngle;
     // Gyroscope angle will be confined to +/- acceptableError degrees from the desired angle
-    private double acceptableError = 2.5;
+    private double acceptableError = 5.0;
     // Counter for tracking how many ticks the gyroscope angle has been in the acceptable range of error
     private int inRangeCounter = 0;
     // Current and previous wheel positions, used for calculating derivative
