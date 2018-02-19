@@ -12,15 +12,13 @@ class DriveTowardTapeCommand extends CommandBase {
 
     // Distance in centimeters ahead at which the command stops
     private final double stopDistanceCentimeters = 5;
-
-    private final int timeoutMilliseconds = 3000;
-
-    private final double driveSpeed = 0.2;
-
+    private final double driveSpeed = 0.5;
+    private int timeoutMilliseconds;
     private long endTime;
 
-    DriveTowardTapeCommand() {
+    DriveTowardTapeCommand(int timeoutMilliseconds) {
         requires(driveBase);
+        this.timeoutMilliseconds = timeoutMilliseconds;
     }
 
     @Override

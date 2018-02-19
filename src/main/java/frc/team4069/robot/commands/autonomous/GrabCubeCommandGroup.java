@@ -13,8 +13,8 @@ class GrabCubeCommandGroup extends CommandGroup {
     GrabCubeCommandGroup() {
         addSequential(new StartVacuumCommand());
         addSequential(new SetCustomElevatorPositionCommand(-6000));
-        addSequential(new SetElevatorPositionCommand(Position.MINIMUM));
+        addSequential(new SetElevatorPositionCommand(Position.MINIMUM, true));
         addSequential(new WaitCommand(0.3));
-        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
+        addSequential(new SetElevatorPositionCommand(Position.SWITCH, false));
     }
 }

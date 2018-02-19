@@ -7,9 +7,11 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 public class SetElevatorPositionCommand extends CommandBase {
 
     private Position position;
+    private boolean blocking;
 
-    public SetElevatorPositionCommand(Position position) {
+    public SetElevatorPositionCommand(Position position, boolean blocking) {
         this.position = position;
+        this.blocking = blocking;
         requires(elevator);
     }
 
@@ -20,13 +22,17 @@ public class SetElevatorPositionCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
+        if (!blocking) {
+            return true;
+        }
+
         double pos = elevator.getPosition();
-        if(position == Position.MINIMUM) {
+        if (position == Position.MINIMUM) {
             return Math.abs(pos) <= 100;
         }
 
         double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
 
-        return tolerance <= 500;
+        return tolerance <= 1000;
     }
 }

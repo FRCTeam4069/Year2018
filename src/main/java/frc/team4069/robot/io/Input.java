@@ -31,9 +31,9 @@ public class Input {
 
         // Map the elevator controls for scale, switch, and exchange
         Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
+        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH, false));
         Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
+        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE, false));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
         elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
@@ -86,10 +86,10 @@ public class Input {
     // Accessor for the drive speed, using the left and right triggers
     public static double getDriveSpeed() {
         // Right trigger controls forward motion, left trigger controls backward motion
-        if(driveJoystick.getRawButton(IOMapping.BUMPER_LEFT)) {
+        if (driveJoystick.getRawButton(IOMapping.BUMPER_LEFT)) {
             return -DriveBaseSubsystem.SLOW_SPEED;
         }
-        if(driveJoystick.getRawButton(IOMapping.BUMPER_RIGHT)) {
+        if (driveJoystick.getRawButton(IOMapping.BUMPER_RIGHT)) {
             return DriveBaseSubsystem.SLOW_SPEED;
         }
         double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);

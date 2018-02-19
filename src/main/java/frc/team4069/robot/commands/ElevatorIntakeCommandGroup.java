@@ -13,8 +13,8 @@ public class ElevatorIntakeCommandGroup extends CommandGroup {
     // Constructor that runs the four commands sequentially
     public ElevatorIntakeCommandGroup() {
         addSequential(new StartVacuumCommand());
-        addSequential(new SetElevatorPositionCommand(Position.INTAKE));
+        addSequential(new SetElevatorPositionCommand(Position.INTAKE, false));
         addSequential(new WaitCommand(3));
-        addSequential(new SetElevatorPositionCommand(Position.SWITCH));
+        addSequential(new SetElevatorPositionCommand(Position.SWITCH, false));
     }
 }
