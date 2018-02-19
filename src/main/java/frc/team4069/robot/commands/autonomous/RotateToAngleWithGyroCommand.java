@@ -33,7 +33,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     private long prevTime = currentTime;
 
     // Lower derivativeMultiplier -> derivative has lesser effect on turning speed
-    private double derivativeMultiplier = 0.0075;
+    private final double derivativeMultiplier = 0.0075;
 
     // Current speed at which the robot's wheels are turning
     private double turningSpeed;

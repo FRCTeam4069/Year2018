@@ -62,6 +62,7 @@ public class TalonSRXMotor extends TalonSRX {
 
     public double getDistanceTraveledRotations() {
         double quadPosition = getSensorCollection().getQuadraturePosition();
+		System.out.println(quadPosition / encoderTicksPerRotation);
         return quadPosition / encoderTicksPerRotation;
     }
 }
