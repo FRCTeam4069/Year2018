@@ -11,11 +11,11 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 class GrabCubeCommandGroup extends CommandGroup {
 
     GrabCubeCommandGroup() {
+        addSequential(new StartVacuumCommand());
         addSequential(new SetCustomElevatorPositionCommand(-6000));
         addSequential(new WaitCommand(1));
-        addSequential(new StartVacuumCommand());
         addSequential(new SetElevatorPositionCommand(Position.MINIMUM));
-        addSequential(new WaitCommand(2));
+        addSequential(new WaitCommand(1.5));
         addSequential(new SetElevatorPositionCommand(Position.SWITCH));
         addSequential(new WaitCommand(1.5));
     }
