@@ -3,6 +3,7 @@ package frc.team4069.robot.commands.elevator;
 import frc.team4069.robot.commands.CommandBase;
 
 public class SetCustomElevatorPositionCommand extends CommandBase {
+
     private double position;
 
     public SetCustomElevatorPositionCommand(double position) {
@@ -18,6 +19,8 @@ public class SetCustomElevatorPositionCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
-        return true;
+        double pos = elevator.getPosition();
+        double tolerance = Math.abs(position) - Math.abs(pos);
+        return tolerance <= 500;
     }
 }
