@@ -1,6 +1,7 @@
 package frc.team4069.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 
@@ -8,22 +9,26 @@ public class VacuumSubsystem extends SubsystemBase {
 
     private static VacuumSubsystem instance;
 
-    private TalonSRXMotor talon;
+    private TalonSRXMotor vacuumTalon;
+    private Solenoid vacuumSolenoid;
 
     private VacuumSubsystem() {
-        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true, 4096);
+        vacuumTalon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
+        vacuumSolenoid = new Solenoid(IOMapping.VACUUM_SOLENOID_CAN_BUS, IOMapping.SOLENOID_CHANNEL);
     }
 
     public void start() {
-        talon.set(ControlMode.PercentOutput, 1);
+        vacuumTalon.set(ControlMode.PercentOutput, 1);
+        vacuumSolenoid.set(true);
     }
 
     public void stop() {
-        talon.stop();
+        vacuumTalon.stop();
+        vacuumSolenoid.set(false);
     }
 
     public boolean isStarted() {
-        return talon.isStarted();
+        return vacuumTalon.isStarted();
     }
 
     public static VacuumSubsystem getInstance() {
@@ -36,6 +41,6 @@ public class VacuumSubsystem extends SubsystemBase {
 
     @Override
     public void reset() {
-        talon.stop();
+        vacuumTalon.stop();
     }
 }
