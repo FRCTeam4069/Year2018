@@ -36,7 +36,6 @@ class DriveTowardTapeCommand extends CommandBase {
             double horizontalError = colourRegions.mXCenter - 160;
             // Use the scaled error as the turn value
             turn = (horizontalError / 160) * errorScalingFactor;
-            System.out.println(turn);
         } else {
             // Otherwise, drive straight
             turn = 0;

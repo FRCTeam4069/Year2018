@@ -6,11 +6,13 @@ import frc.team4069.robot.commands.CommandBase;
 public class RotateToAngleWithGyroCommand extends CommandBase {
 
     // Max turn speed
-    private final double turnSpeedAbsolute = 0.3;
+    private final double turnSpeedAbsolute = 0.4;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
-    private final int counterThreshold = 25;
+    private final int counterThreshold = 10;
     // Timeout the command after this many milliseconds
     private final int timeout = 4000;
+    // Lower derivativeMultiplier -> derivative has lesser effect on turning speed
+    private final double derivativeMultiplier = 0.0075;
     // True if the robot is turning right
     private boolean turnRight;
     // Initial gyroscope angle
@@ -25,16 +27,10 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
     private long startTime = 0;
-
     private double angleAccumulator = 0.0;
-
     // Current and previous times, used for calculating derivative
     private long currentTime = 0;
     private long prevTime = currentTime;
-
-    // Lower derivativeMultiplier -> derivative has lesser effect on turning speed
-    private final double derivativeMultiplier = 0.0075;
-
     // Current speed at which the robot's wheels are turning
     private double turningSpeed;
 

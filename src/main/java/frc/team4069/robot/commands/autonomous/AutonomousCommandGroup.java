@@ -23,20 +23,11 @@ public class AutonomousCommandGroup extends CommandGroup {
         if (shouldGoRight()) {
             addSequential(new DriveTowardTapeCommand(1750));
         } else {
+            addSequential(new DriveStraightForDistanceCommand(0.5, 0.2));
             addSequential(new RotateToAngleWithGyroCommand(-60));
-            addSequential(new DriveStraightForDistanceCommand(7.25, 0.4));
+            addSequential(new DriveStraightForDistanceCommand(8.5, 0.4));
             addSequential(new RotateToAngleWithGyroCommand(60));
-            addSequential(new DriveTowardTapeCommand(3000));
-            addSequential(new StopVacuumCommand());
-            addSequential(new WaitCommand(2));
-            addSequential(new StartVacuumCommand());
-            addSequential(new DriveStraightForDistanceCommand(-1, 0.2));
-            addSequential(new RotateToAngleWithGyroCommand(90));
-            addSequential(new DriveStraightForDistanceCommand(1, 0.2));
-            addSequential(new GrabCubeCommandGroup());
-            addSequential(new DriveStraightForDistanceCommand(-1, 0.2));
-            addSequential(new RotateToAngleWithGyroCommand(-90));
-            addSequential(new DriveStraightForDistanceCommand(1, 0.2));
+            addSequential(new DriveTowardTapeCommand(850));
         }
         addSequential(new StopVacuumCommand());
     }
