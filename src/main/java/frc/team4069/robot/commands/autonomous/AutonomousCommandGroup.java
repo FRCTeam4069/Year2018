@@ -2,9 +2,6 @@ package frc.team4069.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
-import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
-import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 
 // Command group that does everything involved in autonomous mode
 public class AutonomousCommandGroup extends CommandGroup {
@@ -18,7 +15,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-		addSequential(new DriveStraightForDistanceCommand(6));
+        addSequential(new DriveStraightForDistanceCommand(6, 0.2));
         /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
