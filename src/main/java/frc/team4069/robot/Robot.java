@@ -65,7 +65,7 @@ public class Robot extends IterativeRobot {
 //        threadArmCamera = new ThreadArmCamera();
 //        threadArmCameraHandle = new Thread(threadArmCamera);
 //        threadArmCameraHandle.start();
-        
+
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
     }
 
