@@ -25,7 +25,7 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 	
 	private final double derivativeMultiplier = 0.1;
 
-    public DriveStraightForDistanceCommand(double distanceMeters) {
+    public DriveStraightForDistanceCommand(double distanceMeters, double speed) {
         requires(driveBase);
         this.distanceMeters = Math.abs(distanceMeters);
         signedSpeed = distanceMeters > 0 ? speed : -speed;

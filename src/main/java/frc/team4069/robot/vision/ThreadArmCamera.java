@@ -36,7 +36,7 @@ public class ThreadArmCamera implements Runnable {
             if (!pipeline.findContoursOutput().isEmpty()) {
                 // Get the maximum extents of the contours
                 Rect contourBounds = Imgproc
-                        .boundingRect(pipeline.findContoursOutput().get(0));
+                        .boundingRect(pipeline.filterContoursOutput().get(0));
                 // Set the public values accordingly
                 powerCubeXPos = contourBounds.x + (contourBounds.width / 2);
                 powerCubeYPos = contourBounds.x + (contourBounds.height / 2);

@@ -5,6 +5,7 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 
 // Use our enum values with MotionMagic to move the elevator to predefined locations passed in the constructor
 public class SetElevatorPositionCommand extends CommandBase {
+
     private Position position;
 
     public SetElevatorPositionCommand(Position position) {
@@ -19,6 +20,13 @@ public class SetElevatorPositionCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
-        return true;
+        double pos = elevator.getPosition();
+        if(position == Position.MINIMUM) {
+            return Math.abs(pos) <= 100;
+        }
+
+        double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
+
+        return tolerance <= 500;
     }
 }
