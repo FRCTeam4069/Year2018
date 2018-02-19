@@ -1,6 +1,5 @@
 package frc.team4069.robot.commands;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
@@ -10,13 +9,9 @@ public class OperatorDriveCommand extends CommandBase {
 
     // The distance that the current quick turn should travel (0 means quick turn is not being used)
     private double quickTurnDistanceMeters = 0;
-	
-	// Reference to the power distribution panel
-	private PowerDistributionPanel pdp;
-	
+
     // Constructor, used to claim subsystems
     public OperatorDriveCommand() {
-		pdp = getPowerDistributionPanel();
         // Claim exclusive use of the drive base
         requires(driveBase);
     }
