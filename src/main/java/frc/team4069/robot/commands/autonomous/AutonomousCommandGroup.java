@@ -22,7 +22,7 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new WaitCommand(1));
-        addSequential(new GrabCubeCommand());
+        addSequential(new GrabCubeCommandGroup());
         addSequential(new RotateToAngleWithGyroCommand(-60));
         addSequential(new DriveStraightForDistanceCommand(9));
         addSequential(new RotateToAngleWithGyroCommand(60));
@@ -30,13 +30,13 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new StopVacuumCommand());
         addSequential(new WaitCommand(2));
         addSequential(new StartVacuumCommand());
-        addSequential(new DriveStraightForDistanceCommand(-1));
+        addSequential(new DriveStraightForDistanceCommand(-0.5));
         addSequential(new RotateToAngleWithGyroCommand(90));
-        addSequential(new DriveStraightForDistanceCommand(1));
-        addSequential(new GrabCubeCommand());
-        addSequential(new DriveStraightForDistanceCommand(-1));
+        addSequential(new DriveStraightForDistanceCommand(0.5));
+        addSequential(new GrabCubeCommandGroup());
+        addSequential(new DriveStraightForDistanceCommand(-0.5));
         addSequential(new RotateToAngleWithGyroCommand(-90));
-        addSequential(new DriveStraightForDistanceCommand(1));
+        addSequential(new DriveStraightForDistanceCommand(0.5));
         addSequential(new StopVacuumCommand());
     }
 
