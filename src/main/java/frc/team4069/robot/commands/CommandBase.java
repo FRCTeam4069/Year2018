@@ -1,6 +1,5 @@
 package frc.team4069.robot.commands;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team4069.robot.Robot;
 import frc.team4069.robot.subsystems.ArmSubsystem;
@@ -46,11 +45,6 @@ public abstract class CommandBase extends Command {
     // Accessor for the Lidar distance directly ahead
     protected static double getDistanceAheadCentimeters() {
         return mRobot.threadLIDARInstance.lastDistance;
-    }
-
-    // Accessor for the power distribution panel
-    protected static PowerDistributionPanel getPowerDistributionPanel() {
-        return mRobot.powerDistributionPanel;
     }
 
     // Accessors for the power cube's position

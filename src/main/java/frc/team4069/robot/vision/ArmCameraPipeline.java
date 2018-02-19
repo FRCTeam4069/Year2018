@@ -25,7 +25,7 @@ public class ArmCameraPipeline implements VisionPipeline {
 
     //Outputs
     private Mat resizeImageOutput = new Mat();
-    private Mat hsvThresholdOutput = new Mat();
+    private Mat hslThresholdOutput = new Mat();
     private Mat blurOutput = new Mat();
     private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 
@@ -42,18 +42,18 @@ public class ArmCameraPipeline implements VisionPipeline {
         resizeImage(resizeImageInput, resizeImageWidth, resizeImageHeight, resizeImageInterpolation,
                 resizeImageOutput);
 
-        // Step HSV_Threshold0:
-        Mat hsvThresholdInput = resizeImageOutput;
-        double[] hsvThresholdHue = {21.043165467625897, 53.1748726655348};
-        double[] hsvThresholdSaturation = {142.17625899280574, 255.0};
-        double[] hsvThresholdValue = {155.93525179856115, 255.0};
-        hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue,
-                hsvThresholdOutput);
+        // Step HSL_Threshold0:
+        Mat hslThresholdInput = resizeImageOutput;
+        double[] hslThresholdHue = {0.0, 83.73514431239389};
+        double[] hslThresholdSaturation = {123.83093525179855, 255.0};
+        double[] hslThresholdLuminance = {84.84712230215828, 255.0};
+        hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation,
+                hslThresholdLuminance, hslThresholdOutput);
 
         // Step Blur0:
-        Mat blurInput = hsvThresholdOutput;
+        Mat blurInput = hslThresholdOutput;
         BlurType blurType = BlurType.get("Median Filter");
-        double blurRadius = 9.909909909909913;
+        double blurRadius = 29.72972972972973;
         blur(blurInput, blurType, blurRadius, blurOutput);
 
         // Step Find_Contours0:
@@ -73,12 +73,12 @@ public class ArmCameraPipeline implements VisionPipeline {
     }
 
     /**
-     * This method is a generated getter for the output of a HSV_Threshold.
+     * This method is a generated getter for the output of a HSL_Threshold.
      *
-     * @return Mat output from HSV_Threshold.
+     * @return Mat output from HSL_Threshold.
      */
-    public Mat hsvThresholdOutput() {
-        return hsvThresholdOutput;
+    public Mat hslThresholdOutput() {
+        return hslThresholdOutput;
     }
 
     /**
@@ -115,19 +115,18 @@ public class ArmCameraPipeline implements VisionPipeline {
     }
 
     /**
-     * Segment an image based on hue, saturation, and value ranges.
+     * Segment an image based on hue, saturation, and luminance ranges.
      *
      * @param input The image on which to perform the HSL threshold.
      * @param hue The min and max hue
      * @param sat The min and max saturation
-     * @param val The min and max value
-     * //     * @param output The image in which to store the output.
+     * @param lum The min and max luminance
      */
-    private void hsvThreshold(Mat input, double[] hue, double[] sat, double[] val,
+    private void hslThreshold(Mat input, double[] hue, double[] sat, double[] lum,
             Mat out) {
-        Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HSV);
-        Core.inRange(out, new Scalar(hue[0], sat[0], val[0]),
-                new Scalar(hue[1], sat[1], val[1]), out);
+        Imgproc.cvtColor(input, out, Imgproc.COLOR_BGR2HLS);
+        Core.inRange(out, new Scalar(hue[0], lum[0], sat[0]),
+                new Scalar(hue[1], lum[1], sat[1]), out);
     }
 
     /**
@@ -164,10 +163,7 @@ public class ArmCameraPipeline implements VisionPipeline {
     /**
      * Sets the values of pixels in a binary image to their distance to the nearest black pixel.
      *
-     * //     * @param input The image on which to perform the Distance Transform.
-     * //     * @param type The Transform.
-     * //     * @param maskSize the size of the mask.
-     * //     * @param output The image in which to store the output.
+     * @param input The image on which to perform the Distance Transform.
      */
     private void findContours(Mat input, boolean externalOnly,
             List<MatOfPoint> contours) {
@@ -214,4 +210,7 @@ public class ArmCameraPipeline implements VisionPipeline {
             return this.label;
         }
     }
+
+
 }
+

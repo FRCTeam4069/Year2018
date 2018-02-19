@@ -1,7 +1,6 @@
 package frc.team4069.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4069.robot.commands.CommandBase;
@@ -24,9 +23,8 @@ public class Robot extends IterativeRobot {
     public ThreadGyro threadGyroInstance;
     public ThreadLIDAR threadLIDARInstance;
     public ThreadVisionProcessor threadVisionProcessorInstance;
-    public PowerDistributionPanel powerDistributionPanel;
     public ThreadArmCamera threadArmCamera;
-    public Thread threadArmCameraHandle;
+    //    public Thread threadArmCameraHandle;
     private ThreadVideoCapture threadVideoCaptureInstance;
     private Thread threadGyroHandle;
     private Thread threadLIDARHandle;
@@ -39,9 +37,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         super.robotInit();
-
-        // Instantiate PowerDistributionPanel
-//        powerDistributionPanel = new PowerDistributionPanel(1);
 
         // Initialize the subsystems
         CommandBase.init(this);
@@ -67,9 +62,10 @@ public class Robot extends IterativeRobot {
                 threadVideoCaptureHandle, this);
         threadVisionProcessorHandle = new Thread(threadVisionProcessorInstance);
         threadVisionProcessorHandle.start();
-        threadArmCamera = new ThreadArmCamera();
-        threadArmCameraHandle = new Thread(threadArmCamera);
-
+//        threadArmCamera = new ThreadArmCamera();
+//        threadArmCameraHandle = new Thread(threadArmCamera);
+//        threadArmCameraHandle.start();
+        
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
     }
 
