@@ -4,13 +4,11 @@ import frc.team4069.robot.commands.CommandBase;
 
 public class DriveStraightForDistanceCommand extends CommandBase {
 
-    private final double speed = 0.2;
-
     private double distanceMeters;
     private double signedSpeed;
     private double initialPosition;
 
-    public DriveStraightForDistanceCommand(double distanceMeters) {
+    public DriveStraightForDistanceCommand(double distanceMeters, double speed) {
         requires(driveBase);
         this.distanceMeters = Math.abs(distanceMeters);
         signedSpeed = distanceMeters > 0 ? speed : -speed;
