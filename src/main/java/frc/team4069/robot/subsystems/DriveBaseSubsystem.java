@@ -85,7 +85,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
 //        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.6);
+            driveOneWheel(turn < 0, turn * 0.6, auto);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -95,7 +95,19 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
     }
 
+    public void driveOneWheel(boolean rightWheel, double speed, boolean auto) {
+        WheelSpeeds wheelSpeeds;
+        if (!rightWheel) {
+            wheelSpeeds = new WheelSpeeds(speed, (-speed * 0.4));
+        } else {
+            wheelSpeeds = new WheelSpeeds((speed * 0.4), -speed);
+        }
+        driveFiltered(wheelSpeeds, auto);
+    }
+
     // Turn on the spot with the given left wheel speed
+    // DEPRECATED: BROWNS OUT ON CARPET
+    @Deprecated
     public void rotate(double leftWheelSpeed) {
         WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
         driveUnfiltered(speeds);
@@ -115,13 +127,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
         WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
 
         if (auto) {
-            leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
-            rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
+            driveUnfiltered(preciseFiltered);
         } else {
             WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
-            // Set the motor speeds with the calculated values
-            leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
-            rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+            driveUnfiltered(lowPassFilteredSpeeds);
         }
     }
 
