@@ -79,10 +79,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
-        // Invert the turn if we're moving backwards
-//        if (speed < 0) {
-//            turn = -turn;
-//        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
             driveOneWheel(turn < 0, turn * 0.6, auto);
@@ -103,17 +99,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
             wheelSpeeds = new WheelSpeeds((speed * 0.4), -speed);
         }
         driveFiltered(wheelSpeeds, auto);
-    }
-
-    // Turn on the spot with the given left wheel speed
-    // DEPRECATED: BROWNS OUT ON CARPET
-    @Deprecated
-    public void rotate(double leftWheelSpeed) {
-        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
-        driveUnfiltered(speeds);
-        // Low pass filter is giving us trouble. Bypass it.
-//        leftDrive.setConstantSpeed(leftWheelSpeed);
-//        rightDrive.setConstantSpeed(-leftWheelSpeed);
     }
 
     private void driveUnfiltered(WheelSpeeds speeds) {
