@@ -11,13 +11,14 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // The lateral distance between the robot's wheels in meters
     public static final double ROBOT_TRACK_WIDTH_METERS = 0.6;
+    public static final double SLOW_SPEED = 0.2;
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.61;
+    private final int ENCODER_TICKS_PER_ROTATION = 1024;
     // Toggleable precision mode by driver
     private boolean precision = false;
-
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
     private TalonSRXMotor rightDrive;
@@ -25,13 +26,13 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
 
-    public static final double SLOW_SPEED = 0.2;
-
     // Initialize the drive motors
     private DriveBaseSubsystem() {
         // Initialize the motors with predefined port numbers
-        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false, 11, 13);
-        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
+        leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, ENCODER_TICKS_PER_ROTATION,
+                false, 11, 13);
+        rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, ENCODER_TICKS_PER_ROTATION,
+                false, 18, 20);
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
