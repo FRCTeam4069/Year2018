@@ -6,7 +6,7 @@ import frc.team4069.robot.commands.CommandBase;
 public class RotateToAngleWithGyroCommand extends CommandBase {
 
     // Max turn speed
-    private final double turnSpeedAbsolute = 0.4;
+    private final double turnSpeedAbsolute = 0.6;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
     private final int counterThreshold = 10;
     // Timeout the command after this many milliseconds
@@ -107,7 +107,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         } else if (motorOutput < -turnSpeedAbsolute) {
             motorOutput = -turnSpeedAbsolute;
         }
-        driveBase.driveOneWheel(!turnRight, motorOutput, true);
+        driveBase.driveOneWheel(!turnRight, Math.abs(motorOutput), true);
         // If robot is in range of acceptable error, increment the in range counter, otherwise zero it
         if (delta >= relativeAngle - acceptableError && delta <= relativeAngle + acceptableError) {
             inRangeCounter++;

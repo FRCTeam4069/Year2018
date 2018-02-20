@@ -102,9 +102,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveOneWheel(boolean rightWheel, double speed, boolean auto) {
         WheelSpeeds wheelSpeeds;
         if (!rightWheel) {
-            wheelSpeeds = new WheelSpeeds(speed, (-speed * 0.4));
+            wheelSpeeds = new WheelSpeeds(speed, -speed * 0.4);
         } else {
-            wheelSpeeds = new WheelSpeeds((speed * 0.4), -speed);
+            wheelSpeeds = new WheelSpeeds(-speed * 0.4, speed);
         }
         driveFiltered(wheelSpeeds, auto);
     }

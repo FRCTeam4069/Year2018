@@ -19,16 +19,15 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
-        addSequential(new WaitCommand(0.1));
-        if (shouldGoRight()) {
-            addSequential(new DriveTowardTapeCommand(1750));
-        } else {
-            addSequential(new DriveStraightForDistanceCommand(0.5, 0.2));
-            addSequential(new RotateToAngleWithGyroCommand(-60));
-            addSequential(new DriveStraightForDistanceCommand(8.5, 0.4));
-            addSequential(new RotateToAngleWithGyroCommand(60));
-            addSequential(new DriveTowardTapeCommand(850));
-        }
+//        if (shouldGoRight()) {
+//            addSequential(new DriveTowardTapeCommand(1750));
+//        } else {
+        addSequential(new RotateToAngleWithGyroCommand(-90));
+        addSequential(new WaitCommand(0.5));
+        addSequential(new DriveStraightForDistanceCommand(1.6, 0.7));
+        addSequential(new RotateToAngleWithGyroCommand(90));
+        addSequential(new DriveTowardTapeCommand(2000));
+//        }
         addSequential(new StopVacuumCommand());
     }
 
