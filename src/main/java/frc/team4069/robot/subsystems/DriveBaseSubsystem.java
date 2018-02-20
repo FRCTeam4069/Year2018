@@ -1,5 +1,6 @@
 package frc.team4069.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.team4069.robot.commands.OperatorDriveCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
@@ -32,6 +33,8 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // Initialize the motors with predefined port numbers
         leftDrive = new TalonSRXMotor(IOMapping.LEFT_DRIVE_CAN_BUS, 256, false, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, 256, false, 18, 20);
+		leftDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		rightDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
