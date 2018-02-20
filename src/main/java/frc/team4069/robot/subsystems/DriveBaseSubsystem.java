@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems;
 
 import frc.team4069.robot.commands.OperatorDriveCommand;
 import frc.team4069.robot.io.IOMapping;
+import frc.team4069.robot.motors.DriveEncoder;
 import frc.team4069.robot.motors.TalonSRXMotor;
 import frc.team4069.robot.util.LowPassFilter;
 
@@ -22,6 +23,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
     // Left and right drive motors
     private TalonSRXMotor leftDrive;
     private TalonSRXMotor rightDrive;
+    // Left and right drive encoders;
+    private DriveEncoder leftEncoder;
+    private DriveEncoder rightEncoder;
     // Low pass filters that smooth steering
     private LowPassFilter leftSideLpf;
     private LowPassFilter rightSideLpf;
@@ -33,6 +37,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 false, 11, 13);
         rightDrive = new TalonSRXMotor(IOMapping.RIGHT_DRIVE_CAN_BUS, ENCODER_TICKS_PER_ROTATION,
                 false, 18, 20);
+        // Initialize the encoders with predefined port numbers
+        leftEncoder = new DriveEncoder(0, 1);
+        rightEncoder = new DriveEncoder(8, 9);
         // Initialize the low pass filters with a time period of 200 milliseconds
         leftSideLpf = new LowPassFilter(200);
         rightSideLpf = new LowPassFilter(200);
@@ -52,14 +59,15 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public double getDistanceTraveledMeters() {
         // Get the absolute values of the positions of each of the motors and calculate the average
         double leftWheelRotationsTraveled =
-                Math.abs(leftDrive.getDistanceTraveledRotations());
+                Math.abs(leftEncoder.getDistanceTraveledRotations());
         double rightWheelRotationsTraveled =
-                Math.abs(rightDrive.getDistanceTraveledRotations());
+                Math.abs(rightEncoder.getDistanceTraveledRotations());
         double averageRotationsTraveled =
                 (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
+        System.out.println(leftEncoder.get());
         // Multiply the average rotations by the number of wheels per rotation to get the average
         // distance traveled in meters
-        return -averageRotationsTraveled * METERS_PER_ROTATION;
+        return averageRotationsTraveled * METERS_PER_ROTATION;
     }
 
     // Stop moving immediately
