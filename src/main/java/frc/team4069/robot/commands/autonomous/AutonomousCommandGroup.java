@@ -16,7 +16,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-		addSequential(new DriveStraightForDistanceCommand(6, 0.4));
+		addSequential(new DriveStraightForDistanceCommand(7.62, 0.4));
         /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());

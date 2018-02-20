@@ -4,12 +4,12 @@ import frc.team4069.robot.commands.CommandBase;
 
 public class DriveStraightForDistanceCommand extends CommandBase {
 
-    private final double speed = 0.4;
+    private final double speed;
 	
 	private int inRangeCounter = 0;
-	private final int counterThreshold = 10;
+	private final int counterThreshold = 50;
 
-	private final double acceptableError = 0.1;
+	private final double acceptableError = 0.05;
 	
     private double distanceMeters;
     private double signedSpeed;
@@ -23,10 +23,11 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 	private double currentDistance = 0;
 	private double prevDistance = currentDistance;
 	
-	private final double derivativeMultiplier = 0.1;
+	private final double derivativeMultiplier = 0.35;
 
     public DriveStraightForDistanceCommand(double distanceMeters, double speed) {
         requires(driveBase);
+		this.speed = speed;
         this.distanceMeters = Math.abs(distanceMeters);
         signedSpeed = distanceMeters > 0 ? speed : -speed;
     }
@@ -46,13 +47,13 @@ public class DriveStraightForDistanceCommand extends CommandBase {
         prevTime = currentTime;
         currentTime = System.currentTimeMillis();
         double metersPerSecond = (currentDistance - prevDistance) / ((double) (currentTime - prevTime) / 1000.0);
-		double distance = Math.abs(initialPosition - driveBase.getDistanceTraveledMeters());
-		double speedConstant = Math.abs(distanceMeters);
+		double distance = driveBase.getDistanceTraveledMeters() - initialPosition;
+		double speedConstant = Math.abs(distanceMeters) * 3;
         double motorOutput = lerp(signedSpeed * speedConstant, 0, 0, distanceMeters, distance);
 		if (distanceMeters < 0) {
-            motorOutput -= metersPerSecond * derivativeMultiplier;
-        } else {
             motorOutput += metersPerSecond * derivativeMultiplier;
+        } else {
+            motorOutput -= metersPerSecond * derivativeMultiplier;
         }
 		if (motorOutput > speed) {
             motorOutput = speed;
@@ -68,8 +69,10 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 		System.out.println("Meters per second: " + metersPerSecond);
 		System.out.println("Delta time: " + (int)(currentTime - prevTime));
 		System.out.println("Motor output: " + motorOutput);
-		System.out.println("Distance: " + currentDistance);
-		
+		System.out.println("Distance: " + distance);
+		System.out.println("Derivative factor: " + (metersPerSecond * derivativeMultiplier));
+		System.out.println("Distance travelled: " + currentDistance);
+		System.out.println("Distance meters: " + distanceMeters);
 	}
 
     @Override
