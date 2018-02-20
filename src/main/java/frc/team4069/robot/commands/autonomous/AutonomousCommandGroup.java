@@ -16,7 +16,8 @@ public class AutonomousCommandGroup extends CommandGroup {
 
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-        addSequential(new StartVacuumCommand());
+		addSequential(new DriveStraightForDistanceCommand(7.62, 0.4));
+        /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
         addSequential(new WaitCommand(0.1));
@@ -29,7 +30,7 @@ public class AutonomousCommandGroup extends CommandGroup {
             addSequential(new RotateToAngleWithGyroCommand(60));
             addSequential(new DriveTowardTapeCommand(850));
         }
-        addSequential(new StopVacuumCommand());
+        addSequential(new StopVacuumCommand());*/
     }
 
     // Read the game data and get the direction to drive

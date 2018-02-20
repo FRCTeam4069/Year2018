@@ -79,13 +79,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // Start driving with a given turning coefficient and speed from zero to one
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
-        // Invert the turn if we're moving backwards
-//        if (speed < 0) {
-//            turn = -turn;
-//        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn);
+            driveOneWheel(turn < 0, turn * 0.6, auto);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -95,13 +91,14 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
     }
 
-    // Turn on the spot with the given left wheel speed
-    public void rotate(double leftWheelSpeed) {
-        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
-        driveUnfiltered(speeds);
-        // Low pass filter is giving us trouble. Bypass it.
-//        leftDrive.setConstantSpeed(leftWheelSpeed);
-//        rightDrive.setConstantSpeed(-leftWheelSpeed);
+    public void driveOneWheel(boolean rightWheel, double speed, boolean auto) {
+        WheelSpeeds wheelSpeeds;
+        if (!rightWheel) {
+            wheelSpeeds = new WheelSpeeds(speed, (-speed * 0.4));
+        } else {
+            wheelSpeeds = new WheelSpeeds((speed * 0.4), -speed);
+        }
+        driveFiltered(wheelSpeeds, auto);
     }
 
     private void driveUnfiltered(WheelSpeeds speeds) {
@@ -115,13 +112,10 @@ public class DriveBaseSubsystem extends SubsystemBase {
         WheelSpeeds preciseFiltered = preciseFilterSpeeds(speeds);
 
         if (auto) {
-            leftDrive.setConstantSpeed(preciseFiltered.leftWheelSpeed);
-            rightDrive.setConstantSpeed(preciseFiltered.rightWheelSpeed);
+            driveUnfiltered(preciseFiltered);
         } else {
             WheelSpeeds lowPassFilteredSpeeds = lowPassFilter(preciseFiltered);
-            // Set the motor speeds with the calculated values
-            leftDrive.setConstantSpeed(lowPassFilteredSpeeds.leftWheelSpeed);
-            rightDrive.setConstantSpeed(lowPassFilteredSpeeds.rightWheelSpeed);
+            driveUnfiltered(lowPassFilteredSpeeds);
         }
     }
 
