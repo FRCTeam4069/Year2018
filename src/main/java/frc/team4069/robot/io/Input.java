@@ -37,13 +37,15 @@ public class Input {
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
         elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
+        Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE, false));
 
         Button startWinch = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
         startWinch.whenPressed(new StartWinchCommand());
         startWinch.whenReleased(new StopWinchCommand());
 
         // Stop the vacuum when the start button is pressed
-        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
 
         Button armDown = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);

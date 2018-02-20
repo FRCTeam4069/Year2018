@@ -85,11 +85,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
 //        }
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.6);
+            rotate(turn);
         }
         // Otherwise, use the regular algorithm
         else {
-            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.8, speed);
 
             driveFiltered(wheelSpeeds, auto);
         }

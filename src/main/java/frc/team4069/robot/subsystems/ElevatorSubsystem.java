@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public class ElevatorSubsystem extends SubsystemBase {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    public static final int MAX_POSITION_TICKS = -30530;
+    public static final int MAX_POSITION_TICKS = -29300;
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
-        limitSwitch.enableInterrupts();
+//        limitSwitch.enableInterrupts();
 
         // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
@@ -47,7 +47,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Configure motion magic acceleration and cruise velocity so that it actually works
         talon.configMotionCruiseVelocity(3000, 0);
-        talon.configMotionAcceleration(1500, 0);
+        talon.configMotionAcceleration(1000, 0);
 
 //        talon.setSelectedSensorPosition(0, 0, 0);
 

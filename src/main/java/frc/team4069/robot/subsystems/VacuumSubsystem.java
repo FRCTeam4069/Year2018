@@ -15,6 +15,7 @@ public class VacuumSubsystem extends SubsystemBase {
     private VacuumSubsystem() {
         vacuumTalon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
         vacuumSolenoid = new Solenoid(IOMapping.VACUUM_SOLENOID_CAN_BUS, IOMapping.SOLENOID_CHANNEL);
+        vacuumSolenoid.set(true);
     }
 
     public void start() {
@@ -42,5 +43,6 @@ public class VacuumSubsystem extends SubsystemBase {
     @Override
     public void reset() {
         vacuumTalon.stop();
+        vacuumSolenoid.set(true);
     }
 }
