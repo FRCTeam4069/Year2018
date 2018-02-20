@@ -10,21 +10,21 @@ public class VacuumSubsystem extends SubsystemBase {
     private static VacuumSubsystem instance;
 
     private TalonSRXMotor vacuumTalon;
-    private Solenoid vacuumSolenoid;
+    //private Solenoid vacuumSolenoid;
 
     private VacuumSubsystem() {
         vacuumTalon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
-        vacuumSolenoid = new Solenoid(IOMapping.VACUUM_SOLENOID_CAN_BUS, IOMapping.SOLENOID_CHANNEL);
+        //vacuumSolenoid = new Solenoid(IOMapping.VACUUM_SOLENOID_CAN_BUS, IOMapping.SOLENOID_CHANNEL);
     }
 
     public void start() {
         vacuumTalon.set(ControlMode.PercentOutput, 1);
-        vacuumSolenoid.set(true);
+        //vacuumSolenoid.set(true);
     }
 
     public void stop() {
         vacuumTalon.stop();
-        vacuumSolenoid.set(false);
+        //vacuumSolenoid.set(false);
     }
 
     public boolean isStarted() {

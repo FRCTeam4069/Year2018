@@ -20,25 +20,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Motor to control
     private TalonSRXMotor talon;
     // Limit switch at the bottom, used to zero the elevator
-    private DigitalInput limitSwitch;
+    //private DigitalInput limitSwitch;
 
     private ElevatorSubsystem() {
-        limitSwitch = new DigitalInput(0);
+        //limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
 
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
-        limitSwitch.requestInterrupts(new InterruptHandlerFunction<Object>() {
+        /*limitSwitch.requestInterrupts(new InterruptHandlerFunction<Object>() {
             @Override
             public void interruptFired(int interruptAssertedMask, Object param) {
                 talon.setSelectedSensorPosition(0, 0, 0);
 //                talon.stop();
             }
-        });
+        });*/
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
-        limitSwitch.enableInterrupts();
+        //limitSwitch.enableInterrupts();
 
         // Set closed loop gains
         talon.config_kF(0, 0.5, 0);
@@ -97,7 +97,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Get the state of the limit switch at the bottom of the elevator
     public boolean getLimitSwitchClosed() {
-        return limitSwitch.get();
+        return false;/*limitSwitch.get();*/
     }
 
     public int getVelocity() {
