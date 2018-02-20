@@ -16,7 +16,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
     private final double METERS_PER_ROTATION = 0.61;
-    private final int ENCODER_TICKS_PER_ROTATION = 1024;
+    private final int ENCODER_TICKS_PER_ROTATION = 256;
     // Toggleable precision mode by driver
     private boolean precision = false;
     // Left and right drive motors
