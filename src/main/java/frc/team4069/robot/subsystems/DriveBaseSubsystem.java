@@ -64,7 +64,6 @@ public class DriveBaseSubsystem extends SubsystemBase {
                 Math.abs(rightEncoder.getDistanceTraveledRotations());
         double averageRotationsTraveled =
                 (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
-        System.out.println(leftEncoder.get());
         // Multiply the average rotations by the number of wheels per rotation to get the average
         // distance traveled in meters
         return averageRotationsTraveled * METERS_PER_ROTATION;
@@ -89,12 +88,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn);
+            rotate(turn * 0.7);
         }
         // Otherwise, use the regular algorithm
         else {
             WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
-
             driveFiltered(wheelSpeeds, auto);
         }
     }
