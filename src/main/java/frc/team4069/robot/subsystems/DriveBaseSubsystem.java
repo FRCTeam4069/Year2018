@@ -93,7 +93,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // Otherwise, use the regular algorithm
         else {
-            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.8, speed);
 
             driveFiltered(wheelSpeeds, auto);
         }
