@@ -58,8 +58,10 @@ public class OperatorDriveCommand extends CommandBase {
                 quickTurnDistanceMeters = (((double) directionalPadAngle) / 360)
                         * DriveBaseSubsystem.ROBOT_TRACK_WIDTH_METERS
                         * Math.PI;
+                // Get the sign of the angle in order to calculate the direction to turn the wheels
+                double turnDirection = Math.signum(quickTurnDistanceMeters);
                 // Start turning at full speed in the direction of the sign
-                driveBase.driveOneWheel(quickTurnDistanceMeters < 0, 1.0, false);
+                driveBase.rotate(turnDirection);
             }
         }
 

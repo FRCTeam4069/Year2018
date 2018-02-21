@@ -89,7 +89,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            driveOneWheel(turn < 0, turn * 0.6, auto);
+            rotate(turn);
         }
         // Otherwise, use the regular algorithm
         else {
@@ -99,20 +99,9 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
     }
 
-    public void driveOneWheel(boolean rightWheel, double speed, boolean auto) {
-        WheelSpeeds wheelSpeeds;
-        if (!rightWheel) {
-//            wheelSpeeds = new WheelSpeeds(speed, -speed * 0.4);
-            wheelSpeeds = new WheelSpeeds(speed, 0);
-        } else {
-            wheelSpeeds = new WheelSpeeds(0, speed);
-        }
-        driveFiltered(wheelSpeeds, auto);
-    }
-
     // Turn on the spot with the given left wheel speed
     public void rotate(double leftWheelSpeed) {
-        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        WheelSpeeds speeds = new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed);
         driveUnfiltered(speeds);
     }
 
