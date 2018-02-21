@@ -2,7 +2,6 @@ package frc.team4069.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
@@ -22,13 +21,13 @@ public class AutonomousCommandGroup extends CommandGroup {
 //        if (shouldGoRight()) {
 //            addSequential(new DriveTowardTapeCommand(1750));
 //        } else {
-        addSequential(new RotateToAngleWithGyroCommand(-90));
-        addSequential(new WaitCommand(0.5));
-        addSequential(new DriveStraightForDistanceCommand(1.6, 0.7));
-        addSequential(new RotateToAngleWithGyroCommand(90));
-        addSequential(new DriveTowardTapeCommand(2000));
-//        }
+        addSequential(new DriveStraightForDistanceCommand(0.5, 0.4));
+        addSequential(new RotateToAngleWithGyroCommand(-70));
+        addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
+        addSequential(new RotateToAngleWithGyroCommand(70));
+        addSequential(new DriveTowardTapeCommand(1000));
         addSequential(new StopVacuumCommand());
+//        }
     }
 
     // Read the game data and get the direction to drive

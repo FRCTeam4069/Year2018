@@ -102,11 +102,18 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveOneWheel(boolean rightWheel, double speed, boolean auto) {
         WheelSpeeds wheelSpeeds;
         if (!rightWheel) {
-            wheelSpeeds = new WheelSpeeds(speed, -speed * 0.4);
+//            wheelSpeeds = new WheelSpeeds(speed, -speed * 0.4);
+            wheelSpeeds = new WheelSpeeds(speed, 0);
         } else {
-            wheelSpeeds = new WheelSpeeds(-speed * 0.4, speed);
+            wheelSpeeds = new WheelSpeeds(0, speed);
         }
         driveFiltered(wheelSpeeds, auto);
+    }
+
+    // Turn on the spot with the given left wheel speed
+    public void rotate(double leftWheelSpeed) {
+        WheelSpeeds speeds = preciseFilterSpeeds(new WheelSpeeds(leftWheelSpeed, -leftWheelSpeed));
+        driveUnfiltered(speeds);
     }
 
     private void driveUnfiltered(WheelSpeeds speeds) {
