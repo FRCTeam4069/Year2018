@@ -126,15 +126,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double lowerPreset() {
         double pos = getPosition();
 
-//        List<Position> positions = Arrays.asList(Position.values());
-//        Collections.reverse(positions);
-//
-//        for(Position position : positions) {
-//            if(Math.abs(position.getTicks()) < Math.abs(pos)) {
-//                return position.getTicks();
-//            }
-//        }
-
         return Stream.of(Position.values())
                 .sorted(Collections.reverseOrder())
                 .filter(position -> Math.abs(position.getTicks()) < Math.abs(pos))
