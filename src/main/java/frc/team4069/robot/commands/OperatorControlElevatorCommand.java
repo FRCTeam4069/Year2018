@@ -27,7 +27,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
             set = false;
         } else {
             if (!set) {
-                elevator.setPosition((double) elevator.getPosition() - 500);
+                elevator.setPosition((double) elevator.getPosition());
                 set = true;
             }
         }

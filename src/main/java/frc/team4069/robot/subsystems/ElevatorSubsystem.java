@@ -2,8 +2,6 @@ package frc.team4069.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
@@ -47,12 +45,12 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Configure motion magic acceleration and cruise velocity so that it actually works
         talon.configMotionCruiseVelocity(3000, 0);
-        talon.configMotionAcceleration(1000, 0);
+        talon.configMotionAcceleration(1400, 0);
 
 //        talon.setSelectedSensorPosition(0, 0, 0);
 
         // Soft limits to avoid destruction of hardware
-        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
+//        talon.configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0);
 //        talon.configForwardSoftLimitThreshold(0, 0);
         talon.configReverseSoftLimitEnable(true, 0);
         talon.configForwardSoftLimitEnable(false, 0);
