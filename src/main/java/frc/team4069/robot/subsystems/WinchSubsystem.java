@@ -9,7 +9,8 @@ public class WinchSubsystem extends SubsystemBase {
     private TalonSRXMotor talon;
 
     private WinchSubsystem() {
-        talon = new TalonSRXMotor(10, 17);
+        // Stupid workaround because we have 4 god damn int parameters in a row and Java can't differentiate between them and a variadic call
+        talon = new TalonSRXMotor(10, new int[] {17});
     }
 
     public void start(boolean reversed) {
