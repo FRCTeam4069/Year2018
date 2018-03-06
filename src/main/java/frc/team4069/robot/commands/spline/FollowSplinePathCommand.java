@@ -29,13 +29,21 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private int targetSplinePosition = splinePositionFollowDistance;
 	
+	private int ticksWhileSplineFinished = 0;
+	
+	private double startAngle;
+	private double angleAccumulator = 0.0;
+	
+	private double currentGyroscope = 0;
+    private double prevGyroscope = currentGyroscope;
+	
 	public FollowSplinePathCommand(ArrayList<DoublePoint> points){
 		requires(driveBase);
 		this.points = points;
 		spline = new SplinePathGenerator(0.8);
-		spline.generateSpline(points, 90, 180, 250);
-		leftPID = new PID(1, 0);
-		rightPID = new PID(1, 0);
+		spline.generateSpline(points, 90, 180, 0);
+		leftPID = new PID(100, 0.1);
+		rightPID = new PID(100, 0.1);
 		gyroPID = new PID(1, 0);
 		leftPID.setOutputCap(0.4);
 		rightPID.setOutputCap(0.4);
@@ -46,17 +54,52 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	protected void initialize(){
+		startAngle = getGyroAngle();
 		startDistance = driveBase.getDistanceTraveledMeters();
 		startDistanceLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel();
 		startDistanceRightWheel = driveBase.getDistanceTraveledMetersRightWheel();
 	}
 	
+	 /**
+     * Calculate relative gyro angle, accounting for jump from 360 to 0
+     */
+    private double calculateGyroAngle() {
+        /*double gyroAngle = getGyroAngle();
+        if (gyroAngle - startAngle < -1 && this.turnRight) {
+            gyroAngle += 360;
+        } else if (gyroAngle - startAngle > 1 && !this.turnRight) {
+            gyroAngle -= 360;
+        }
+        return gyroAngle;*/
+        double gyroAngle = getGyroAngle();
+        return gyroAngle + angleAccumulator;
+    }
+
+    /**
+     * Calculate degrees turned from starting angle
+     */
+    private double calculateDelta() {
+        double gyroAngle = calculateGyroAngle();
+        return gyroAngle - startAngle;
+    }
+	
 	@Override
 	protected void execute(){
+		prevGyroscope = currentGyroscope;
+        currentGyroscope = calculateGyroAngle();
+		// Detect jump between 0 and 360 and adjust angle accumulator accordingly
+        if (currentGyroscope - prevGyroscope > 180) {
+            angleAccumulator -= 360.0;
+        } else if (currentGyroscope - prevGyroscope < -180) {
+            angleAccumulator += 360.0;
+        }
+		if(splinePosition == spline.splineIntegral.length - 1){
+			ticksWhileSplineFinished++;
+		}
 		distanceTravelledMeters = driveBase.getDistanceTraveledMeters() - startDistance;
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
-		if(splinePosition < spline.splineIntegral.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
+		while(splinePosition < spline.splineIntegral.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 			targetSplinePosition = splinePosition + splinePositionFollowDistance;
 			if(targetSplinePosition > spline.splineIntegral.length - 1){
@@ -76,7 +119,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	public boolean isFinished(){
-		return false;
+		return ticksWhileSplineFinished > 25;
 	}
 	
 }

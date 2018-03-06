@@ -55,6 +55,7 @@ public class PID{
 			motorOutput = -outputCap;
 		}
 		System.out.println("Motor output: " + motorOutput);
+		prevPosition = position;
 		return motorOutput;
 	}
 	

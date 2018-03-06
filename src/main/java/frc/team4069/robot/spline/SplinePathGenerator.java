@@ -17,7 +17,7 @@ public class SplinePathGenerator {
 	
 	private double driveBaseWidth;
 	
-	private final int numPointsOnCurve = 800;
+	private int numPointsOnCurve;
 	
 	private CubicSplineInterpolator spline;
 	
@@ -42,6 +42,11 @@ public class SplinePathGenerator {
 	}
 	
 	public void generateSpline(ArrayList<DoublePoint> points, int startAngle, int endAngle, int weight){
+		double totalPathSize = 0;
+		for(int i = 1; i < points.size(); i++){
+			totalPathSize += new Vector(points.get(i).x, points.get(i).y).sub(new Vector(points.get(i-1).x, points.get(i-1).y)).length();
+		}
+		numPointsOnCurve = (int)(400 * totalPathSize);
 		spline = new CubicSplineInterpolator(points, startAngle, endAngle, weight);
 		pointsOnCurve = new DoublePoint[numPointsOnCurve];
 		leftWheel = new DoublePoint[numPointsOnCurve - 1];
