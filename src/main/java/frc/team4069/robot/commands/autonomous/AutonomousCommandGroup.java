@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
+import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
+import frc.team4069.robot.spline.DoublePoint;
+import java.util.ArrayList;
 
 // Command group that does everything involved in autonomous mode
 public class AutonomousCommandGroup extends CommandGroup {
@@ -12,10 +15,15 @@ public class AutonomousCommandGroup extends CommandGroup {
     // The number of milliseconds after which to stop searching for the game data and choose a
     // reasonable default
     private final int gameDataTimeoutMilliseconds = 250;
-
+	
+	private ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
+	
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-        addSequential(new StartVacuumCommand());
+		splinePoints.add(new DoublePoint(0, 0));
+		splinePoints.add(new DoublePoint(0, 1));
+		splinePoints.add(new DoublePoint(-1, 1));
+        /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
 //        if (shouldGoRight()) {
@@ -24,9 +32,10 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new DriveStraightForDistanceCommand(0.5, 0.4));
         addSequential(new RotateToAngleWithGyroCommand(-70));
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
-        addSequential(new RotateToAngleWithGyroCommand(70));
-        addSequential(new DriveTowardTapeCommand(1000));
-        addSequential(new StopVacuumCommand());
+        addSequential(new RotateToAngleWithGyroCommand(70));*/
+		addSequential(new FollowSplinePathCommand(splinePoints));
+        /*addSequential(new DriveTowardTapeCommand(1000));
+        addSequential(new StopVacuumCommand());*/
 //        }
     }
 
