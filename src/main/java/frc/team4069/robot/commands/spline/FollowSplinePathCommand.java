@@ -4,6 +4,7 @@ import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.spline.SplinePathGenerator;
 import frc.team4069.robot.spline.DoublePoint;
+import frc.team4069.robot.spline.Vector;
 import frc.team4069.robot.motors.PID;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private int splinePosition = 0;
 	
-	private final int splinePositionFollowDistance = 10;
+	private final int splinePositionFollowDistance = 5;
 	
 	private int targetSplinePosition = splinePositionFollowDistance;
 	
@@ -40,16 +41,17 @@ public class FollowSplinePathCommand extends CommandBase{
 	public FollowSplinePathCommand(ArrayList<DoublePoint> points){
 		requires(driveBase);
 		this.points = points;
-		spline = new SplinePathGenerator(0.8);
-		spline.generateSpline(points, 90, 180, 0);
+		spline = new SplinePathGenerator(0.55);
+		spline.generateSpline(points, 180, 180, 0);
 		leftPID = new PID(100, 0.1);
 		rightPID = new PID(100, 0.1);
-		gyroPID = new PID(1, 0);
-		leftPID.setOutputCap(0.4);
+		gyroPID = new PID(0.075, 0);
+		/*leftPID.setOutputCap(0.4);
 		rightPID.setOutputCap(0.4);
-		gyroPID.setOutputCap(0.6);
+		gyroPID.setOutputCap(0.3);*/
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
 	}
 	
 	@Override
@@ -64,13 +66,6 @@ public class FollowSplinePathCommand extends CommandBase{
      * Calculate relative gyro angle, accounting for jump from 360 to 0
      */
     private double calculateGyroAngle() {
-        /*double gyroAngle = getGyroAngle();
-        if (gyroAngle - startAngle < -1 && this.turnRight) {
-            gyroAngle += 360;
-        } else if (gyroAngle - startAngle > 1 && !this.turnRight) {
-            gyroAngle -= 360;
-        }
-        return gyroAngle;*/
         double gyroAngle = getGyroAngle();
         return gyroAngle + angleAccumulator;
     }
@@ -99,21 +94,43 @@ public class FollowSplinePathCommand extends CommandBase{
 		distanceTravelledMeters = driveBase.getDistanceTraveledMeters() - startDistance;
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
-		while(splinePosition < spline.splineIntegral.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
+		/*while(splinePosition < spline.splineIntegral.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 			targetSplinePosition = splinePosition + splinePositionFollowDistance;
 			if(targetSplinePosition > spline.splineIntegral.length - 1){
 				targetSplinePosition = spline.splineIntegral.length - 1;
 			}
-			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
-			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+			Vector followDirection = new Vector(new Vector(spline.leftWheel[targetSplinePosition - 1]).sub(new Vector(spline.leftWheel[targetSplinePosition - 2])).length(), new Vector(spline.rightWheel[targetSplinePosition - 1]).sub(new Vector(spline.rightWheel[targetSplinePosition - 2])).length()).normalize();
+			followDirection = followDirection.multScalar(0.1);
+			//leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
+			//rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1] + followDirection.x);
+			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1] + followDirection.y);
+		}*/
+		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters + 0.005 >= spline.splineIntegral[splinePosition]){
+			splinePosition++;
 		}
+		System.out.println("Distance travelled: " + distanceTravelledMeters);
+		System.out.println("Spline integral: " + spline.splineIntegral[splinePosition]);
+		Vector followDirection = new Vector(new Vector(spline.leftWheel[splinePosition]).sub(new Vector(spline.leftWheel[splinePosition - 1])).length(), new Vector(spline.rightWheel[splinePosition]).sub(new Vector(spline.rightWheel[splinePosition - 1])).length()).normalize();
+		followDirection = followDirection.multScalar(0.005);
+		leftPID.setTarget(spline.leftWheelIntegral[splinePosition] + followDirection.x);
+		rightPID.setTarget(spline.rightWheelIntegral[splinePosition] + followDirection.y);
+		gyroPID.setTarget(spline.splineAngles[splinePosition]);
+		System.out.println("Gyro PID:\n-----");
+		double motorValues = gyroPID.getMotorOutput(calculateGyroAngle());
+		System.out.println("-----");
 		System.out.println("Left PID:\n-----");
-		double leftWheelMotor = leftPID.getMotorOutput(distanceTravelledMetersLeftWheel);
+		double leftWheelMotor = (leftPID.getMotorOutput(distanceTravelledMetersLeftWheel) - motorValues) / 2;
 		System.out.println("-----");
 		System.out.println("Right PID:\n-----");
-		double rightWheelMotor = rightPID.getMotorOutput(distanceTravelledMetersRightWheel);
+		double rightWheelMotor = (rightPID.getMotorOutput(distanceTravelledMetersRightWheel) + motorValues) / 2;
+		Vector normalizedOutputs = new Vector(leftWheelMotor, rightWheelMotor).normalize().multScalar(0.5);
+		leftWheelMotor = normalizedOutputs.x;
+		rightWheelMotor = normalizedOutputs.y;
 		System.out.println("-----");
+		System.out.println("Left wheel motor: " + leftWheelMotor);
+		System.out.println("Right wheel motor: " + rightWheelMotor);
 		driveBase.driveUnfiltered(leftWheelMotor, rightWheelMotor);
 	}
 	

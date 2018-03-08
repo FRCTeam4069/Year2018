@@ -48,12 +48,12 @@ public class PID{
 		}
 		System.out.println("Derivative: " + derivative);
 		double motorOutput = proportional + derivative;
-		if(motorOutput > outputCap){
+		/*if(motorOutput > outputCap){
 			motorOutput = outputCap;
 		}
 		else if(motorOutput < -outputCap){
 			motorOutput = -outputCap;
-		}
+		}*/
 		System.out.println("Motor output: " + motorOutput);
 		prevPosition = position;
 		return motorOutput;

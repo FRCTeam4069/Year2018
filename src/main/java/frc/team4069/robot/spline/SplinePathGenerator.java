@@ -15,6 +15,9 @@ public class SplinePathGenerator {
 	public double[] leftWheelIntegral;
 	public double[] rightWheelIntegral;
 	
+	public double[] splineAngles;
+	public double splineStartAngle;
+	
 	private double driveBaseWidth;
 	
 	private int numPointsOnCurve;
@@ -51,6 +54,7 @@ public class SplinePathGenerator {
 		pointsOnCurve = new DoublePoint[numPointsOnCurve];
 		leftWheel = new DoublePoint[numPointsOnCurve - 1];
 		rightWheel = new DoublePoint[numPointsOnCurve - 1];
+		splineAngles = new double[numPointsOnCurve - 1];
 		splineIntegral = new double[numPointsOnCurve];
 		leftWheelIntegral = new double[numPointsOnCurve - 1];
 		rightWheelIntegral = new double[numPointsOnCurve - 1];
@@ -63,6 +67,11 @@ public class SplinePathGenerator {
 			if(i != 0){
 				Vector pointVector = new Vector(point.x, point.y);
 				Vector diff = pointVector.sub(new Vector(prevPoint.x, prevPoint.y));
+				double angle = Math.toDegrees(Math.atan2(diff.y, diff.x));
+				if(i == 1){
+					splineStartAngle = angle;
+				}
+				splineAngles[i - 1] = angle - splineStartAngle;
 				splineIntegral[i] = splineIntegral[i - 1] + diff.length();
 				Vector normal = null;
 				if(diff.x > 0 && diff.y > 0){

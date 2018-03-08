@@ -70,14 +70,12 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 	
 	public double getDistanceTraveledMetersLeftWheel() {
-        double leftWheelRotationsTraveled =
-                Math.abs(leftEncoder.getDistanceTraveledRotations());
+        double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
         return leftWheelRotationsTraveled * METERS_PER_ROTATION;
     }
 	
 	public double getDistanceTraveledMetersRightWheel() {
-        double rightWheelRotationsTraveled =
-                Math.abs(rightEncoder.getDistanceTraveledRotations());
+        double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
         return rightWheelRotationsTraveled * METERS_PER_ROTATION;
     }
 
