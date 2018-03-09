@@ -21,10 +21,21 @@ public class AutonomousCommandGroup extends CommandGroup {
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
 		splinePoints.add(new DoublePoint(0, 0));
-		splinePoints.add(new DoublePoint(-3, 3));
-		splinePoints.add(new DoublePoint(0, 6));
-		splinePoints.add(new DoublePoint(3, 3));
+		splinePoints.add(new DoublePoint(1, 2));
+		splinePoints.add(new DoublePoint(-1, 4));
+		splinePoints.add(new DoublePoint(1, 6));
+		splinePoints.add(new DoublePoint(-1, 8));
+		splinePoints.add(new DoublePoint(1, 10));
+		splinePoints.add(new DoublePoint(-1, 12));
+		/*splinePoints.add(new DoublePoint(0, 0));
+		splinePoints.add(new DoublePoint(-1.5, 1.5));
+		splinePoints.add(new DoublePoint(0, 3));
+		splinePoints.add(new DoublePoint(1.5, 1.5));
 		splinePoints.add(new DoublePoint(0, 0));
+		splinePoints.add(new DoublePoint(-1.5, -1.5));
+		splinePoints.add(new DoublePoint(0, -3));
+		splinePoints.add(new DoublePoint(1.5, -1.5));
+		splinePoints.add(new DoublePoint(0, 0));*/
         /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());

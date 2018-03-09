@@ -45,7 +45,7 @@ public class FollowSplinePathCommand extends CommandBase{
 		spline.generateSpline(points, 180, 180, 0);
 		leftPID = new PID(100, 0.1);
 		rightPID = new PID(100, 0.1);
-		gyroPID = new PID(0.075, 0);
+		gyroPID = new PID(0.5, 0.2);
 		/*leftPID.setOutputCap(0.4);
 		rightPID.setOutputCap(0.4);
 		gyroPID.setOutputCap(0.3);*/
@@ -107,7 +107,7 @@ public class FollowSplinePathCommand extends CommandBase{
 			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1] + followDirection.x);
 			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1] + followDirection.y);
 		}*/
-		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters + 0.005 >= spline.splineIntegral[splinePosition]){
+		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters + 0.2 >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 		}
 		System.out.println("Distance travelled: " + distanceTravelledMeters);
@@ -118,7 +118,7 @@ public class FollowSplinePathCommand extends CommandBase{
 		rightPID.setTarget(spline.rightWheelIntegral[splinePosition] + followDirection.y);
 		gyroPID.setTarget(spline.splineAngles[splinePosition]);
 		System.out.println("Gyro PID:\n-----");
-		double motorValues = gyroPID.getMotorOutput(calculateGyroAngle());
+		double motorValues = gyroPID.getMotorOutput(-calculateGyroAngle());
 		System.out.println("-----");
 		System.out.println("Left PID:\n-----");
 		double leftWheelMotor = (leftPID.getMotorOutput(distanceTravelledMetersLeftWheel) - motorValues) / 2;
