@@ -14,7 +14,7 @@ public class WinchSubsystem extends SubsystemBase {
     }
 
     public void start(boolean reversed) {
-        talon.set(ControlMode.PercentOutput, reversed ? -1 : 1);
+        talon.set(ControlMode.PercentOutput, reversed ? -0.5 : 1);
     }
 
     public void stop() {

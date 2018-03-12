@@ -58,6 +58,10 @@ public class Input {
         Button togglePrecisionMode = new JoystickButton(driveJoystick, IOMapping.BUTTON_START);
         togglePrecisionMode.whenPressed(new ToggleDrivePrecisionModeCommand());
 
+        Button winchBackwards = new JoystickButton(driveJoystick, IOMapping.BUTTON_B);
+        winchBackwards.whenPressed(new StartWinchCommand(true));
+        winchBackwards.whenReleased(new StopWinchCommand());
+
     }
 
     // Accessor for the steering axis on the drive joystick
