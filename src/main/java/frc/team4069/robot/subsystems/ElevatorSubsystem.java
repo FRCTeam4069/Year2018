@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
+import frc.team4069.robot.util.LowPassFilter;
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -17,22 +18,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Motor to control
     private TalonSRXMotor talon;
+    private LowPassFilter operatorLPS;
     // Limit switch at the bottom, used to zero the elevator
     //private DigitalInput limitSwitch;
 
     private ElevatorSubsystem() {
         //limitSwitch = new DigitalInput(0);
         talon = new TalonSRXMotor(IOMapping.ELEVATOR_CAN_BUS, 1024);
+        operatorLPS = new LowPassFilter(250);
 
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-
-        /*limitSwitch.requestInterrupts(new InterruptHandlerFunction<Object>() {
-            @Override
-            public void interruptFired(int interruptAssertedMask, Object param) {
-                talon.setSelectedSensorPosition(0, 0, 0);
-//                talon.stop();
-            }
-        });*/
 
         talon.setSelectedSensorPosition(0, 0, 0);
 
@@ -82,7 +77,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Set the position of the elevator using one of the presets
     public void setSpeed(double speed) {
         // Store the sign and multiply it by the low pass filter output to keep the direction
-        set(ControlMode.PercentOutput, speed);
+        set(ControlMode.PercentOutput, operatorLPS.calculate(speed));
     }
 
     public void stop() {
