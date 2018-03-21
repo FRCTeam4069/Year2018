@@ -8,8 +8,7 @@ import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
 import frc.team4069.robot.spline.DoublePoint;
 import frc.team4069.robot.spline.SplinePath;
-import frc.team4069.robot.spline.SplinePathFarSwitch;
-import frc.team4069.robot.spline.SplinePathNearSwitch;
+import frc.team4069.robot.spline.SplinePathSwitchRight;
 import java.util.ArrayList;
 
 // Command group that does everything involved in autonomous mode
@@ -40,7 +39,7 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(-70));
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
-		SplinePath path = new SplinePathFarSwitch();
+		SplinePath path = new SplinePathSwitchRight();
 		addSequential(new FollowSplinePathCommand(path));
         /*addSequential(new DriveTowardTapeCommand(1000));
         addSequential(new StopVacuumCommand());*/
