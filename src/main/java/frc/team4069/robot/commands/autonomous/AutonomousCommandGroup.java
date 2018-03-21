@@ -9,6 +9,8 @@ import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
 import frc.team4069.robot.spline.DoublePoint;
 import frc.team4069.robot.spline.SplinePath;
 import frc.team4069.robot.spline.SplinePathSwitchRight;
+import frc.team4069.robot.spline.SplinePathSwitchLeft;
+import frc.team4069.robot.spline.SplinePathFarSwitch;
 import java.util.ArrayList;
 
 // Command group that does everything involved in autonomous mode

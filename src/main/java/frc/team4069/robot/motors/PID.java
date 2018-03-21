@@ -16,6 +16,8 @@ public class PID{
 	
 	private double outputCap = 1.0;
 	
+	private boolean outputCapSet = false;
+	
 	public boolean logging = false;
 	
 	public PID(double kP, double kD){
@@ -30,6 +32,7 @@ public class PID{
 	
 	public void setOutputCap(double outputCap){
 		this.outputCap = outputCap;
+		this.outputCapSet = true;
 	}
 	
 	public double getMotorOutput(double position){
@@ -58,12 +61,14 @@ public class PID{
 			System.out.println("Derivative: " + derivative);
 		}
 		double motorOutput = proportional + derivative;
-		/*if(motorOutput > outputCap){
-			motorOutput = outputCap;
+		if(outputCapSet){
+			if(motorOutput > outputCap){
+				motorOutput = outputCap;
+			}
+			else if(motorOutput < -outputCap){
+				motorOutput = -outputCap;
+			}
 		}
-		else if(motorOutput < -outputCap){
-			motorOutput = -outputCap;
-		}*/
 		if(logging){
 			System.out.println("Motor output: " + motorOutput);
 		}

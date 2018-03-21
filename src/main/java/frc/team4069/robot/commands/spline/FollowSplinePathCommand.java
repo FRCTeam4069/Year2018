@@ -19,6 +19,8 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private PID gyroPID;
 	
+	private PID distancePID;
+	
 	private double distanceTravelledMeters;
 	private double distanceTravelledMetersLeftWheel, distanceTravelledMetersRightWheel;
 	
@@ -41,6 +43,10 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private double absoluteMotorSpeed = 0.6;
 	
+	private double splineAngleAccumulator = 0.0;
+	
+	private double forwardVelocityCap = 3.0;
+	
 	public FollowSplinePathCommand(SplinePath path){
 		requires(driveBase);
 		this.points = points;
@@ -49,12 +55,16 @@ public class FollowSplinePathCommand extends CommandBase{
 		leftPID = new PID(100, 0.1);
 		rightPID = new PID(100, 0.1);
 		gyroPID = new PID(0.75, 0.2);
+		distancePID = new PID(15, 5.0);
+		distancePID.setOutputCap(forwardVelocityCap);
+		distancePID.logging = true;
 		/*leftPID.setOutputCap(0.4);
 		rightPID.setOutputCap(0.4);
 		gyroPID.setOutputCap(0.3);*/
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
 		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
+		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
 	}
 	
 	@Override
@@ -112,13 +122,19 @@ public class FollowSplinePathCommand extends CommandBase{
 		}*/
 		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
+			if(spline.splineAngles[splinePosition] - spline.splineAngles[splinePosition - 1] >= 180.0){
+				splineAngleAccumulator -= 360.0;
+			}
+			else if(spline.splineAngles[splinePosition] - spline.splineAngles[splinePosition - 1] <= -180.0){
+				splineAngleAccumulator += 360.0;
+			}
 		}
 		//System.out.println("Spline position value: " + spline.pointsOnCurve[splinePosition].x + ", " + spline.pointsOnCurve[splinePosition].y);
 		Vector followDirection = new Vector(new Vector(spline.leftWheel[splinePosition]).sub(new Vector(spline.leftWheel[splinePosition - 1])).length(), new Vector(spline.rightWheel[splinePosition]).sub(new Vector(spline.rightWheel[splinePosition - 1])).length()).normalize();
 		followDirection = followDirection.multScalar(1);
 		leftPID.setTarget(spline.leftWheelIntegral[splinePosition] + followDirection.x);
 		rightPID.setTarget(spline.rightWheelIntegral[splinePosition] + followDirection.y);
-		gyroPID.setTarget(spline.splineAngles[splinePosition]);
+		gyroPID.setTarget(spline.splineAngles[splinePosition] + splineAngleAccumulator);
 		if(gyroPID.logging){
 			System.out.println("Gyro PID:\n-----");
 		}
@@ -140,25 +156,14 @@ public class FollowSplinePathCommand extends CommandBase{
 		if(rightPID.logging){
 			System.out.println("-----");
 		}
-		//Vector normalizedOutputs = new Vector(leftWheelMotor, rightWheelMotor).normalize().multScalar(0.6);
-		Vector normalizedOutputs;
-		double forwardVelocity = 3.0;
-		if(distanceTravelledMeters < spline.splineIntegral[spline.splineIntegral.length - 1]){
-			normalizedOutputs = new Vector(-motorValues + forwardVelocity, motorValues + forwardVelocity).normalize().multScalar(absoluteMotorSpeed);
+		double forwardVelocity = distancePID.getMotorOutput(distanceTravelledMeters);
+		double velocityRatio = forwardVelocity / forwardVelocityCap;
+		if(velocityRatio < 0){
+			motorValues *= -1;
 		}
-		else{
-			normalizedOutputs = new Vector(-motorValues - forwardVelocity, motorValues - forwardVelocity).normalize().multScalar(absoluteMotorSpeed);
-		}
+		Vector normalizedOutputs = new Vector(-motorValues + forwardVelocityCap, motorValues + forwardVelocityCap).normalize().multScalar(absoluteMotorSpeed * (forwardVelocity / forwardVelocityCap));
 		leftWheelMotor = normalizedOutputs.x;
 		rightWheelMotor = normalizedOutputs.y;
-		if(leftWheelMotor < 0){
-			System.out.println(leftWheelMotor);
-		}
-		if(rightWheelMotor < 0){
-			System.out.println(rightWheelMotor);
-		}
-		/*System.out.println("Left wheel motor: " + leftWheelMotor);
-		System.out.println("Right wheel motor: " + rightWheelMotor);*/
 		driveBase.driveUnfiltered(leftWheelMotor, rightWheelMotor);
 	}
 	
