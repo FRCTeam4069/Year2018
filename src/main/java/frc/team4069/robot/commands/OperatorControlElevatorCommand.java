@@ -1,8 +1,6 @@
 package frc.team4069.robot.commands;
 
 import frc.team4069.robot.io.Input;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OperatorControlElevatorCommand extends CommandBase {
 
@@ -10,11 +8,9 @@ public class OperatorControlElevatorCommand extends CommandBase {
     // If it's not set, then the drivers are actively controlling the elevator with the stick
     // Otherwise we set the position with MM and flip it
     private boolean set = true;
-    private List<Integer> average;
 
     public OperatorControlElevatorCommand() {
         requires(elevator);
-        average = new ArrayList<>();
     }
 
     @Override
@@ -22,15 +18,16 @@ public class OperatorControlElevatorCommand extends CommandBase {
         // Get the axis of the elevator, scale it down so that it's easier to control
         double elevatorAxis = Input.getElevatorAxis() * 0.5;
 
-        if (elevatorAxis != 0.0) { // Driver is using it
+//        if (elevatorAxis != 0.0) { // Driver is using it
             elevator.setSpeed(elevatorAxis);
-            set = false;
-        } else {
-            if (!set) {
-                elevator.setPosition((double) elevator.getPosition());
-                set = true;
-            }
-        }
+//            set = false;
+//        } else {
+//            if (!set) {
+//                elevator.setPosition((double) elevator.getPosition() - 250);
+//                elevator.setSpeed(0.0);
+//                set = true;
+//            }
+//        }
 
         double dpadValue = Input.getOperatorDirectionalPad();
         if(dpadValue == 0.0) {

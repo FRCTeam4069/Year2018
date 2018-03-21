@@ -33,6 +33,10 @@ public class TalonSRXMotor extends TalonSRX {
         this(deviceNumber, encoderTicksPerRotation, false);
     }
 
+    public TalonSRXMotor(int deviceNumber, int encoderTicksPerRotation, int[] slaves) {
+        this(deviceNumber, encoderTicksPerRotation, false, slaves);
+    }
+
     public TalonSRXMotor(int deviceNumber, int... slaves) {
         this(deviceNumber, 4096, false, slaves);
     }
