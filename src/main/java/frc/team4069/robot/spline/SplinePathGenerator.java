@@ -44,12 +44,16 @@ public class SplinePathGenerator {
 		return cumulativeRightWheelDistance;
 	}
 	
-	public void generateSpline(ArrayList<DoublePoint> points, int startAngle, int endAngle, int weight){
+	public void generateSpline(SplinePath splinePath){
+		int startAngle = splinePath.startAngle;
+		int endAngle = splinePath.endAngle;
+		int weight = splinePath.angleWeight;
+		ArrayList<DoublePoint> points = splinePath.points;
 		double totalPathSize = 0;
 		for(int i = 1; i < points.size(); i++){
 			totalPathSize += new Vector(points.get(i).x, points.get(i).y).sub(new Vector(points.get(i-1).x, points.get(i-1).y)).length();
 		}
-		numPointsOnCurve = (int)(400 * totalPathSize);
+		numPointsOnCurve = (int)(1600 * totalPathSize);
 		spline = new CubicSplineInterpolator(points, startAngle, endAngle, weight);
 		pointsOnCurve = new DoublePoint[numPointsOnCurve];
 		leftWheel = new DoublePoint[numPointsOnCurve - 1];

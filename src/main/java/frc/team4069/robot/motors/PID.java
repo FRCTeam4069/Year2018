@@ -16,6 +16,8 @@ public class PID{
 	
 	private double outputCap = 1.0;
 	
+	public boolean logging = false;
+	
 	public PID(double kP, double kD){
 		this.kP = kP;
 		this.kD = kD;
@@ -31,14 +33,20 @@ public class PID{
 	}
 	
 	public double getMotorOutput(double position){
-		System.out.println("Position: " + position);
-		System.out.println("Target position: " + target);
+		if(logging){
+			System.out.println("Position: " + position);
+			System.out.println("Target position: " + target);
+		}
 		prevTime = currentTime;
 		currentTime = System.currentTimeMillis();
 		deltaTime = (int)(currentTime - prevTime) / 1000.0;
-		System.out.println("Delta time: " + deltaTime);
+		if(logging){
+			System.out.println("Delta time: " + deltaTime);
+		}
 		double proportional = kP * (target - position);
-		System.out.println("Proportional: " + proportional);
+		if(logging){
+			System.out.println("Proportional: " + proportional);
+		}
 		double derivative = 0;
 		if(firstTick){
 			firstTick = false;
@@ -46,7 +54,9 @@ public class PID{
 		else{
 			derivative = kD * -((position - prevPosition) / deltaTime);
 		}
-		System.out.println("Derivative: " + derivative);
+		if(logging){
+			System.out.println("Derivative: " + derivative);
+		}
 		double motorOutput = proportional + derivative;
 		/*if(motorOutput > outputCap){
 			motorOutput = outputCap;
@@ -54,7 +64,9 @@ public class PID{
 		else if(motorOutput < -outputCap){
 			motorOutput = -outputCap;
 		}*/
-		System.out.println("Motor output: " + motorOutput);
+		if(logging){
+			System.out.println("Motor output: " + motorOutput);
+		}
 		prevPosition = position;
 		return motorOutput;
 	}

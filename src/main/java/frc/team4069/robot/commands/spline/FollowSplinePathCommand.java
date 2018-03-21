@@ -5,6 +5,7 @@ import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.spline.SplinePathGenerator;
 import frc.team4069.robot.spline.DoublePoint;
 import frc.team4069.robot.spline.Vector;
+import frc.team4069.robot.spline.SplinePath;
 import frc.team4069.robot.motors.PID;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	private double startDistance;
 	private double startDistanceLeftWheel, startDistanceRightWheel;
 	
-	private int splinePosition = 0;
+	private int splinePosition = 1;
 	
 	private final int splinePositionFollowDistance = 5;
 	
@@ -38,14 +39,16 @@ public class FollowSplinePathCommand extends CommandBase{
 	private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
 	
-	public FollowSplinePathCommand(ArrayList<DoublePoint> points){
+	private double absoluteMotorSpeed = 0.6;
+	
+	public FollowSplinePathCommand(SplinePath path){
 		requires(driveBase);
 		this.points = points;
 		spline = new SplinePathGenerator(0.55);
-		spline.generateSpline(points, 180, 180, 0);
+		spline.generateSpline(path);
 		leftPID = new PID(100, 0.1);
 		rightPID = new PID(100, 0.1);
-		gyroPID = new PID(0.5, 0.2);
+		gyroPID = new PID(0.75, 0.2);
 		/*leftPID.setOutputCap(0.4);
 		rightPID.setOutputCap(0.4);
 		gyroPID.setOutputCap(0.3);*/
@@ -88,7 +91,7 @@ public class FollowSplinePathCommand extends CommandBase{
         } else if (currentGyroscope - prevGyroscope < -180) {
             angleAccumulator += 360.0;
         }
-		if(splinePosition == spline.splineIntegral.length - 1){
+		if(splinePosition == spline.leftWheel.length - 1){
 			ticksWhileSplineFinished++;
 		}
 		distanceTravelledMeters = driveBase.getDistanceTraveledMeters() - startDistance;
@@ -107,36 +110,61 @@ public class FollowSplinePathCommand extends CommandBase{
 			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1] + followDirection.x);
 			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1] + followDirection.y);
 		}*/
-		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters + 0.2 >= spline.splineIntegral[splinePosition]){
+		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 		}
-		System.out.println("Distance travelled: " + distanceTravelledMeters);
-		System.out.println("Spline integral: " + spline.splineIntegral[splinePosition]);
+		//System.out.println("Spline position value: " + spline.pointsOnCurve[splinePosition].x + ", " + spline.pointsOnCurve[splinePosition].y);
 		Vector followDirection = new Vector(new Vector(spline.leftWheel[splinePosition]).sub(new Vector(spline.leftWheel[splinePosition - 1])).length(), new Vector(spline.rightWheel[splinePosition]).sub(new Vector(spline.rightWheel[splinePosition - 1])).length()).normalize();
-		followDirection = followDirection.multScalar(0.005);
+		followDirection = followDirection.multScalar(1);
 		leftPID.setTarget(spline.leftWheelIntegral[splinePosition] + followDirection.x);
 		rightPID.setTarget(spline.rightWheelIntegral[splinePosition] + followDirection.y);
 		gyroPID.setTarget(spline.splineAngles[splinePosition]);
-		System.out.println("Gyro PID:\n-----");
+		if(gyroPID.logging){
+			System.out.println("Gyro PID:\n-----");
+		}
 		double motorValues = gyroPID.getMotorOutput(-calculateGyroAngle());
-		System.out.println("-----");
-		System.out.println("Left PID:\n-----");
+		if(gyroPID.logging){
+			System.out.println("-----");
+		}
+		if(leftPID.logging){
+			System.out.println("Left PID:\n-----");
+		}
 		double leftWheelMotor = (leftPID.getMotorOutput(distanceTravelledMetersLeftWheel) - motorValues) / 2;
-		System.out.println("-----");
-		System.out.println("Right PID:\n-----");
+		if(leftPID.logging){
+			System.out.println("-----");
+		}
+		if(rightPID.logging){
+			System.out.println("Right PID:\n-----");
+		}
 		double rightWheelMotor = (rightPID.getMotorOutput(distanceTravelledMetersRightWheel) + motorValues) / 2;
-		Vector normalizedOutputs = new Vector(leftWheelMotor, rightWheelMotor).normalize().multScalar(0.5);
+		if(rightPID.logging){
+			System.out.println("-----");
+		}
+		//Vector normalizedOutputs = new Vector(leftWheelMotor, rightWheelMotor).normalize().multScalar(0.6);
+		Vector normalizedOutputs;
+		double forwardVelocity = 3.0;
+		if(distanceTravelledMeters < spline.splineIntegral[spline.splineIntegral.length - 1]){
+			normalizedOutputs = new Vector(-motorValues + forwardVelocity, motorValues + forwardVelocity).normalize().multScalar(absoluteMotorSpeed);
+		}
+		else{
+			normalizedOutputs = new Vector(-motorValues - forwardVelocity, motorValues - forwardVelocity).normalize().multScalar(absoluteMotorSpeed);
+		}
 		leftWheelMotor = normalizedOutputs.x;
 		rightWheelMotor = normalizedOutputs.y;
-		System.out.println("-----");
-		System.out.println("Left wheel motor: " + leftWheelMotor);
-		System.out.println("Right wheel motor: " + rightWheelMotor);
+		if(leftWheelMotor < 0){
+			System.out.println(leftWheelMotor);
+		}
+		if(rightWheelMotor < 0){
+			System.out.println(rightWheelMotor);
+		}
+		/*System.out.println("Left wheel motor: " + leftWheelMotor);
+		System.out.println("Right wheel motor: " + rightWheelMotor);*/
 		driveBase.driveUnfiltered(leftWheelMotor, rightWheelMotor);
 	}
 	
 	@Override
 	public boolean isFinished(){
-		return ticksWhileSplineFinished > 25;
+		return ticksWhileSplineFinished > 70;
 	}
 	
 }

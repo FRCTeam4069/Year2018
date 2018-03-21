@@ -7,6 +7,9 @@ import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
 import frc.team4069.robot.spline.DoublePoint;
+import frc.team4069.robot.spline.SplinePath;
+import frc.team4069.robot.spline.SplinePathFarSwitch;
+import frc.team4069.robot.spline.SplinePathNearSwitch;
 import java.util.ArrayList;
 
 // Command group that does everything involved in autonomous mode
@@ -16,26 +19,17 @@ public class AutonomousCommandGroup extends CommandGroup {
     // reasonable default
     private final int gameDataTimeoutMilliseconds = 250;
 	
-	private ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
-	
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-		splinePoints.add(new DoublePoint(0, 0));
-		splinePoints.add(new DoublePoint(1, 2));
-		splinePoints.add(new DoublePoint(-1, 4));
-		splinePoints.add(new DoublePoint(1, 6));
-		splinePoints.add(new DoublePoint(-1, 8));
-		splinePoints.add(new DoublePoint(1, 10));
-		splinePoints.add(new DoublePoint(-1, 12));
-		/*splinePoints.add(new DoublePoint(0, 0));
-		splinePoints.add(new DoublePoint(-1.5, 1.5));
-		splinePoints.add(new DoublePoint(0, 3));
-		splinePoints.add(new DoublePoint(1.5, 1.5));
-		splinePoints.add(new DoublePoint(0, 0));
-		splinePoints.add(new DoublePoint(-1.5, -1.5));
-		splinePoints.add(new DoublePoint(0, -3));
-		splinePoints.add(new DoublePoint(1.5, -1.5));
-		splinePoints.add(new DoublePoint(0, 0));*/
+		/*splinePoints.add(new DoublePoint(0 * scale, 0 * scale));
+		splinePoints.add(new DoublePoint(-1.0 * scale, 1.0 * scale));
+		splinePoints.add(new DoublePoint(0 * scale, 2.0 * scale));
+		splinePoints.add(new DoublePoint(1.0 * scale, 1.0 * scale));
+		splinePoints.add(new DoublePoint(0 * scale, 0 * scale));
+		splinePoints.add(new DoublePoint(-1.0 * scale, -1.0 * scale));
+		splinePoints.add(new DoublePoint(0, -2.0 * scale));
+		splinePoints.add(new DoublePoint(1.0 * scale, -1.0 * scale));
+		splinePoints.add(new DoublePoint(0 * scale, 0 * scale));*/
         /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
@@ -46,7 +40,8 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(-70));
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
-		addSequential(new FollowSplinePathCommand(splinePoints));
+		SplinePath path = new SplinePathFarSwitch();
+		addSequential(new FollowSplinePathCommand(path));
         /*addSequential(new DriveTowardTapeCommand(1000));
         addSequential(new StopVacuumCommand());*/
 //        }
