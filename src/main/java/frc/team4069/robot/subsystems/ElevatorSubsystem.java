@@ -66,6 +66,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         set(ControlMode.MotionMagic, customPosition);
     }
 
+    public double getPositionMeters() {
+        return talon.getDistanceTraveledRotations() / -28;
+    }
+
     public void setSpeed(double speed) {
         set(ControlMode.PercentOutput, speed);
     }
@@ -103,7 +107,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 })
                 .findFirst()
                 .map(Position::getTicks)
-                .orElse((int)pos);
+                .orElse((int) pos);
     }
 
     public double lowerPreset() {
@@ -114,7 +118,7 @@ public class ElevatorSubsystem extends SubsystemBase {
                 .filter(position -> Math.abs(position.getTicks()) < Math.abs(pos))
                 .findFirst()
                 .map(Position::getTicks)
-                .orElse((int)pos);
+                .orElse((int) pos);
     }
 
     @Override
