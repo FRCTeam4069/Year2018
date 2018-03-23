@@ -55,12 +55,8 @@ public class FollowSplinePathCommand extends CommandBase{
 		leftPID = new PID(100, 0.1);
 		rightPID = new PID(100, 0.1);
 		gyroPID = new PID(0.75, 0.2);
-		distancePID = new PID(15, 5.0);
+		distancePID = new PID(15, 1.0);
 		distancePID.setOutputCap(forwardVelocityCap);
-		distancePID.logging = true;
-		/*leftPID.setOutputCap(0.4);
-		rightPID.setOutputCap(0.4);
-		gyroPID.setOutputCap(0.3);*/
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
 		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
@@ -107,19 +103,6 @@ public class FollowSplinePathCommand extends CommandBase{
 		distanceTravelledMeters = driveBase.getDistanceTraveledMeters() - startDistance;
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
-		/*while(splinePosition < spline.splineIntegral.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
-			splinePosition++;
-			targetSplinePosition = splinePosition + splinePositionFollowDistance;
-			if(targetSplinePosition > spline.splineIntegral.length - 1){
-				targetSplinePosition = spline.splineIntegral.length - 1;
-			}
-			Vector followDirection = new Vector(new Vector(spline.leftWheel[targetSplinePosition - 1]).sub(new Vector(spline.leftWheel[targetSplinePosition - 2])).length(), new Vector(spline.rightWheel[targetSplinePosition - 1]).sub(new Vector(spline.rightWheel[targetSplinePosition - 2])).length()).normalize();
-			followDirection = followDirection.multScalar(0.1);
-			//leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
-			//rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
-			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1] + followDirection.x);
-			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1] + followDirection.y);
-		}*/
 		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 			if(spline.splineAngles[splinePosition] - spline.splineAngles[splinePosition - 1] >= 180.0){
@@ -129,7 +112,9 @@ public class FollowSplinePathCommand extends CommandBase{
 				splineAngleAccumulator += 360.0;
 			}
 		}
-		//System.out.println("Spline position value: " + spline.pointsOnCurve[splinePosition].x + ", " + spline.pointsOnCurve[splinePosition].y);
+		System.out.println("Spline angle: " + (spline.splineAngles[splinePosition] + splineAngleAccumulator));
+		System.out.println("Spline position: " + spline.pointsOnCurve[splinePosition].x + ", " + spline.pointsOnCurve[splinePosition].y);
+		System.out.println("Calculated spline angle: " + Math.toDegrees(Math.atan2(spline.pointsOnCurve[splinePosition].y - spline.pointsOnCurve[splinePosition - 1].y, spline.pointsOnCurve[splinePosition].x - spline.pointsOnCurve[splinePosition - 1].x)));
 		Vector followDirection = new Vector(new Vector(spline.leftWheel[splinePosition]).sub(new Vector(spline.leftWheel[splinePosition - 1])).length(), new Vector(spline.rightWheel[splinePosition]).sub(new Vector(spline.rightWheel[splinePosition - 1])).length()).normalize();
 		followDirection = followDirection.multScalar(1);
 		leftPID.setTarget(spline.leftWheelIntegral[splinePosition] + followDirection.x);

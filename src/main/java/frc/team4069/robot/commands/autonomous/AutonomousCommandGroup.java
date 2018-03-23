@@ -10,6 +10,7 @@ import frc.team4069.robot.spline.DoublePoint;
 import frc.team4069.robot.spline.SplinePath;
 import frc.team4069.robot.spline.SplinePathSwitchRight;
 import frc.team4069.robot.spline.SplinePathSwitchLeft;
+import frc.team4069.robot.spline.SplinePathCircle;
 import frc.team4069.robot.spline.SplinePathFarSwitch;
 import java.util.ArrayList;
 
@@ -41,7 +42,14 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(-70));
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
-		SplinePath path = new SplinePathSwitchRight();
+		addSequential(new StartVacuumCommand());
+		SplinePath path = new SplinePathSwitchLeft();;
+		/*if(shouldGoRight()){
+			path = new SplinePathSwitchRight();
+		}
+		else{
+			path = new SplinePathSwitchLeft();
+		}*/
 		addSequential(new FollowSplinePathCommand(path));
         /*addSequential(new DriveTowardTapeCommand(1000));
         addSequential(new StopVacuumCommand());*/
