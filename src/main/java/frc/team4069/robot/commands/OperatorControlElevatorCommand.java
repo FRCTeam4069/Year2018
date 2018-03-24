@@ -6,8 +6,8 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
     private final double lowSpeed = 0.25;
     private final double highSpeed = 0.5;
-    private final double lowSpeedMaxPosition = 0.4;
-    private final double highSpeedMinPosition = 0.6;
+    private final double lowSpeedMaxPosition = 0.05;
+    private final double highSpeedMinPosition = 0.2;
 
     // We use this as a latch when controlling the elevator
     // If it's not set, then the drivers are actively controlling the elevator with the stick
@@ -32,9 +32,9 @@ public class OperatorControlElevatorCommand extends CommandBase {
         // Scale it down more if we're in the bottom 50 centimeters
         double position = elevator.getPositionMeters();
         double speedFactor;
-        if (position < 0.4) {
+        if (position < lowSpeedMaxPosition) {
             speedFactor = lowSpeed;
-        } else if (position > 0.6) {
+        } else if (position > highSpeedMinPosition) {
             speedFactor = highSpeed;
         } else {
             double maxPositionDelta = highSpeedMinPosition - lowSpeedMaxPosition;
