@@ -37,8 +37,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // Configure motion magic acceleration and cruise velocity so that it actually works
 //        talon.configMotionCruiseVelocity(3000, 0);
-        talon.configMotionCruiseVelocity(1500, 0);
-        talon.configMotionAcceleration(800, 0);
+        talon.configMotionCruiseVelocity(2500, 0);
+        talon.configMotionAcceleration(1800, 0);
 
 //        talon.setSelectedSensorPosition(0, 0, 0);
 

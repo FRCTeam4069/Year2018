@@ -67,6 +67,7 @@ public class Robot extends IterativeRobot {
 //        threadArmCameraHandle.start();
 
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
+        SmartDashboard.putBoolean("Vacuum enabled", false);
     }
 
     @Override
