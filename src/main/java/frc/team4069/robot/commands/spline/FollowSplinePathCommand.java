@@ -65,6 +65,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	protected void initialize(){
+		System.out.println("FOLLOW SPLINE PATH COMMAND INITIALIZE");
 		startAngle = getGyroAngle();
 		startDistance = driveBase.getDistanceTraveledMeters();
 		startDistanceLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel();

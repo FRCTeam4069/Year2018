@@ -23,15 +23,6 @@ public class AutonomousCommandGroup extends CommandGroup {
 	
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
-		/*splinePoints.add(new DoublePoint(0 * scale, 0 * scale));
-		splinePoints.add(new DoublePoint(-1.0 * scale, 1.0 * scale));
-		splinePoints.add(new DoublePoint(0 * scale, 2.0 * scale));
-		splinePoints.add(new DoublePoint(1.0 * scale, 1.0 * scale));
-		splinePoints.add(new DoublePoint(0 * scale, 0 * scale));
-		splinePoints.add(new DoublePoint(-1.0 * scale, -1.0 * scale));
-		splinePoints.add(new DoublePoint(0, -2.0 * scale));
-		splinePoints.add(new DoublePoint(1.0 * scale, -1.0 * scale));
-		splinePoints.add(new DoublePoint(0 * scale, 0 * scale));*/
         /*addSequential(new StartVacuumCommand());
         addSequential(new ZeroElevatorCommand());
         addSequential(new GrabCubeCommandGroup());
@@ -43,7 +34,7 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
 		addSequential(new StartVacuumCommand());
-		SplinePath path = new SplinePathSwitchLeft();;
+		SplinePath path = new SplinePathCircle();
 		/*if(shouldGoRight()){
 			path = new SplinePathSwitchRight();
 		}
