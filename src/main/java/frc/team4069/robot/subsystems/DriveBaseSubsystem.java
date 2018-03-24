@@ -68,6 +68,16 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // distance traveled in meters
         return averageRotationsTraveled * METERS_PER_ROTATION;
     }
+	
+	public double getDistanceTraveledMetersLeftWheel() {
+        double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
+        return leftWheelRotationsTraveled * METERS_PER_ROTATION;
+    }
+	
+	public double getDistanceTraveledMetersRightWheel() {
+        double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
+        return rightWheelRotationsTraveled * METERS_PER_ROTATION;
+    }
 
     // Stop moving immediately
     public void stop() {
@@ -103,10 +113,15 @@ public class DriveBaseSubsystem extends SubsystemBase {
         driveUnfiltered(speeds);
     }
 
-    private void driveUnfiltered(WheelSpeeds speeds) {
+    public void driveUnfiltered(WheelSpeeds speeds) {
         leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
     }
+	
+	public void driveUnfiltered(double leftWheelSpeed, double rightWheelSpeed){
+		leftDrive.setConstantSpeed(leftWheelSpeed);
+		rightDrive.setConstantSpeed(rightWheelSpeed);
+	}
 
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds, boolean auto) {
