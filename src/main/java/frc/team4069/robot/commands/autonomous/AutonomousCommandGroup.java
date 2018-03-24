@@ -33,8 +33,8 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new RotateToAngleWithGyroCommand(-70));
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
-		addSequential(new StartVacuumCommand());
-		SplinePath path = new SplinePathCircle();
+		//addSequential(new StartVacuumCommand());
+		SplinePath path = new SplinePathSwitchRight();
 		/*if(shouldGoRight()){
 			path = new SplinePathSwitchRight();
 		}
