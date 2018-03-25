@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class ElevatorSubsystem extends SubsystemBase {
 
     // The maximum number of ticks that the elevator motor can safely reach
-    public static final int MAX_POSITION_TICKS = -29300;
+    public static final int MAX_POSITION_TICKS = 29300;
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
@@ -36,9 +36,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         talon.config_kD(0, 0.1, 0);
 
         // Configure motion magic acceleration and cruise velocity so that it actually works
-//        talon.configMotionCruiseVelocity(3000, 0);
-        talon.configMotionCruiseVelocity(2500, 0);
-        talon.configMotionAcceleration(1800, 0);
+        talon.configMotionCruiseVelocity(3000, 0);
+        talon.configMotionAcceleration(2500, 0);
 
 //        talon.setSelectedSensorPosition(0, 0, 0);
 
@@ -129,10 +128,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
         MINIMUM(0),
-        EXCHANGE(-3000),
-        INTAKE(-5500),
-        SWITCH(-15000),
-        SCALE(MAX_POSITION_TICKS + 100);
+        EXCHANGE(3000),
+        INTAKE(5500),
+        SWITCH(15000),
+        SCALE(MAX_POSITION_TICKS - 100);
 
         private int ticks;
 

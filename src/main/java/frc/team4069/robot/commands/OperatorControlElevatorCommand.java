@@ -23,7 +23,9 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
         // Get the axis of the elevator, scale it down so that it's easier to control
         double elevatorAxis = Input.getElevatorAxis();
-        elevator.setSpeed(elevatorAxis * 0.5);
+        if(elevatorAxis != 0 || elevator.getVelocity() != 0) {
+            elevator.setSpeed(elevatorAxis * 0.5);
+        }
 
         double dpadValue = Input.getOperatorDirectionalPad();
         if (dpadValue == 0.0) {
