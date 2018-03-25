@@ -20,7 +20,7 @@ deploy {
         artifact('frcJava', jaci.openrio.gradle.frc.FRCJavaArtifact) {
             targets << "roborio"
 
-            //debug = true
+            debug = true
         }
     }
 }
