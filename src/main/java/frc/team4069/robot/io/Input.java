@@ -31,14 +31,14 @@ public class Input {
 
         // Map the elevator controls for scale, switch, and exchange
         Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH, false));
+        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
         Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE, false));
+        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
         Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
         elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
         Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
-        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE, false));
+        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
 
         Button startWinch = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
         startWinch.whenPressed(new StartWinchCommand());

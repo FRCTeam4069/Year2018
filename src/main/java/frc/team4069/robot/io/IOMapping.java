@@ -15,7 +15,7 @@ public class IOMapping {
     public static final int LEFT_DRIVE_CAN_BUS = 12;
     public static final int RIGHT_DRIVE_CAN_BUS = 19;
     // Limit switch digital input numbers
-    public static final int ELEVATOR_LIMIT_SWITCH = 1;
+    public static final int ELEVATOR_LIMIT_SWITCH = 7;
 
     public static final int SOLENOID_CHANNEL = 0;
 

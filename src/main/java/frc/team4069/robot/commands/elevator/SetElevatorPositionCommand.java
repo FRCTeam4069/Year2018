@@ -1,38 +1,86 @@
 package frc.team4069.robot.commands.elevator;
 
-import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
+import frc.team4069.robot.subsystems.ElevatorSubsystem;
+import frc.team4069.robot.commands.CommandBase;
+import frc.team4069.robot.motors.PID;
 
-// Use our enum values with MotionMagic to move the elevator to predefined locations passed in the constructor
 public class SetElevatorPositionCommand extends CommandBase {
-
-    private Position position;
-    private boolean blocking;
-
-    public SetElevatorPositionCommand(Position position, boolean blocking) {
-        this.position = position;
-        this.blocking = blocking;
-        requires(elevator);
+	
+	private PID elevatorPID;
+	
+	private final int acceptableError = 1000;
+	
+	private int ticksBeforeFinished = 0;
+	
+	private double targetPosition;
+	
+	private double maxSpeedUp = 0.6;
+	private double maxSpeedDown = 0.4;
+	
+	private boolean exitCommand = false;
+	
+	private boolean movingUp;
+	
+    public SetElevatorPositionCommand(double position) {
+		if(position > 0 || position < ElevatorSubsystem.MAX_POSITION_TICKS){
+			System.out.println("Error: position is not in acceptable range");
+			exitCommand = true;
+		}
+		targetPosition = position;
+		requires(elevator);
     }
+	
+	public SetElevatorPositionCommand(Position position){
+		this(position.getTicks());
+	}
 
     @Override
     protected void initialize() {
-        elevator.setPosition(position);
+        double currentPosition = elevator.getPositionTicks();
+		if(targetPosition < currentPosition){
+			movingUp = true;
+		}
+		else{
+			movingUp = false;
+		}
+        
+		if(movingUp){
+			elevatorPID = new PID(0.0002, 0.00001, 0.0000005);
+		}
+		else{
+			elevatorPID = new PID(0.0001, 0.00001, 0.0000005);
+		}
+		elevatorPID.setOutputCap(1.0);
+		elevatorPID.setTarget(targetPosition);
     }
+	
+	@Override
+	protected void execute(){
+		double ticksTraveled = elevator.getPositionTicks();
+		System.out.println(targetPosition - ticksTraveled);
+		if(ticksTraveled < targetPosition + acceptableError && ticksTraveled > targetPosition - acceptableError){
+			ticksBeforeFinished++;
+		}
+		double motorOutput = elevatorPID.getMotorOutput(ticksTraveled);
+		if(movingUp){
+			motorOutput *= maxSpeedUp;
+		}
+		else{
+			motorOutput *= maxSpeedDown;
+		}
+        elevator.setConstantSpeed(motorOutput);
+	}
 
     @Override
     protected boolean isFinished() {
-        if (!blocking) {
-            return true;
-        }
-
-        double pos = elevator.getPosition();
-        if (position == Position.MINIMUM) {
-            return Math.abs(pos) <= 100;
-        }
-
-        double tolerance = Math.abs(position.getTicks()) - Math.abs(pos);
-
-        return tolerance <= 1000;
+		if(exitCommand){
+			return true;
+		}
+		if(ticksBeforeFinished >= 50){
+			elevator.setConstantSpeed(0);
+			return true;
+		}
+		return false;
     }
 }

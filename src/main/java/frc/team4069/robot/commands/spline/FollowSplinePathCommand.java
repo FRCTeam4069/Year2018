@@ -41,21 +41,23 @@ public class FollowSplinePathCommand extends CommandBase{
 	private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
 	
-	private double absoluteMotorSpeed = 0.6;
+	private double absoluteMotorSpeed = 1.0;
 	
 	private double splineAngleAccumulator = 0.0;
 	
 	private double forwardVelocityCap = 3.0;
 	
-	public FollowSplinePathCommand(SplinePath path){
+	private boolean moveForwards = true;
+	
+	public FollowSplinePathCommand(SplinePath path, boolean moveForwards){
 		requires(driveBase);
-		this.points = points;
-		spline = new SplinePathGenerator(0.55);
+		this.moveForwards = moveForwards;
+		spline = new SplinePathGenerator(0.55, moveForwards);
 		spline.generateSpline(path);
-		leftPID = new PID(100, 0.1);
-		rightPID = new PID(100, 0.1);
-		gyroPID = new PID(0.75, 0.2);
-		distancePID = new PID(15, 1.0);
+		leftPID = new PID(100, 0.0, 0.1);
+		rightPID = new PID(100, 0.0, 0.1);
+		gyroPID = new PID(0.75, 0.0, 0.2);
+		distancePID = new PID(15, 0.0, 1.0);
 		distancePID.setOutputCap(forwardVelocityCap);
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
@@ -63,9 +65,15 @@ public class FollowSplinePathCommand extends CommandBase{
 		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
 	}
 	
+	public void setForwards(boolean value){
+		if(value != moveForwards){
+			forwardVelocityCap *= -1;
+		}
+		moveForwards = value;
+	}
+	
 	@Override
 	protected void initialize(){
-		System.out.println("FOLLOW SPLINE PATH COMMAND INITIALIZE");
 		startAngle = getGyroAngle();
 		startDistance = driveBase.getDistanceTraveledMeters();
 		startDistanceLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel();
@@ -150,6 +158,18 @@ public class FollowSplinePathCommand extends CommandBase{
 		Vector normalizedOutputs = new Vector(-motorValues + forwardVelocityCap, motorValues + forwardVelocityCap).normalize().multScalar(absoluteMotorSpeed * (forwardVelocity / forwardVelocityCap));
 		leftWheelMotor = normalizedOutputs.x;
 		rightWheelMotor = normalizedOutputs.y;
+		if(leftWheelMotor > 1){
+			leftWheelMotor = 1;
+		}
+		else if(leftWheelMotor < -1){
+			leftWheelMotor = -1;
+		}
+		if(rightWheelMotor > 1){
+			rightWheelMotor = 1;
+		}
+		else if(rightWheelMotor < -1){
+			rightWheelMotor = -1;
+		}
 		driveBase.driveUnfiltered(leftWheelMotor, rightWheelMotor);
 	}
 	

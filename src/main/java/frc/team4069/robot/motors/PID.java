@@ -2,7 +2,7 @@ package frc.team4069.robot.motors;
 
 public class PID{
 	
-	private double kP, kD;
+	private double kP, kI, kD;
 	
 	private double target;
 	
@@ -20,8 +20,11 @@ public class PID{
 	
 	public boolean logging = false;
 	
-	public PID(double kP, double kD){
+	private double integral = 0;
+	
+	public PID(double kP, double kI, double kD){
 		this.kP = kP;
+		this.kI = kI;
 		this.kD = kD;
 		currentTime = prevTime = System.currentTimeMillis();
 	}
@@ -60,7 +63,8 @@ public class PID{
 		if(logging){
 			System.out.println("Derivative: " + derivative);
 		}
-		double motorOutput = proportional + derivative;
+		integral += kI * deltaTime * (target - position);
+		double motorOutput = proportional + integral + derivative;
 		if(outputCapSet){
 			if(motorOutput > outputCap){
 				motorOutput = outputCap;

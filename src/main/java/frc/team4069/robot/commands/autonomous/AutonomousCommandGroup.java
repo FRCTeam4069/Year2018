@@ -3,6 +3,7 @@ package frc.team4069.robot.commands.autonomous;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
@@ -36,14 +37,15 @@ public class AutonomousCommandGroup extends CommandGroup {
         addSequential(new DriveStraightForDistanceCommand(2.7, 0.7));
         addSequential(new RotateToAngleWithGyroCommand(70));*/
 		//addSequential(new StartVacuumCommand());
-		SplinePath path = new SplinePathScaleLeft();
+		SplinePath path = new SplinePathSwitchRight();
 		/*if(shouldGoRight()){
 			path = new SplinePathSwitchRight();
 		}
 		else{
 			path = new SplinePathSwitchLeft();
 		}*/
-		addSequential(new FollowSplinePathCommand(path));
+		addSequential(new FollowSplinePathCommand(path, true));
+		addSequential(new SetElevatorPositionCommand(-18000));
         /*addSequential(new DriveTowardTapeCommand(1000));
         addSequential(new StopVacuumCommand());*/
 //        }
