@@ -68,10 +68,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Enum that holds tick values for the various positions that the elevator must go to
     public enum Position {
         MINIMUM(0),
-        EXCHANGE(-3000),
-        INTAKE(-5500),
-        SWITCH(-15000),
-        SCALE(MAX_POSITION_TICKS + 100);
+        EXCHANGE(3000),
+        INTAKE(5500),
+        SWITCH(15000),
+        SCALE(MAX_POSITION_TICKS - 100);
 
         private int ticks;
 
