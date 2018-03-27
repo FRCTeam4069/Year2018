@@ -35,7 +35,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
         // Scale it down more if we're in the bottom 50 centimeters
         boolean limitSwitchPressed = elevator.isLimitSwitchPressed();
         //System.out.println(limitSwitchPressed);
-        double position = elevator.getPositionTicks();
+        double position = elevator.getPosition();
         double speedFactor = lerp(0.25, 1, 0, -10000, position);
         if (speedFactor > 1) {
             speedFactor = 1;

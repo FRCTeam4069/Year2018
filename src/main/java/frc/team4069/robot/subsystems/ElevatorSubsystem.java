@@ -1,14 +1,9 @@
 package frc.team4069.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team4069.robot.commands.OperatorControlElevatorCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
-import frc.team4069.robot.motors.PID;
-import java.util.Collections;
-import java.util.stream.Stream;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -37,15 +32,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getPosition() {
         return talon.getDistanceTraveledTicks();
     }
-	
-	public void setConstantSpeed(double speed){
+    
+    public void setConstantSpeed(double speed){
 		talon.setConstantSpeed(speed);
 	}
-	
-	public double getPositionTicks(){
-		return talon.getDistanceTraveledTicks();
-	}
-	
+
 	public boolean isLimitSwitchPressed(){
 		return limitSwitch.get();
 	}

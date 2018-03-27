@@ -37,7 +37,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 
     @Override
     protected void initialize() {
-        double currentPosition = elevator.getPositionTicks();
+        double currentPosition = elevator.getPosition();
 		if(targetPosition < currentPosition){
 			movingUp = true;
 		}
@@ -57,7 +57,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 	
 	@Override
 	protected void execute(){
-		double ticksTraveled = elevator.getPositionTicks();
+		double ticksTraveled = elevator.getPosition();
 		System.out.println(targetPosition - ticksTraveled);
 		if(ticksTraveled < targetPosition + acceptableError && ticksTraveled > targetPosition - acceptableError){
 			ticksBeforeFinished++;
