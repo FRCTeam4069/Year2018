@@ -2,15 +2,14 @@ package frc.team4069.robot.spline;
 
 import java.util.ArrayList;
 
-public class SplinePathFarSwitch extends SplinePath{
+public class SplinePathCubeLeft extends SplinePath{
 	
-	public SplinePathFarSwitch(){
+	public SplinePathCubeLeft(){
 		super(270, 270, 250);
 		ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
 		splinePoints.add(new DoublePoint(0.0, 0.0));
-		splinePoints.add(new DoublePoint(1.0, 1.0));
-		splinePoints.add(new DoublePoint(2.0, 1.0));
-		splinePoints.add(new DoublePoint(3.0, 2.0));
+		splinePoints.add(new DoublePoint(0.785, 0.653));
+		splinePoints.add(new DoublePoint(1.385, 1.513));
 		super.points = splinePoints;
 	}
 	

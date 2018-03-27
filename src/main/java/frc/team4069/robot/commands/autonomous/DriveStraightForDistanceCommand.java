@@ -6,7 +6,7 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 
     private final double speed;
     private final int counterThreshold = 20;
-    private final double acceptableError = 0.05;
+    private final double acceptableError = 0.1;
     private final double derivativeMultiplier = 0.35;
     private int inRangeCounter = 0;
     private double distanceMeters;
@@ -21,7 +21,7 @@ public class DriveStraightForDistanceCommand extends CommandBase {
     public DriveStraightForDistanceCommand(double distanceMeters, double speed) {
         requires(driveBase);
         this.speed = speed;
-        this.distanceMeters = Math.abs(distanceMeters);
+        this.distanceMeters = distanceMeters;
         signedSpeed = distanceMeters > 0 ? speed : -speed;
     }
 
@@ -29,23 +29,23 @@ public class DriveStraightForDistanceCommand extends CommandBase {
     protected void initialize() {
         super.initialize();
         prevTime = currentTime = startTime = System.currentTimeMillis();
-        initialPosition = driveBase.getDistanceTraveledMeters();
+        initialPosition = driveBase.getDisplacementTraveledMeters();
         driveBase.driveContinuousSpeed(0, signedSpeed, true);
     }
 
     @Override
     protected void execute() {
         prevDistance = currentDistance;
-        currentDistance = driveBase.getDistanceTraveledMeters();
+        currentDistance = driveBase.getDisplacementTraveledMeters();
         prevTime = currentTime;
         currentTime = System.currentTimeMillis();
         double metersPerSecond =
                 (currentDistance - prevDistance) / ((double) (currentTime - prevTime) / 1000.0);
-        double distance = driveBase.getDistanceTraveledMeters() - initialPosition;
+        double distance = driveBase.getDisplacementTraveledMeters() - initialPosition;
         double speedConstant = Math.abs(distanceMeters) * 3;
         double motorOutput = lerp(signedSpeed * speedConstant, 0, 0, distanceMeters, distance);
         if (distanceMeters < 0) {
-            motorOutput += metersPerSecond * derivativeMultiplier;
+            motorOutput -= metersPerSecond * derivativeMultiplier;
         } else {
             motorOutput -= metersPerSecond * derivativeMultiplier;
         }

@@ -6,7 +6,7 @@ import frc.team4069.robot.commands.CommandBase;
 public class RotateToAngleWithGyroCommand extends CommandBase {
 
     // Max turn speed
-    private final double turnSpeedAbsolute = 0.4;
+    private final double turnSpeedAbsolute = 0.7;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
     private final int counterThreshold = 10;
     // Timeout the command after this many milliseconds

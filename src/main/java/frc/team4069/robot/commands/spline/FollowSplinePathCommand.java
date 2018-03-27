@@ -41,7 +41,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	private double currentGyroscope = 0;
     private double prevGyroscope = currentGyroscope;
 	
-	private double absoluteMotorSpeed = 1.0;
+	private double absoluteMotorSpeed = 0.7;
 	
 	private double splineAngleAccumulator = 0.0;
 	
@@ -52,30 +52,33 @@ public class FollowSplinePathCommand extends CommandBase{
 	public FollowSplinePathCommand(SplinePath path, boolean moveForwards){
 		requires(driveBase);
 		this.moveForwards = moveForwards;
+		if(!moveForwards){
+			forwardVelocityCap *= -1;
+			absoluteMotorSpeed -= 0.1;
+		}
 		spline = new SplinePathGenerator(0.55, moveForwards);
-		spline.generateSpline(path);
+		spline.generateSpline(path, path.getSmoothnessFactor());
 		leftPID = new PID(100, 0.0, 0.1);
 		rightPID = new PID(100, 0.0, 0.1);
-		gyroPID = new PID(0.75, 0.0, 0.2);
-		distancePID = new PID(15, 0.0, 1.0);
-		distancePID.setOutputCap(forwardVelocityCap);
+		if(!moveForwards){
+			gyroPID = new PID(0.5, 0.0, 0.1);
+			distancePID = new PID(30, 0.0, 1.0);
+		}
+		else{
+			gyroPID = new PID(0.5, 0.0, 0.1);
+			distancePID = new PID(15, 0.0, 1.0);
+		}
+		distancePID.setOutputCap(Math.abs(forwardVelocityCap));
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
 		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
 		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
 	}
 	
-	public void setForwards(boolean value){
-		if(value != moveForwards){
-			forwardVelocityCap *= -1;
-		}
-		moveForwards = value;
-	}
-	
 	@Override
 	protected void initialize(){
 		startAngle = getGyroAngle();
-		startDistance = driveBase.getDistanceTraveledMeters();
+		startDistance = driveBase.getDisplacementTraveledMeters();
 		startDistanceLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel();
 		startDistanceRightWheel = driveBase.getDistanceTraveledMetersRightWheel();
 	}
@@ -99,7 +102,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	@Override
 	protected void execute(){
 		prevGyroscope = currentGyroscope;
-        currentGyroscope = calculateGyroAngle();
+        currentGyroscope = calculateDelta();
 		// Detect jump between 0 and 360 and adjust angle accumulator accordingly
         if (currentGyroscope - prevGyroscope > 180) {
             angleAccumulator -= 360.0;
@@ -109,7 +112,10 @@ public class FollowSplinePathCommand extends CommandBase{
 		if(splinePosition == spline.leftWheel.length - 1){
 			ticksWhileSplineFinished++;
 		}
-		distanceTravelledMeters = driveBase.getDistanceTraveledMeters() - startDistance;
+		distanceTravelledMeters = driveBase.getDisplacementTraveledMeters() - startDistance;
+		if(!moveForwards){
+			distanceTravelledMeters *= -1;
+		}
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
 		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
@@ -121,9 +127,10 @@ public class FollowSplinePathCommand extends CommandBase{
 				splineAngleAccumulator += 360.0;
 			}
 		}
-		System.out.println("Spline angle: " + (spline.splineAngles[splinePosition] + splineAngleAccumulator));
+		System.out.println("Distance travelled: " + distanceTravelledMeters);
+		//System.out.println("Spline angle: " + (spline.splineAngles[splinePosition] + splineAngleAccumulator));
 		System.out.println("Spline position: " + spline.pointsOnCurve[splinePosition].x + ", " + spline.pointsOnCurve[splinePosition].y);
-		System.out.println("Calculated spline angle: " + Math.toDegrees(Math.atan2(spline.pointsOnCurve[splinePosition].y - spline.pointsOnCurve[splinePosition - 1].y, spline.pointsOnCurve[splinePosition].x - spline.pointsOnCurve[splinePosition - 1].x)));
+		//System.out.println("Calculated spline angle: " + Math.toDegrees(Math.atan2(spline.pointsOnCurve[splinePosition].y - spline.pointsOnCurve[splinePosition - 1].y, spline.pointsOnCurve[splinePosition].x - spline.pointsOnCurve[splinePosition - 1].x)));
 		Vector followDirection = new Vector(new Vector(spline.leftWheel[splinePosition]).sub(new Vector(spline.leftWheel[splinePosition - 1])).length(), new Vector(spline.rightWheel[splinePosition]).sub(new Vector(spline.rightWheel[splinePosition - 1])).length()).normalize();
 		followDirection = followDirection.multScalar(1);
 		leftPID.setTarget(spline.leftWheelIntegral[splinePosition] + followDirection.x);
@@ -132,7 +139,7 @@ public class FollowSplinePathCommand extends CommandBase{
 		if(gyroPID.logging){
 			System.out.println("Gyro PID:\n-----");
 		}
-		double motorValues = gyroPID.getMotorOutput(-calculateGyroAngle());
+		double motorValues = gyroPID.getMotorOutput(-calculateDelta());
 		if(gyroPID.logging){
 			System.out.println("-----");
 		}
@@ -151,6 +158,9 @@ public class FollowSplinePathCommand extends CommandBase{
 			System.out.println("-----");
 		}
 		double forwardVelocity = distancePID.getMotorOutput(distanceTravelledMeters);
+		if(!moveForwards){
+			forwardVelocity *= -1;
+		}
 		double velocityRatio = forwardVelocity / forwardVelocityCap;
 		if(velocityRatio < 0){
 			motorValues *= -1;
@@ -158,6 +168,9 @@ public class FollowSplinePathCommand extends CommandBase{
 		Vector normalizedOutputs = new Vector(-motorValues + forwardVelocityCap, motorValues + forwardVelocityCap).normalize().multScalar(absoluteMotorSpeed * (forwardVelocity / forwardVelocityCap));
 		leftWheelMotor = normalizedOutputs.x;
 		rightWheelMotor = normalizedOutputs.y;
+		System.out.println("Forward velocity cap: " + forwardVelocityCap);
+		System.out.println("Normalized outputs: " + leftWheelMotor + ", " + rightWheelMotor);
+		System.out.println("motorValues: " + motorValues);
 		if(leftWheelMotor > 1){
 			leftWheelMotor = 1;
 		}
@@ -175,7 +188,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	public boolean isFinished(){
-		return ticksWhileSplineFinished > 70;
+		return ticksWhileSplineFinished > 25;
 	}
 	
 }

@@ -8,6 +8,8 @@ public class SplinePath{
 	
 	public int startAngle, endAngle, angleWeight;
 	
+	private double smoothnessFactor = 1.0;
+	
 	public SplinePath(ArrayList<DoublePoint> points, int startAngle, int endAngle, int angleWeight){
 		this.startAngle = startAngle;
 		this.endAngle = endAngle;
@@ -26,6 +28,15 @@ public class SplinePath{
 			points.get(i).x *= scalar;
 			points.get(i).y *= scalar;
 		}
+	}
+	
+	public void smoothify(double smoothnessFactor){
+		scale(smoothnessFactor);
+		this.smoothnessFactor *= smoothnessFactor;
+	}
+	
+	public double getSmoothnessFactor(){
+		return smoothnessFactor;
 	}
 	
 }

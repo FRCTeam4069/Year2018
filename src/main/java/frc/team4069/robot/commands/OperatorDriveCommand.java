@@ -33,6 +33,8 @@ public class OperatorDriveCommand extends CommandBase {
         double elevatorPosition = Math.abs(elevator.getPosition()) - Math.abs(
                 ElevatorSubsystem.MAX_POSITION_TICKS);
 
+		//System.out.println("Left wheel encoder: " + driveBase.getDistanceTraveledMetersLeftWheel());
+		//System.out.println("Right wheel encoder: " + driveBase.getDistanceTraveledMetersRightWheel());
         // Dampen the drive base input if the elevator is raised ~halfway
         // TODO: Check the values here
         if (Math.abs(elevatorPosition) <= 16000 && elevatorPosition > 0) {

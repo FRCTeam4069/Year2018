@@ -17,7 +17,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 	private double maxSpeedGoingDown = 0.4;
 	
     public OperatorControlElevatorCommand() {
-		slowDownLowerPID = new PID(0.0002, 0.0, 0.0000005);
+		slowDownLowerPID = new PID(0.0002, 0.0, 0.0);
 		slowDownLowerPID.setOutputCap(1.0);
 		slowDownLowerPID.setTarget(0);
 		slowDownUpperPID = new PID(0.0002, 0.0, 0.0000005);
@@ -39,6 +39,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
         // Scale it down more if we're in the bottom 50 centimeters
 		boolean limitSwitchPressed = elevator.isLimitSwitchPressed();
+		//System.out.println("Elevator limit switch: " + limitSwitchPressed);
 		//System.out.println(limitSwitchPressed);
 		double position = elevator.getPositionTicks();
 		double speedFactor = lerp(0.25, 1, 0, -10000, position);

@@ -7,13 +7,14 @@ public class SplinePathScaleLeft extends SplinePath{
 	public SplinePathScaleLeft(){
 		super(270, 270, 250);
 		ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
-		splinePoints.add(new DoublePoint(0.0, 0.45));
-		splinePoints.add(new DoublePoint(0, 2.081));
-		splinePoints.add(new DoublePoint(0, 4.126));
-		splinePoints.add(new DoublePoint(-1.018, 4.875));
-		splinePoints.add(new DoublePoint(-3.977, 4.876));
-		splinePoints.add(new DoublePoint(-4.98, 5.396));
-		splinePoints.add(new DoublePoint(-5.056, 6.298));
+		splinePoints.add(new DoublePoint(0.0, 0.0));
+		splinePoints.add(new DoublePoint(1.4, 1.453));
+		splinePoints.add(new DoublePoint(2.3, 1.953));
+		splinePoints.add(new DoublePoint(2.5, 3.453));
+		splinePoints.add(new DoublePoint(2.5, 4.753));
+		splinePoints.add(new DoublePoint(0.66, 5.001));
+		splinePoints.add(new DoublePoint(-2.1, 5.153));
+		splinePoints.add(new DoublePoint(-2.053, 6.452));
 		super.points = splinePoints;
 	}
 	

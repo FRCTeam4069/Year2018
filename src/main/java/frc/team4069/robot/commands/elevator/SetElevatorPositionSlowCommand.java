@@ -5,7 +5,7 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.motors.PID;
 
-public class SetElevatorPositionCommand extends CommandBase {
+public class SetElevatorPositionSlowCommand extends CommandBase {
 	
 	private PID elevatorPID;
 	
@@ -22,7 +22,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 	
 	private boolean movingUp;
 	
-    public SetElevatorPositionCommand(double position) {
+    public SetElevatorPositionSlowCommand(double position) {
 		if(position > 0 || position < ElevatorSubsystem.MAX_POSITION_TICKS){
 			System.out.println("Error: position is not in acceptable range");
 			exitCommand = true;
@@ -31,7 +31,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 		requires(elevator);
     }
 	
-	public SetElevatorPositionCommand(Position position){
+	public SetElevatorPositionSlowCommand(Position position){
 		this(position.getTicks());
 	}
 
@@ -61,6 +61,13 @@ public class SetElevatorPositionCommand extends CommandBase {
 		if(ticksTraveled < targetPosition + acceptableError && ticksTraveled > targetPosition - acceptableError){
 			ticksBeforeFinished++;
 		}
+		double speedFactor = lerp(0.25, 1, 0, -10000, ticksTraveled);
+		if(speedFactor > 1){
+			speedFactor = 1;
+		}
+		else if(speedFactor < 0.25){
+			speedFactor = 0.25;
+		}
 		double motorOutput = elevatorPID.getMotorOutput(ticksTraveled);
 		if(movingUp){
 			motorOutput *= maxSpeedUp;
@@ -68,7 +75,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 		else{
 			motorOutput *= maxSpeedDown;
 		}
-        elevator.setConstantSpeed(motorOutput);
+        elevator.setConstantSpeed(motorOutput * speedFactor);
 	}
 
     @Override
@@ -76,11 +83,16 @@ public class SetElevatorPositionCommand extends CommandBase {
 		if(exitCommand){
 			return true;
 		}
-		if(ticksBeforeFinished >= 10){
+		if(ticksBeforeFinished >= 50){
 			elevator.setConstantSpeed(0);
 			return true;
 		}
 		return false;
+    }
+	
+	private double lerp(double a, double b, double a2, double b2, double c) {
+        double x = (c - a2) / (b2 - a2);
+        return x * b + (1 - x) * a;
     }
 	
 }

@@ -54,7 +54,18 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
         return instance;
     }
-
+	
+	public double getDisplacementTraveledMeters(){
+        // Get the absolute values of the positions of each of the motors and calculate the average
+        double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
+        double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
+        double averageRotationsTraveled =
+                (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
+        // Multiply the average rotations by the number of wheels per rotation to get the average
+        // distance traveled in meters
+        return averageRotationsTraveled * METERS_PER_ROTATION;
+	}
+	
     // A public getter for the distance traveled in meters
     public double getDistanceTraveledMeters() {
         // Get the absolute values of the positions of each of the motors and calculate the average

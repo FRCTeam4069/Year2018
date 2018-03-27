@@ -47,7 +47,7 @@ public class SplinePathGenerator {
 		return cumulativeRightWheelDistance;
 	}
 	
-	public void generateSpline(SplinePath splinePath){
+	public void generateSpline(SplinePath splinePath, double smoothnessFactor){
 		int startAngle = splinePath.startAngle;
 		int endAngle = splinePath.endAngle;
 		int weight = splinePath.angleWeight;
@@ -76,7 +76,7 @@ public class SplinePathGenerator {
 				t = 1.0 - i / (double)numPointsOnCurve;
 			}
 			DoublePoint point = spline.getSplinePosition(t);
-			pointsOnCurve[i] = new DoublePoint(point.x, point.y);
+			pointsOnCurve[i] = new DoublePoint(point.x / smoothnessFactor, point.y / smoothnessFactor);
 			if(i != 0){
 				Vector pointVector = new Vector(point.x, point.y);
 				Vector diff = pointVector.sub(new Vector(prevPoint.x, prevPoint.y));

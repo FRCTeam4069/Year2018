@@ -5,15 +5,13 @@ import java.util.ArrayList;
 public class SplinePathScaleRight extends SplinePath{
 	
 	public SplinePathScaleRight(){
-		super(270, 270, 250);
+		super(270, 300, 250);
 		ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
 		splinePoints.add(new DoublePoint(0.0, 0.0));
-		splinePoints.add(new DoublePoint(0, 2.081));
-		splinePoints.add(new DoublePoint(-0.015, 2.691));
-		splinePoints.add(new DoublePoint(-0.116, 3.516));
-		splinePoints.add(new DoublePoint(-0.218, 4.342));
-		splinePoints.add(new DoublePoint(-0.414, 5.18));
-		splinePoints.add(new DoublePoint(-0.903, 6.018));
+		splinePoints.add(new DoublePoint(1.6, 1.453));
+		splinePoints.add(new DoublePoint(2.5, 1.953));
+		splinePoints.add(new DoublePoint(2.6, 4.253));
+		splinePoints.add(new DoublePoint(2.3, 6.453));
 		super.points = splinePoints;
 	}
 	
