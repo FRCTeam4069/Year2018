@@ -6,16 +6,11 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem;
 
 public class OperatorControlElevatorCommand extends CommandBase {
 
-    // We use this as a latch when controlling the elevator
-    // If it's not set, then the drivers are actively controlling the elevator with the stick
-    // Otherwise we set the position with MM and flip it
-    private boolean set = true;
-	
-	private PID slowDownLowerPID, slowDownUpperPID;
-	
-	private double maxSpeedGoingUp = 0.7;
-	private double maxSpeedGoingDown = 0.4;
-	
+    private PID slowDownLowerPID, slowDownUpperPID;
+
+    private double maxSpeedGoingUp = 0.7;
+    private double maxSpeedGoingDown = 0.4;
+
     public OperatorControlElevatorCommand() {
 		slowDownLowerPID = new PID(0.0002, 0.0, 0.0);
 		slowDownLowerPID.setOutputCap(1.0);
@@ -35,7 +30,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
     protected void execute() {
         // Get the axis of the elevator, scale it down so that it's easier to control
         double elevatorAxis = Input.getElevatorAxis();
-		//System.out.println("Joystick axis: " + elevatorAxis);
+        //System.out.println("Joystick axis: " + elevatorAxis);
 
         // Scale it down more if we're in the bottom 50 centimeters
 		boolean limitSwitchPressed = elevator.isLimitSwitchPressed();
@@ -73,8 +68,8 @@ public class OperatorControlElevatorCommand extends CommandBase {
             elevator.setPosition(newPosition);
         }*/
     }
-	
-	private double lerp(double a, double b, double a2, double b2, double c) {
+
+    private double lerp(double a, double b, double a2, double b2, double c) {
         double x = (c - a2) / (b2 - a2);
         return x * b + (1 - x) * a;
     }

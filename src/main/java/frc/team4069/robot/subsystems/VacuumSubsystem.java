@@ -8,30 +8,32 @@ public class VacuumSubsystem extends SubsystemBase {
 
     private static VacuumSubsystem instance;
 
-    private TalonSRXMotor vacuumTalon;
-    //private Solenoid vacuumSolenoid;
-    private TalonSRXMotor vacuumSolenoid;
+    private TalonSRXMotor talon;
 
     private VacuumSubsystem() {
-        vacuumTalon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
-        //vacuumSolenoid = new Solenoid(IOMapping.VACUUM_SOLENOID_CAN_BUS, IOMapping.SOLENOID_CHANNEL);
-        vacuumSolenoid = new TalonSRXMotor(22);
+        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
+//        talon.config_kP(0, 1.0, 0);
+//        talon.config_kF(0, 0.9, 0);
+//        talon.configAllowableClosedloopError(0, 1000, 0);
     }
 
     public void start() {
-        vacuumTalon.set(ControlMode.PercentOutput, 1);
-        //vacuumSolenoid.set(true);
-        vacuumSolenoid.set(ControlMode.PercentOutput, 1.0);
+        talon.set(ControlMode.PercentOutput, 1);
+//        talon.set(ControlMode.Current, 13 * 30);
+    }
+
+    @Override
+    public void periodic() {
+        System.out.println("Current closed loop error " + talon.getClosedLoopError(0));
+        System.out.println("Vacuum Current " + talon.getOutputCurrent());
     }
 
     public void stop() {
-        vacuumTalon.stop();
-        //vacuumSolenoid.set(false);
-        vacuumSolenoid.set(ControlMode.PercentOutput, 0);
+        talon.stop();
     }
 
     public boolean isStarted() {
-        return vacuumTalon.isStarted();
+        return talon.isStarted();
     }
 
     public static VacuumSubsystem getInstance() {
@@ -44,6 +46,6 @@ public class VacuumSubsystem extends SubsystemBase {
 
     @Override
     public void reset() {
-        vacuumTalon.stop();
+        talon.stop();
     }
 }

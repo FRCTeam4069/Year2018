@@ -79,13 +79,13 @@ public class DriveBaseSubsystem extends SubsystemBase {
         // distance traveled in meters
         return averageRotationsTraveled * METERS_PER_ROTATION;
     }
-	
-	public double getDistanceTraveledMetersLeftWheel() {
+
+    public double getDistanceTraveledMetersLeftWheel() {
         double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
         return leftWheelRotationsTraveled * METERS_PER_ROTATION;
     }
-	
-	public double getDistanceTraveledMetersRightWheel() {
+
+    public double getDistanceTraveledMetersRightWheel() {
         double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
         return rightWheelRotationsTraveled * METERS_PER_ROTATION;
     }
@@ -102,6 +102,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 
     public void driveContinuousSpeed(double turn, double speed) {
+        // Invert steering if we're going backwards
+        if (speed < 0) {
+            turn = -turn;
+        }
+
         driveContinuousSpeed(turn, speed, false);
     }
 
@@ -113,7 +118,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
         }
         // Otherwise, use the regular algorithm
         else {
-            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.5, speed);
             driveFiltered(wheelSpeeds, auto);
         }
     }
@@ -128,11 +133,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
         leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
     }
-	
-	public void driveUnfiltered(double leftWheelSpeed, double rightWheelSpeed){
-		leftDrive.setConstantSpeed(leftWheelSpeed);
-		rightDrive.setConstantSpeed(rightWheelSpeed);
-	}
+
+    public void driveUnfiltered(double leftWheelSpeed, double rightWheelSpeed) {
+        leftDrive.setConstantSpeed(leftWheelSpeed);
+        rightDrive.setConstantSpeed(rightWheelSpeed);
+    }
 
     // Drive at the given wheel speeds, applying a low pass filter
     private void driveFiltered(WheelSpeeds speeds, boolean auto) {
