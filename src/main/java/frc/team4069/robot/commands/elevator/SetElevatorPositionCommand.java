@@ -57,7 +57,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 	
 	@Override
 	protected void execute(){
-		double ticksTraveled = elevator.getPositionTicks();
+		double ticksTraveled = elevator.getPosition();
 		if(ticksTraveled < targetPosition + acceptableError && ticksTraveled > targetPosition - acceptableError){
 			ticksBeforeFinished++;
 		}
