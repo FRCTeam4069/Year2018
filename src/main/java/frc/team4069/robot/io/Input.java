@@ -64,9 +64,6 @@ public class Input {
 		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
 		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217));
 		
-		Button driveForwardVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
-		driveForwardVacuum.whenPressed(new DriveForwardVacuumCommandGroup(0.5));
-		
         // Stop the vacuum when the start button is pressed
         Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());
@@ -81,9 +78,8 @@ public class Input {
         Button togglePrecisionMode = new JoystickButton(driveJoystick, IOMapping.BUTTON_START);
         togglePrecisionMode.whenPressed(new ToggleDrivePrecisionModeCommand());
 
-        Button winchBackwards = new JoystickButton(driveJoystick, IOMapping.BUTTON_B);
-        winchBackwards.whenPressed(new StartWinchCommand(true));
-        winchBackwards.whenReleased(new StopWinchCommand());
+        Button pickupCube = new JoystickButton(driveJoystick, IOMapping.BUTTON_B);
+        pickupCube.whenPressed(new DriveForwardVacuumCommandGroup(0.5));
 
     }
 

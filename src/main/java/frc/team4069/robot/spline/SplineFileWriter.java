@@ -11,6 +11,10 @@ public class SplineFileWriter{
 		SplinePathGenerator spg = path.getSpline();
 		for(int i = 0; i < spg.pointsOnCurve.length; i++){
 			DoublePoint current = spg.pointsOnCurve[i];
+			splineData += current.x + "," + current.y;
+			if(i != spg.pointsOnCurve.length - 1){
+				splineData += "\n";
+			}
 		}
 		byte[] bytes = splineData.getBytes();
 		try{

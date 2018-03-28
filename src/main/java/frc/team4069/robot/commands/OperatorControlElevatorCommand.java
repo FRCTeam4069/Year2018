@@ -23,7 +23,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
     @Override
     protected void initialize() {
-        elevator.reset();
+        
     }
 
     @Override

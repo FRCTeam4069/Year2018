@@ -2,7 +2,7 @@ package frc.team4069.robot.spline;
 
 import java.util.ArrayList;
 
-public abstract class SplinePath{
+public class SplinePath{
 	
 	private ArrayList<DoublePoint> points;
 	
@@ -46,6 +46,11 @@ public abstract class SplinePath{
 		splinePathTeleopExchangeFarSwitch = new SplinePathTeleopExchangeFarSwitch();
 		splinePathTeleopExchangeFarScale = new SplinePathTeleopExchangeFarScale();
 		splinePathTeleopScale = new SplinePathTeleopScale();
+	}
+	
+	public SplinePath(ArrayList<DoublePoint> data){
+		spg = new SplinePathGenerator(0.55);
+		spg.generateSpline(data);
 	}
 	
 	public SplinePath(ArrayList<DoublePoint> points, int startAngle, int endAngle, int angleWeight){
