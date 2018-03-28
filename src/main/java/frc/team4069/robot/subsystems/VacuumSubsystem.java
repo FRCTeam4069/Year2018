@@ -22,12 +22,6 @@ public class VacuumSubsystem extends SubsystemBase {
 //        talon.set(ControlMode.Current, 13 * 30);
     }
 
-    @Override
-    public void periodic() {
-        System.out.println("Current closed loop error " + talon.getClosedLoopError(0));
-        System.out.println("Vacuum Current " + talon.getOutputCurrent());
-    }
-
     public void stop() {
         talon.stop();
     }
