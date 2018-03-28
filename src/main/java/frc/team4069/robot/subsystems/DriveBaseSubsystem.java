@@ -12,7 +12,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // The lateral distance between the robot's wheels in meters
     public static final double ROBOT_TRACK_WIDTH_METERS = 0.6;
-    public static final double SLOW_SPEED = 0.2;
+    public static final double SLOW_SPEED = 0.5;
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
