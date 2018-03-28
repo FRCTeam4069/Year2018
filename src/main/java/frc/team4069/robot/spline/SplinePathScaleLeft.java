@@ -15,7 +15,7 @@ public class SplinePathScaleLeft extends SplinePath{
 		splinePoints.add(new DoublePoint(0.66, 5.001));
 		splinePoints.add(new DoublePoint(-2.1, 5.153));
 		splinePoints.add(new DoublePoint(-2.053, 6.452));
-		super.points = splinePoints;
+		super.setPoints(splinePoints);
 	}
 	
 }

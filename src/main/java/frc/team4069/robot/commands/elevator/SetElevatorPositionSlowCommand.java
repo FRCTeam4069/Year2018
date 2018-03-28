@@ -15,7 +15,7 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 	
 	private double targetPosition;
 	
-	private double maxSpeedUp = 0.8;
+	private double maxSpeedUp = 0.9;
 	private double maxSpeedDown = 0.4;
 	
 	private boolean exitCommand = false;
@@ -29,6 +29,11 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 		}
 		targetPosition = position;
 		requires(elevator);
+    }
+	
+	public SetElevatorPositionSlowCommand(double position, double upSpeed) {
+		this(position);
+		maxSpeedUp = upSpeed;
     }
 	
 	public SetElevatorPositionSlowCommand(Position position){

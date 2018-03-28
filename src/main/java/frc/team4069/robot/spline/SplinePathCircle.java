@@ -12,7 +12,7 @@ public class SplinePathCircle extends SplinePath{
 		splinePoints.add(new DoublePoint(-2.0, 0.0));
 		splinePoints.add(new DoublePoint(-1.0, -1.0));
 		splinePoints.add(new DoublePoint(0.0, 0.0));
-		super.points = splinePoints;
+		super.setPoints(splinePoints);
 	}
 	
 }

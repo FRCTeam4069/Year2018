@@ -12,7 +12,7 @@ public class SplinePathSwitchLeft extends SplinePath{
 		splinePoints.add(new DoublePoint(-0.972, 0.817));
 		splinePoints.add(new DoublePoint(-1.413, 1.284));
 		splinePoints.add(new DoublePoint(-1.528, 2.071));
-		super.points = splinePoints;
+		super.setPoints(splinePoints);
 	}
 	
 }

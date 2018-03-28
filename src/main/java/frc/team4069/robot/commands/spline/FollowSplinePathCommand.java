@@ -47,32 +47,42 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private double forwardVelocityCap = 3.0;
 	
-	private boolean moveForwards = true;
+	private int splineFinishedCounter = 25;
 	
-	public FollowSplinePathCommand(SplinePath path, boolean moveForwards){
+	public FollowSplinePathCommand(SplinePath path){
 		requires(driveBase);
-		this.moveForwards = moveForwards;
-		if(!moveForwards){
-			forwardVelocityCap *= -1;
-			absoluteMotorSpeed -= 0.1;
-		}
-		spline = new SplinePathGenerator(0.55, moveForwards);
-		spline.generateSpline(path, path.getSmoothnessFactor());
+		spline = path.getSpline();
 		leftPID = new PID(100, 0.0, 0.1);
 		rightPID = new PID(100, 0.0, 0.1);
-		if(!moveForwards){
-			gyroPID = new PID(0.5, 0.0, 0.1);
-			distancePID = new PID(30, 0.0, 1.0);
-		}
-		else{
-			gyroPID = new PID(0.5, 0.0, 0.1);
-			distancePID = new PID(15, 0.0, 1.0);
-		}
+		gyroPID = new PID(0.5, 0.0, 0.1);
+		distancePID = new PID(15, 0.0, 1.0);
 		distancePID.setOutputCap(Math.abs(forwardVelocityCap));
 		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
 		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
 		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+	}
+	
+	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter, double derivative, double speed){
+		requires(driveBase);
+		absoluteMotorSpeed = speed;
+		this.splineFinishedCounter = splineFinishedCounter;
+		spline = new SplinePathGenerator(0.55);
+		spline.generateSpline(path);
+		leftPID = new PID(100, 0.0, 0.1);
+		rightPID = new PID(100, 0.0, 0.1);
+		gyroPID = new PID(0.5, 0.0, 0.1);
+		distancePID = new PID(15, 0.0, derivative);
+		distancePID.setOutputCap(Math.abs(forwardVelocityCap));
+		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
+		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
+		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+	}
+	
+	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter){
+		this(path);
+		this.splineFinishedCounter = splineFinishedCounter;
 	}
 	
 	@Override
@@ -113,9 +123,6 @@ public class FollowSplinePathCommand extends CommandBase{
 			ticksWhileSplineFinished++;
 		}
 		distanceTravelledMeters = driveBase.getDisplacementTraveledMeters() - startDistance;
-		if(!moveForwards){
-			distanceTravelledMeters *= -1;
-		}
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
 		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
@@ -158,9 +165,6 @@ public class FollowSplinePathCommand extends CommandBase{
 			System.out.println("-----");
 		}
 		double forwardVelocity = distancePID.getMotorOutput(distanceTravelledMeters);
-		if(!moveForwards){
-			forwardVelocity *= -1;
-		}
 		double velocityRatio = forwardVelocity / forwardVelocityCap;
 		if(velocityRatio < 0){
 			motorValues *= -1;
@@ -188,7 +192,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	public boolean isFinished(){
-		return ticksWhileSplineFinished > 25;
+		return ticksWhileSplineFinished > splineFinishedCounter;
 	}
 	
 }

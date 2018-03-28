@@ -13,8 +13,13 @@ import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
+import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
+import frc.team4069.robot.commands.DriveForwardVacuumCommandGroup;
+import frc.team4069.robot.commands.ApproachScaleCommandGroup;
+import frc.team4069.robot.commands.InlineCommandGroup;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
 import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
+import frc.team4069.robot.spline.SplinePath;
 
 
 // Class that provides accessors for joystick inputs and maps them to commands
@@ -30,20 +35,38 @@ public class Input {
         controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
 
         // Map the elevator controls for scale, switch, and exchange
-        Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-        elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
-        Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-        elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
+        //Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
+        //elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
+        //Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
+        //elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
         // Run a special command group for elevator intake
-        Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-        elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
-        Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
-        elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
+        //Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
+        //elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
+        //Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+        //elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
 
-        Button startWinch = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
+        Button startWinch = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
         startWinch.whenPressed(new StartWinchCommand());
         startWinch.whenReleased(new StopWinchCommand());
-
+		
+		Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
+		splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitch), new ToggleDrivePrecisionModeCommand()));
+		
+		Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
+		splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(), new ToggleDrivePrecisionModeCommand()));
+		
+		Button splineToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
+		splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchange), new ToggleDrivePrecisionModeCommand()));
+		
+		Button splineToExchangeFarScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
+		splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScale), new ToggleDrivePrecisionModeCommand()));
+		
+		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217));
+		
+		Button driveForwardVacuum = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
+		driveForwardVacuum.whenPressed(new DriveForwardVacuumCommandGroup(0.5));
+		
         // Stop the vacuum when the start button is pressed
         Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         toggleVacuum.whenPressed(new ToggleVacuumCommand());

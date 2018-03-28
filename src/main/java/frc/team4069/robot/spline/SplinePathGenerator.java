@@ -24,11 +24,8 @@ public class SplinePathGenerator {
 	
 	private CubicSplineInterpolator spline;
 	
-	private boolean moveForwards;
-	
-	public SplinePathGenerator(double driveBaseWidth, boolean moveForwards){
+	public SplinePathGenerator(double driveBaseWidth){
 		this.driveBaseWidth = driveBaseWidth;
-		this.moveForwards = moveForwards;
 	}
 	
 	public int getNumPointsOnCurve(){
@@ -47,11 +44,11 @@ public class SplinePathGenerator {
 		return cumulativeRightWheelDistance;
 	}
 	
-	public void generateSpline(SplinePath splinePath, double smoothnessFactor){
+	public void generateSpline(SplinePath splinePath){
 		int startAngle = splinePath.startAngle;
 		int endAngle = splinePath.endAngle;
 		int weight = splinePath.angleWeight;
-		ArrayList<DoublePoint> points = splinePath.points;
+		ArrayList<DoublePoint> points = splinePath.getPoints();
 		double totalPathSize = 0;
 		for(int i = 1; i < points.size(); i++){
 			totalPathSize += new Vector(points.get(i).x, points.get(i).y).sub(new Vector(points.get(i-1).x, points.get(i-1).y)).length();
@@ -68,15 +65,9 @@ public class SplinePathGenerator {
 		DoublePoint prevPoint = null;
 		cumulativeRightWheelDistance = cumulativeLeftWheelDistance = 0;
 		for(int i = 0; i < numPointsOnCurve; i++){
-			double t;
-			if(moveForwards){
-				t = i / (double)numPointsOnCurve;
-			}
-			else{
-				t = 1.0 - i / (double)numPointsOnCurve;
-			}
+			double t = i / (double)numPointsOnCurve;
 			DoublePoint point = spline.getSplinePosition(t);
-			pointsOnCurve[i] = new DoublePoint(point.x / smoothnessFactor, point.y / smoothnessFactor);
+			pointsOnCurve[i] = new DoublePoint(point.x, point.y);
 			if(i != 0){
 				Vector pointVector = new Vector(point.x, point.y);
 				Vector diff = pointVector.sub(new Vector(prevPoint.x, prevPoint.y));

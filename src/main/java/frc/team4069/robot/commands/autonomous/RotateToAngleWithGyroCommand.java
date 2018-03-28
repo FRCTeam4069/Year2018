@@ -6,7 +6,7 @@ import frc.team4069.robot.commands.CommandBase;
 public class RotateToAngleWithGyroCommand extends CommandBase {
 
     // Max turn speed
-    private final double turnSpeedAbsolute = 0.7;
+    private double turnSpeedAbsolute = 0.7;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
     private final int counterThreshold = 10;
     // Timeout the command after this many milliseconds
@@ -35,7 +35,18 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     private double turningSpeed;
 
     //Note: relativeAngle can be negative or positive angle
-    public RotateToAngleWithGyroCommand(double relativeAngle) {
+    public RotateToAngleWithGyroCommand(double relativeAngle, double turnSpeed) {
+        requires(driveBase);
+		this.turnSpeedAbsolute = turnSpeed;
+        this.relativeAngle = relativeAngle;
+        if (this.relativeAngle > 180) {
+            this.relativeAngle -= 360;
+        } else if (this.relativeAngle < -180) {
+            this.relativeAngle += 360;
+        }
+    }
+	
+	public RotateToAngleWithGyroCommand(double relativeAngle) {
         requires(driveBase);
         this.relativeAngle = relativeAngle;
         if (this.relativeAngle > 180) {
@@ -44,7 +55,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
             this.relativeAngle += 360;
         }
     }
-
+	
     /**
      * Calculate relative gyro angle, accounting for jump from 360 to 0
      */
