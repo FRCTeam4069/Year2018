@@ -46,8 +46,8 @@ public class Input {
         startWinch.whenReleased(new StopWinchCommand());
 		
 		if(scaleSide == 'L' || AutonomousCommandGroup.gameInfo == null){
-			Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
-			splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(true), new ToggleDrivePrecisionModeCommand()));
+			//Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
+			//splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(true), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
 			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitchMirror), new ToggleDrivePrecisionModeCommand()));
@@ -59,8 +59,8 @@ public class Input {
 			splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScaleMirror, 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
 		}
 		else{
-			Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
-			splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(false), new ToggleDrivePrecisionModeCommand()));
+			//Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
+			//splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(false), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
 			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitch), new ToggleDrivePrecisionModeCommand()));

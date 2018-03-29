@@ -215,7 +215,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	public boolean isFinished(){
 		if(exitCommand){
 			exitCommand = false;
-			this.getGroup().cancel();
+			//this.getGroup().cancel();
 			return true;
 		}
 		return ticksWhileSplineFinished > splineFinishedCounter;
