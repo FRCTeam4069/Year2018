@@ -42,7 +42,9 @@ public class Robot extends IterativeRobot {
 
         // Initialize the subsystems
         CommandBase.init(this);
-
+		
+		Input.init();
+		
         // Get the scheduler
         scheduler = Scheduler.getInstance();
 
