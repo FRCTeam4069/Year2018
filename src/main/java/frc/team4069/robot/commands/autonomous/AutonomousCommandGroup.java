@@ -22,9 +22,12 @@ public class AutonomousCommandGroup extends CommandGroup {
     // reasonable default
     private final int gameDataTimeoutMilliseconds = 250;
 	
+	public static String gameInfo;
+	
     // Constructor that runs all necessary commands in parallel
     public AutonomousCommandGroup() {
 		String gameData = getGameData();
+		gameInfo = gameData;
 		char switchSide = gameData.charAt(0);
 		char scaleSide = gameData.charAt(1);
 		if(switchSide == 'R' && scaleSide == 'R'){
