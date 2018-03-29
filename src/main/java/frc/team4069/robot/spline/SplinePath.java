@@ -34,18 +34,34 @@ public class SplinePath{
 		splinePathCubeRight = new SplinePathCubeRight();
 		splinePathLL1 = new SplinePathLL1();
 		splinePathLL2 = new SplinePathLL2();
-		splinePathLR2 = new SplinePathLR2();
+		splinePathLR2 = new SplinePathLR2();*/
 		splinePathRL1 = new SplinePathRL1();
 		splinePathRL2 = new SplinePathRL2();
-		splinePathScaleLeft = new SplinePathScaleLeft();
-		splinePathScaleRight = new SplinePathScaleRight();
-		splinePathSwitchLeft = new SplinePathSwitchLeft();
-		splinePathSwitchLeftOld = new SplinePathSwitchLeftOld();
-		splinePathSwitchRight = new SplinePathSwitchRight();*/
+		//splinePathScaleLeft = new SplinePathScaleLeft();
+		//splinePathScaleRight = new SplinePathScaleRight();
+		//splinePathSwitchLeft = new SplinePathSwitchLeft();
+		//splinePathSwitchLeftOld = new SplinePathSwitchLeftOld();
+		//splinePathSwitchRight = new SplinePathSwitchRight();
 		splinePathTeleopExchange = new SplinePathTeleopExchange();
 		splinePathTeleopExchangeFarSwitch = new SplinePathTeleopExchangeFarSwitch();
 		splinePathTeleopExchangeFarScale = new SplinePathTeleopExchangeFarScale();
 		splinePathTeleopScale = new SplinePathTeleopScale();
+		/*SplineFileWriter.writeSpline("splinepathcircle", splinePathCircle);
+		SplineFileWriter.writeSpline("splinepathcubeleft", splinePathCubeLeft);
+		SplineFileWriter.writeSpline("splinepathcuberight", splinePathCubeRight);
+		SplineFileWriter.writeSpline("splinepathll1", splinePathLL1);
+		SplineFileWriter.writeSpline("splinepathll2", splinePathLL2);
+		SplineFileWriter.writeSpline("splinepathlr2", splinePathLR2);
+		SplineFileWriter.writeSpline("splinepathrl1", splinePathRL1);
+		SplineFileWriter.writeSpline("splinepathrl2", splinePathRL2);
+		SplineFileWriter.writeSpline("splinepathscaleleft", splinePathScaleLeft);
+		SplineFileWriter.writeSpline("splinepathswitchleft", splinePathSwitchLeft);
+		SplineFileWriter.writeSpline("splinepathswitchleftold", splinePathSwitchLeftOld);
+		SplineFileWriter.writeSpline("splinepathswitchright", splinePathSwitchRight);
+		SplineFileWriter.writeSpline("splinepathteleopexchange", splinePathTeleopExchange);
+		SplineFileWriter.writeSpline("splinepathteleopexchangefarswitch", splinePathTeleopExchangeFarSwitch);
+		SplineFileWriter.writeSpline("splinepathteleopexchangefarscale", splinePathTeleopExchangeFarScale);
+		SplineFileWriter.writeSpline("splinepathteleopscale", splinePathTeleopScale);*/
 	}
 	
 	public SplinePath(ArrayList<DoublePoint> data){

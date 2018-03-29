@@ -37,6 +37,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 		//System.out.println("Elevator limit switch: " + limitSwitchPressed);
 		//System.out.println(limitSwitchPressed);
 		double position = elevator.getPosition();
+		System.out.println("Elevator position: " + position);
 		double speedFactor = lerp(0.25, 1, 0, -10000, position);
 		if(speedFactor > 1){
 			speedFactor = 1;

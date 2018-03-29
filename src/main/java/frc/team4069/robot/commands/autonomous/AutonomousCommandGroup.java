@@ -45,16 +45,16 @@ public class AutonomousCommandGroup extends CommandGroup {
 		else if(switchSide == 'R' && scaleSide == 'L'){
 			SplinePath path = SplinePath.splinePathRL1;
 			SplinePath path2 = SplinePath.splinePathRL2;
-			addSequential(new FollowSplinePathCommand(path, 50, 3.0, 0.8));
+			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
 			addSequential(new RotateToAngleWithGyroCommand(-90));
 			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
-			addSequential(new SetElevatorPositionCommand(-10000));
+			addSequential(new SetElevatorPositionCommand(-13000));
 			addSequential(new StartVacuumCommand());
 			addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
 			addSequential(new SetElevatorPositionCommand(0));
-			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
-			addSequential(new RotateToAngleWithGyroCommand(90, 0.6));
-			addParallel(new RunWithDelayCommand(500, new FollowSplinePathCommand(path2)));
+			addSequential(new DriveStraightForDistanceCommand(0.2, 0.5));
+			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
+			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
 			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
 			addSequential(new StopVacuumCommand());
 		}

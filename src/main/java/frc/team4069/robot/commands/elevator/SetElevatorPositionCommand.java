@@ -49,7 +49,7 @@ public class SetElevatorPositionCommand extends CommandBase {
 			elevatorPID = new PID(0.0002, 0.00001, 0.0000005);
 		}
 		else{
-			elevatorPID = new PID(0.0001, 0.00001, 0.0000005);
+			elevatorPID = new PID(0.0002, 0.00001, 0.0000005);
 		}
 		elevatorPID.setOutputCap(1.0);
 		elevatorPID.setTarget(targetPosition);

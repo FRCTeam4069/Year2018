@@ -1,6 +1,8 @@
 package frc.team4069.robot.commands.autonomous;
 
 import frc.team4069.robot.commands.CommandBase;
+import frc.team4069.robot.Robot;
+import frc.team4069.robot.io.Input;
 
 public class DriveStraightForDistanceCommand extends CommandBase {
 
@@ -17,6 +19,8 @@ public class DriveStraightForDistanceCommand extends CommandBase {
     private long prevTime = currentTime;
     private double currentDistance = 0;
     private double prevDistance = currentDistance;
+	
+	private boolean exitCommand = false;
 
     public DriveStraightForDistanceCommand(double distanceMeters, double speed) {
         requires(driveBase);
@@ -35,6 +39,9 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 
     @Override
     protected void execute() {
+		if(Robot.getOperatorControl() && (Math.abs(Input.getDriveSpeed()) > 0.1 || Math.abs(Input.getElevatorAxis()) > 0.1)){
+			exitCommand = true;
+		}
         prevDistance = currentDistance;
         currentDistance = driveBase.getDisplacementTraveledMeters();
         prevTime = currentTime;
@@ -72,6 +79,10 @@ public class DriveStraightForDistanceCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
+		if(exitCommand){
+			this.getGroup().cancel();
+			return true;
+		}
         return inRangeCounter >= counterThreshold;
     }
 

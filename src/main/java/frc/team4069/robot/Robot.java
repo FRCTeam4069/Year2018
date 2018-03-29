@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
     private long mLastDashboardUpdateTime = 0;
 
     private Scheduler scheduler;
+	
+	private static boolean isOperatorControl;
 
     @Override
     public void robotInit() {
@@ -73,6 +75,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         super.autonomousInit();
+		isOperatorControl = false;
         // Run the autonomous command group, which handles driving, elevator, and vacuum control
         scheduler.add(new AutonomousCommandGroup());
     }
@@ -80,6 +83,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         super.teleopInit();
+		isOperatorControl = true;
         // Remove all commands from the scheduler so no autonomous tasks continue running
         scheduler.removeAll();
         // Add an operator control command group to the scheduler, which should never exit
@@ -113,6 +117,10 @@ public class Robot extends IterativeRobot {
         super.teleopPeriodic();
         universalPeriodic();
     }
+	
+	public static boolean getOperatorControl(){
+		return isOperatorControl;
+	}
 
     // Update smart dashboard every 1 second
     private void sendDataToSmartDashboard() {

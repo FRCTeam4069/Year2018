@@ -7,6 +7,8 @@ import frc.team4069.robot.spline.DoublePoint;
 import frc.team4069.robot.spline.Vector;
 import frc.team4069.robot.spline.SplinePath;
 import frc.team4069.robot.motors.PID;
+import frc.team4069.robot.io.Input;
+import frc.team4069.robot.Robot;
 import java.util.ArrayList;
 
 public class FollowSplinePathCommand extends CommandBase{
@@ -49,18 +51,25 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	private int splineFinishedCounter = 25;
 	
+	private boolean exitCommand = false;
+	
 	public FollowSplinePathCommand(SplinePath path){
 		requires(driveBase);
-		spline = path.getSpline();
-		leftPID = new PID(100, 0.0, 0.1);
-		rightPID = new PID(100, 0.0, 0.1);
-		gyroPID = new PID(0.5, 0.0, 0.1);
-		distancePID = new PID(15, 0.0, 1.0);
-		distancePID.setOutputCap(Math.abs(forwardVelocityCap));
-		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
-		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
-		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
-		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+		if(path != null){
+			spline = path.getSpline();
+			leftPID = new PID(100, 0.0, 0.1);
+			rightPID = new PID(100, 0.0, 0.1);
+			gyroPID = new PID(0.5, 0.0, 0.1);
+			distancePID = new PID(15, 0.0, 1.0);
+			distancePID.setOutputCap(Math.abs(forwardVelocityCap));
+			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
+			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+			gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
+			distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+		}
+		else{
+			exitCommand = true;
+		}
 	}
 	
 	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter, double derivative, double speed){
@@ -113,6 +122,9 @@ public class FollowSplinePathCommand extends CommandBase{
 	protected void execute(){
 		prevGyroscope = currentGyroscope;
         currentGyroscope = calculateDelta();
+		if(Robot.getOperatorControl() && (Math.abs(Input.getDriveSpeed()) > 0.1 || Math.abs(Input.getElevatorAxis()) > 0.1)){
+			exitCommand = true;
+		}
 		// Detect jump between 0 and 360 and adjust angle accumulator accordingly
         if (currentGyroscope - prevGyroscope > 180) {
             angleAccumulator -= 360.0;
@@ -192,6 +204,10 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	public boolean isFinished(){
+		if(exitCommand){
+			this.getGroup().cancel();
+			return true;
+		}
 		return ticksWhileSplineFinished > splineFinishedCounter;
 	}
 	
