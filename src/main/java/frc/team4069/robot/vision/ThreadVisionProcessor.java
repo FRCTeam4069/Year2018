@@ -77,7 +77,7 @@ public class ThreadVisionProcessor implements Runnable {
         yLowPass = new LowPassFilter(50);
 
         // Power cube colors (approximate placeholder, not tested)
-        cregions.addRange(0x50, 0x50, 0x00, 0xe0, 0xe0, 0x30);
+        cregions.addRange(120, 120, 50, 255, 255, 255);
 
         while (!mExitThread) {
             if (mProcessFrames) {
