@@ -70,6 +70,7 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
         SmartDashboard.putBoolean("Vacuum enabled", false);
+        SmartDashboard.putBoolean("Vacuum sealed", false);
     }
 
     @Override
@@ -98,6 +99,7 @@ public class Robot extends IterativeRobot {
         DriveBaseSubsystem.getInstance().reset();
         VacuumSubsystem.getInstance().reset();
         WinchSubsystem.getInstance().reset();
+
     }
 
     // During all phases, run the command scheduler
