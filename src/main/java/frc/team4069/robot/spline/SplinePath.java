@@ -14,7 +14,7 @@ public class SplinePath{
 	public static SplinePath splinePathCubeLeft;
 	public static SplinePath splinePathCubeRight;
 	public static SplinePath splinePathLL1;
-	public static SplinePath splinePathLL2;
+	public static SplinePath splinePathLR1;
 	public static SplinePath splinePathLR2;
 	public static SplinePath splinePathRL1;
 	public static SplinePath splinePathRL2;
@@ -32,9 +32,9 @@ public class SplinePath{
 		//splinePathCircle = new SplinePathCircle();
 		//splinePathCubeLeft = new SplinePathCubeLeft();
 		//splinePathCubeRight = new SplinePathCubeRight();
-		splinePathLL1 = new SplinePathLL1();
-		splinePathLL2 = new SplinePathLL2();
-		//splinePathLR2 = new SplinePathLR2();
+		//splinePathLL1 = new SplinePathLL1();
+		splinePathLR1 = new SplinePathLR1();
+		splinePathLR2 = new SplinePathLR2();
 		//splinePathRL1 = new SplinePathRL1();
 		//splinePathRL2 = new SplinePathRL2();
 		//splinePathScaleLeft = new SplinePathScaleLeft();
@@ -50,7 +50,6 @@ public class SplinePath{
 		SplineFileWriter.writeSpline("splinepathcubeleft", splinePathCubeLeft);
 		SplineFileWriter.writeSpline("splinepathcuberight", splinePathCubeRight);
 		SplineFileWriter.writeSpline("splinepathll1", splinePathLL1);
-		SplineFileWriter.writeSpline("splinepathll2", splinePathLL2);
 		SplineFileWriter.writeSpline("splinepathlr2", splinePathLR2);
 		SplineFileWriter.writeSpline("splinepathrl1", splinePathRL1);
 		SplineFileWriter.writeSpline("splinepathrl2", splinePathRL2);
