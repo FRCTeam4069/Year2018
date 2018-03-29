@@ -19,7 +19,7 @@ public class ApproachScaleCommandGroup extends CommandGroup {
 	
 	public ApproachScaleCommandGroup(){
 		addSequential(new SetElevatorPositionSlowCommand(-20000, 0.7));
-		addSequential(new FollowSplinePathCommand(SplinePath.splinePathTeleopScale, 50, 3.0, 0.7));
+		addSequential(new FollowSplinePathCommand(SplinePath.splinePathTeleopScaleMirror, 50, 3.0, 0.7));
 	}
 	
 }

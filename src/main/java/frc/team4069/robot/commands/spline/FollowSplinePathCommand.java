@@ -74,19 +74,23 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter, double derivative, double speed){
 		requires(driveBase);
-		absoluteMotorSpeed = speed;
-		this.splineFinishedCounter = splineFinishedCounter;
-		spline = new SplinePathGenerator(0.55);
-		spline.generateSpline(path);
-		leftPID = new PID(100, 0.0, 0.1);
-		rightPID = new PID(100, 0.0, 0.1);
-		gyroPID = new PID(0.5, 0.0, 0.1);
-		distancePID = new PID(15, 0.0, derivative);
-		distancePID.setOutputCap(Math.abs(forwardVelocityCap));
-		leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
-		rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
-		gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
-		distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+		if(path != null){
+			absoluteMotorSpeed = speed;
+			this.splineFinishedCounter = splineFinishedCounter;
+			spline = path.getSpline();
+			leftPID = new PID(100, 0.0, 0.1);
+			rightPID = new PID(100, 0.0, 0.1);
+			gyroPID = new PID(0.5, 0.0, 0.1);
+			distancePID = new PID(15, 0.0, derivative);
+			distancePID.setOutputCap(Math.abs(forwardVelocityCap));
+			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
+			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
+			gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
+			distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+		}
+		else{
+			exitCommand = true;
+		}
 	}
 	
 	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter){
@@ -100,6 +104,11 @@ public class FollowSplinePathCommand extends CommandBase{
 		startDistance = driveBase.getDisplacementTraveledMeters();
 		startDistanceLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel();
 		startDistanceRightWheel = driveBase.getDistanceTraveledMetersRightWheel();
+		splinePosition = 1;
+		targetSplinePosition = splinePositionFollowDistance;
+		ticksWhileSplineFinished = 0;
+		angleAccumulator = 0;
+		splineAngleAccumulator = 0.0;
 	}
 	
 	 /**
@@ -205,6 +214,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	@Override
 	public boolean isFinished(){
 		if(exitCommand){
+			exitCommand = false;
 			this.getGroup().cancel();
 			return true;
 		}

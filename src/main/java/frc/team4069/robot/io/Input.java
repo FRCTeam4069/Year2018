@@ -33,33 +33,22 @@ public class Input {
         // Create the joysticks using the port numbers
         driveJoystick = new XboxController(IOMapping.DRIVE_JOYSTICK);
         controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
-
-        // Map the elevator controls for scale, switch, and exchange
-        //Button elevatorToSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-        //elevatorToSwitch.whenPressed(new SetElevatorPositionCommand(Position.SWITCH));
-        //Button elevatorToScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-        //elevatorToScale.whenPressed(new SetElevatorPositionCommand(Position.SCALE));
-        // Run a special command group for elevator intake
-        //Button elevatorToIntake = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-        //elevatorToIntake.whenPressed(new ElevatorIntakeCommandGroup());
-        //Button elevatorToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
-        //elevatorToExchange.whenPressed(new SetElevatorPositionCommand(Position.EXCHANGE));
-
+		
         Button startWinch = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
         startWinch.whenPressed(new StartWinchCommand());
         startWinch.whenReleased(new StopWinchCommand());
 		
 		Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-		splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitch), new ToggleDrivePrecisionModeCommand()));
+		splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitchMirror), new ToggleDrivePrecisionModeCommand()));
 		
 		Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
 		splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(), new ToggleDrivePrecisionModeCommand()));
 		
 		Button splineToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-		splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchange), new ToggleDrivePrecisionModeCommand()));
+		splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeMirror), new ToggleDrivePrecisionModeCommand()));
 		
 		Button splineToExchangeFarScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-		splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScale), new ToggleDrivePrecisionModeCommand()));
+		splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScaleMirror, 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
 		
 		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
 		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217));
