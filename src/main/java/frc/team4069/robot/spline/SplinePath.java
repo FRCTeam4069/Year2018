@@ -29,14 +29,14 @@ public class SplinePath{
 	public static SplinePath splinePathTeleopScale;
 	
 	static{
-		/*splinePathCircle = new SplinePathCircle();
-		splinePathCubeLeft = new SplinePathCubeLeft();
-		splinePathCubeRight = new SplinePathCubeRight();
+		//splinePathCircle = new SplinePathCircle();
+		//splinePathCubeLeft = new SplinePathCubeLeft();
+		//splinePathCubeRight = new SplinePathCubeRight();
 		splinePathLL1 = new SplinePathLL1();
 		splinePathLL2 = new SplinePathLL2();
-		splinePathLR2 = new SplinePathLR2();*/
-		splinePathRL1 = new SplinePathRL1();
-		splinePathRL2 = new SplinePathRL2();
+		//splinePathLR2 = new SplinePathLR2();
+		//splinePathRL1 = new SplinePathRL1();
+		//splinePathRL2 = new SplinePathRL2();
 		//splinePathScaleLeft = new SplinePathScaleLeft();
 		//splinePathScaleRight = new SplinePathScaleRight();
 		//splinePathSwitchLeft = new SplinePathSwitchLeft();

@@ -75,15 +75,17 @@ public class AutonomousCommandGroup extends CommandGroup {
 		else{
 			SplinePath path = SplinePath.splinePathLL1;
 			SplinePath path2 = SplinePath.splinePathLL2;
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetElevatorPositionCommand(-10000));
+			addSequential(new FollowSplinePathCommand(path, 30, 3.0, 0.8));
+			addSequential(new RotateToAngleWithGyroCommand(-90));
+			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
+			addSequential(new SetElevatorPositionCommand(-13000));
 			addSequential(new StartVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new DriveStraightForDistanceCommand(-0.35, 0.5));
-			addSequential(new DriveStraightForDistanceCommand(0.1, 0.5));
+			addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
+			addSequential(new SetElevatorPositionCommand(0));
+			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
 			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
-			addParallel(new SetElevatorPositionSlowCommand(-29000));
-			addSequential(new FollowSplinePathCommand(path2));
+			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
+			addSequential(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
 			addSequential(new StopVacuumCommand());
 		}
     }
