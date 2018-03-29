@@ -31,8 +31,8 @@ public class Input {
 
     // Initializer that handles mapping of the joysticks to commands
     public static void init() {
-		char switchSide;
-		char scaleSide;
+		char switchSide = ' ';
+		char scaleSide = ' ';
 		if(AutonomousCommandGroup.gameInfo != null){
 			switchSide = AutonomousCommandGroup.gameInfo.charAt(0);
 			scaleSide = AutonomousCommandGroup.gameInfo.charAt(1);
