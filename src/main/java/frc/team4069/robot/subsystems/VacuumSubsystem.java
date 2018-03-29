@@ -23,7 +23,6 @@ public class VacuumSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Vacuum current " + talon.getOutputCurrent());
         SmartDashboard.putBoolean("Vacuum sealed", talon.getOutputCurrent() > VacuumSubsystem.SEALED_CUTOFF);
     }
 
