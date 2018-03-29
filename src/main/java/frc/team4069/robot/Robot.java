@@ -43,9 +43,6 @@ public class Robot extends IterativeRobot {
         // Initialize the subsystems
         CommandBase.init(this);
 
-        // Set up the input class
-        Input.init();
-
         // Get the scheduler
         scheduler = Scheduler.getInstance();
 
@@ -84,6 +81,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         super.teleopInit();
+		Input.init();
 		isOperatorControl = true;
         // Remove all commands from the scheduler so no autonomous tasks continue running
         scheduler.removeAll();

@@ -13,7 +13,7 @@ public class SplineFileWriter{
 			DoublePoint current = spg.pointsOnCurve[i];
 			splineData += current.x + "," + current.y;
 			if(i != spg.pointsOnCurve.length - 1){
-				splineData += "\n";
+				splineData += "\r\n";
 			}
 		}
 		byte[] bytes = splineData.getBytes();

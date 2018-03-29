@@ -4,6 +4,7 @@ import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.motors.PID;
+import frc.team4069.robot.io.Input;
 
 public class SetElevatorPositionSlowCommand extends CommandBase {
 	
@@ -19,8 +20,12 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 	private double maxSpeedDown = 0.4;
 	
 	private boolean exitCommand = false;
+	private boolean cancelCommand = false;
 	
 	private boolean movingUp;
+	
+	private boolean exitOnInput;
+	private boolean cancelOnInput;
 	
     public SetElevatorPositionSlowCommand(double position) {
 		if(position > 0 || position < ElevatorSubsystem.MAX_POSITION_TICKS){
@@ -28,6 +33,29 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 			exitCommand = true;
 		}
 		targetPosition = position;
+		requires(elevator);
+    }
+	
+	public SetElevatorPositionSlowCommand(double position, boolean exitOnInput, boolean cancelOnInput) {
+		if(position > 0 || position < ElevatorSubsystem.MAX_POSITION_TICKS){
+			System.out.println("Error: position is not in acceptable range");
+			exitCommand = true;
+		}
+		this.exitOnInput = exitOnInput;
+		this.cancelOnInput = cancelOnInput;
+		targetPosition = position;
+		requires(elevator);
+    }
+	
+	public SetElevatorPositionSlowCommand(double position, double upSpeed, boolean exitOnInput, boolean cancelOnInput) {
+		if(position > 0 || position < ElevatorSubsystem.MAX_POSITION_TICKS){
+			System.out.println("Error: position is not in acceptable range");
+			exitCommand = true;
+		}
+		this.exitOnInput = exitOnInput;
+		this.cancelOnInput = cancelOnInput;
+		targetPosition = position;
+		maxSpeedUp = upSpeed;
 		requires(elevator);
     }
 	
@@ -63,6 +91,14 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 	@Override
 	protected void execute(){
 		double ticksTraveled = elevator.getPosition();
+		if(Math.abs(Input.getElevatorAxis()) > 0.1){
+			if(exitOnInput){
+				exitCommand = true;
+			}
+			if(cancelOnInput){
+				cancelCommand = true;
+			}
+		}
 		if(ticksTraveled < targetPosition + acceptableError && ticksTraveled > targetPosition - acceptableError){
 			ticksBeforeFinished++;
 		}
@@ -85,6 +121,10 @@ public class SetElevatorPositionSlowCommand extends CommandBase {
 
     @Override
     protected boolean isFinished() {
+		if(cancelCommand){
+			this.getGroup().cancel();
+			return true;
+		}
 		if(exitCommand){
 			return true;
 		}
