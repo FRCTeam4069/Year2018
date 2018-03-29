@@ -31,8 +31,12 @@ public class Input {
 
     // Initializer that handles mapping of the joysticks to commands
     public static void init() {
-		char switchSide = AutonomousCommandGroup.gameInfo.charAt(0);
-		char scaleSide = AutonomousCommandGroup.gameInfo.charAt(1);
+		char switchSide;
+		char scaleSide;
+		if(AutonomousCommandGroup.gameInfo != null){
+			switchSide = AutonomousCommandGroup.gameInfo.charAt(0);
+			scaleSide = AutonomousCommandGroup.gameInfo.charAt(1);
+		}
         // Create the joysticks using the port numbers
         driveJoystick = new XboxController(IOMapping.DRIVE_JOYSTICK);
         controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
@@ -41,7 +45,7 @@ public class Input {
         startWinch.whenPressed(new StartWinchCommand());
         startWinch.whenReleased(new StopWinchCommand());
 		
-		if(scaleSide == 'L'){
+		if(scaleSide == 'L' || AutonomousCommandGroup.gameInfo == null){
 			Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
 			splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(true), new ToggleDrivePrecisionModeCommand()));
 			
