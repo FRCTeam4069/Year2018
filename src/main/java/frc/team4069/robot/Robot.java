@@ -94,7 +94,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         // Reset the state of the elevator subsystem so that it doesn't take off when next we enable
-        ElevatorSubsystem.getInstance().reset();
+        //ElevatorSubsystem.getInstance().reset();
         ArmSubsystem.getInstance().reset();
         DriveBaseSubsystem.getInstance().reset();
         VacuumSubsystem.getInstance().reset();
