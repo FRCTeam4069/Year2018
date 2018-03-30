@@ -55,6 +55,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	public FollowSplinePathCommand(SplinePath path){
 		requires(driveBase);
+		System.out.println("FOLLOW SPLINE PATH COMMAND START");
 		if(path != null){
 			spline = path.getSpline();
 			leftPID = new PID(100, 0.0, 0.1);
@@ -74,6 +75,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	public FollowSplinePathCommand(SplinePath path, int splineFinishedCounter, double derivative, double speed){
 		requires(driveBase);
+		System.out.println("FOLLOW SPLINE PATH COMMAND START");
 		if(path != null){
 			absoluteMotorSpeed = speed;
 			this.splineFinishedCounter = splineFinishedCounter;

@@ -30,6 +30,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 		gameInfo = gameData;
 		char switchSide = gameData.charAt(0);
 		char scaleSide = gameData.charAt(1);
+		addSequential(new StartVacuumCommand());
 		if(switchSide == 'R' && scaleSide == 'R'){
 			SplinePath path = SplinePath.splinePathSwitchRight;
 			addParallel(new RunWithDelayCommand(2500, new SetElevatorPositionCommand(-10000)));
