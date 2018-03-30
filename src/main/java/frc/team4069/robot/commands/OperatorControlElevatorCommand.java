@@ -8,7 +8,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
     private PID slowDownLowerPID, slowDownUpperPID;
 
-    private double maxSpeedGoingUp = 0.7;
+    private double maxSpeedGoingUp = 0.5;
     private double maxSpeedGoingDown = 0.4;
 
     public OperatorControlElevatorCommand() {

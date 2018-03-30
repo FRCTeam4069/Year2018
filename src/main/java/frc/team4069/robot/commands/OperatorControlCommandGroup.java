@@ -9,8 +9,8 @@ public class OperatorControlCommandGroup extends CommandGroup {
     // Constructor that runs all necessary commands in parallel
     public OperatorControlCommandGroup() {
         // Add the command for driving
-		addParallel(new StartVacuumCommand());
         addParallel(new OperatorDriveCommand());
+		addParallel(new OperatorControlIntakeCommand());
         addParallel(new OperatorControlElevatorCommand());
     }
 

@@ -11,6 +11,7 @@ import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
+import frc.team4069.robot.commands.vacuum.SetVacuumSpeedCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
@@ -76,8 +77,13 @@ public class Input {
 		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217, true, false));
 		
         // Stop the vacuum when the start button is pressed
-        Button toggleVacuum = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
-        toggleVacuum.whenPressed(new ToggleVacuumCommand());
+        /*Button vacuumForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
+        vacuumForward.whenPressed(new SetVacuumSpeedCommand(0.5));
+		vacuumForward.whenReleased(new SetVacuumSpeedCommand(0.0));
+		
+		Button vacuumBackward = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
+        vacuumBackward.whenPressed(new SetVacuumSpeedCommand(-0.5));
+		vacuumBackward.whenReleased(new SetVacuumSpeedCommand(0.0));*/
 
         Button armDown = new JoystickButton(driveJoystick, IOMapping.BUTTON_A);
         armDown.whenPressed(new StartArmCommand(true));
@@ -132,7 +138,13 @@ public class Input {
         double backwardMotion = -driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
         return backwardMotion + forwardMotion;
     }
-
+	
+	public static double getIntakeSpeed() {
+        double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS) > 0.6 ? 1 : 0;
+        double backwardMotion = driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS) < -0.6 ? -1 : 0;
+        return backwardMotion + forwardMotion;
+    }
+	
     public static boolean getDebugPressed() {
         return driveJoystick.getAButton();
     }

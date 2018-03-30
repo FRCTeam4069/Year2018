@@ -2,7 +2,6 @@ package frc.team4069.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionSlowCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
@@ -30,6 +29,8 @@ public class AutonomousCommandGroup extends CommandGroup {
 		gameInfo = gameData;
 		char switchSide = gameData.charAt(0);
 		char scaleSide = gameData.charAt(1);
+		/*addSequential(new DelayCommand(11000));
+		addSequential(new DriveStraightForDistanceCommand(4, 0.6));*/
 		addSequential(new StartVacuumCommand());
 		if(switchSide == 'R' && scaleSide == 'R'){
 			SplinePath path = SplinePath.splinePathSwitchRight;
@@ -56,7 +57,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			addSequential(new StartVacuumCommand());
 			addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
 			addSequential(new SetElevatorPositionCommand(0));
-			addSequential(new DriveStraightForDistanceCommand(0.2, 0.5));
+			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
 			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
 			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
 			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
@@ -72,7 +73,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			addSequential(new StartVacuumCommand());
 			addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
 			addSequential(new SetElevatorPositionCommand(0));
-			addSequential(new DriveStraightForDistanceCommand(0.2, 0.5));
+			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
 			addSequential(new RotateToAngleWithGyroCommand(-90, 0.7));
 			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
 			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));

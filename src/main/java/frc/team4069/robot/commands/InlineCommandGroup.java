@@ -3,7 +3,6 @@ package frc.team4069.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionSlowCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;

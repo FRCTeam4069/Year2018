@@ -14,9 +14,13 @@ public class VacuumSubsystem extends SubsystemBase {
     private TalonSRXMotor talon;
 
     private VacuumSubsystem() {
-        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true);
+        talon = new TalonSRXMotor(IOMapping.VACUUM_CAN_BUS, true, 21);
     }
-
+	
+	public void setConstantSpeed(double speed){
+		talon.set(ControlMode.PercentOutput, speed);
+	}
+	
     public void start() {
         talon.set(ControlMode.PercentOutput, 1);
     }

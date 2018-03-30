@@ -6,6 +6,8 @@ public class SplinePath{
 	
 	private ArrayList<DoublePoint> points;
 	
+	private static boolean shouldGenerate = false;
+	
 	public int startAngle, endAngle, angleWeight;
 	
 	private SplinePathGenerator spg;
@@ -108,7 +110,13 @@ public class SplinePath{
 	}
 	
 	static{
-		readSplines();
+		if(shouldGenerate){
+			generateSplines();
+			writeSplines();
+		}
+		else{
+			readSplines();
+		}
 	}
 	
 	public SplinePath(ArrayList<DoublePoint> data){
@@ -162,7 +170,9 @@ public class SplinePath{
 	
 	private void generate(){
 		spg = new SplinePathGenerator(0.55);
-		//spg.generateSpline(this);
+		if(shouldGenerate){
+			spg.generateSpline(this);
+		}
 	}
 	
 	protected void setPoints(ArrayList<DoublePoint> points){

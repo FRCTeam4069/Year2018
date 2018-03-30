@@ -114,7 +114,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.6);
+            rotate(turn * 0.8);
         }
         // Otherwise, use the regular algorithm
         else {
