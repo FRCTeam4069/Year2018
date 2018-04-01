@@ -29,9 +29,27 @@ public class AutonomousCommandGroup extends CommandGroup {
 		gameInfo = gameData;
 		char switchSide = gameData.charAt(0);
 		char scaleSide = gameData.charAt(1);
+		if(switchSide == 'R'){
+			SplinePath path = SplinePath.splinePathRL1;
+			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
+			addSequential(new RotateToAngleWithGyroCommand(-90));
+			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(-13000));
+			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(0));
+		}
+		else if(switchSide == 'L'){
+			SplinePath path = SplinePath.splinePathLR1;
+			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
+			addSequential(new RotateToAngleWithGyroCommand(90));
+			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(-13000));
+			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(0));
+		}
 		/*addSequential(new DelayCommand(11000));
 		addSequential(new DriveStraightForDistanceCommand(4, 0.6));*/
-		addSequential(new StartVacuumCommand());
+		/*addSequential(new StartVacuumCommand());
 		if(switchSide == 'R' && scaleSide == 'R'){
 			SplinePath path = SplinePath.splinePathSwitchRight;
 			addParallel(new RunWithDelayCommand(2500, new SetElevatorPositionCommand(-10000)));
@@ -93,7 +111,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			addParallel(new SetElevatorPositionSlowCommand(-29000));
 			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.75, 0.6)));
 			addSequential(new StopVacuumCommand());
-		}
+		}*/
     }
 
 	private String getGameData(){

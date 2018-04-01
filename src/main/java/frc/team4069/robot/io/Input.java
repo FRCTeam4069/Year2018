@@ -140,9 +140,9 @@ public class Input {
     }
 	
 	public static double getIntakeSpeed() {
-        double forwardMotion = driveJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS) > 0.6 ? 1 : 0;
-        double backwardMotion = driveJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS) < -0.6 ? -1 : 0;
-        return backwardMotion + forwardMotion;
+        double forwardMotion = controlJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
+        double backwardMotion = -controlJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
+        return -(backwardMotion + forwardMotion);
     }
 	
     public static boolean getDebugPressed() {

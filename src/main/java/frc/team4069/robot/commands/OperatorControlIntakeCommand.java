@@ -4,6 +4,8 @@ import frc.team4069.robot.io.Input;
 
 public class OperatorControlIntakeCommand extends CommandBase {
 	
+	private double absoluteIntakeSpeed = 1.0;
+	
     public OperatorControlIntakeCommand() {
         requires(vacuum);
     }
@@ -15,7 +17,7 @@ public class OperatorControlIntakeCommand extends CommandBase {
 
     @Override
     protected void execute() {
-		vacuum.setConstantSpeed(Input.getIntakeSpeed());
+		vacuum.setConstantSpeed(Input.getIntakeSpeed() * absoluteIntakeSpeed);
     }
 
     private double lerp(double a, double b, double a2, double b2, double c) {
