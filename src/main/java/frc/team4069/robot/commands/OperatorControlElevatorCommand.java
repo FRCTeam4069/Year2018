@@ -8,7 +8,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 
     private PID slowDownLowerPID, slowDownUpperPID;
 
-    private double maxSpeedGoingUp = 0.5;
+    private double maxSpeedGoingUp = 1.0;
     private double maxSpeedGoingDown = 0.4;
 
     public OperatorControlElevatorCommand() {
@@ -36,7 +36,7 @@ public class OperatorControlElevatorCommand extends CommandBase {
 		boolean limitSwitchPressed = elevator.isLimitSwitchPressed();
 		//System.out.println("Elevator limit switch: " + limitSwitchPressed);
 		//System.out.println(limitSwitchPressed);
-		/*double position = elevator.getPosition();
+		double position = elevator.getPosition();
 		System.out.println("Elevator position: " + position);
 		double speedFactor = 1;//lerp(0.25, 1, 0, -10000, position);
 		if(speedFactor > 1){
@@ -44,22 +44,21 @@ public class OperatorControlElevatorCommand extends CommandBase {
 		}
 		else if(speedFactor < 0.25){
 			speedFactor = 0.25;
-		}*/
-		elevator.setConstantSpeed(elevatorAxis);
-		/*if(elevatorAxis < 0){
-			double slowDownSpeedFactorUpper = 1;//-slowDownUpperPID.getMotorOutput(position);
+		}
+		if(elevatorAxis < 0){
+			double slowDownSpeedFactorUpper = -slowDownUpperPID.getMotorOutput(position);
 			elevator.setConstantSpeed(elevatorAxis * speedFactor * slowDownSpeedFactorUpper * maxSpeedGoingUp);
 		}
 		else{
 			if(limitSwitchPressed){
-				//elevator.setConstantSpeed(0);
+				elevator.setConstantSpeed(0);
 			}
 			if(position < 0){
-				double slowDownSpeedFactorLower = 1;//slowDownLowerPID.getMotorOutput(position);
+				double slowDownSpeedFactorLower = slowDownLowerPID.getMotorOutput(position);
 				elevator.setConstantSpeed(elevatorAxis * slowDownSpeedFactorLower * maxSpeedGoingDown);
 			}
 		}
-        double dpadValue = Input.getOperatorDirectionalPad();*/
+        double dpadValue = Input.getOperatorDirectionalPad();
         /*if (dpadValue == 0.0) {
             double newPosition = elevator.higherPreset();
             elevator.setPosition(newPosition);

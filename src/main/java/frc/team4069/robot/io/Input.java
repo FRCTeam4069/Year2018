@@ -51,26 +51,26 @@ public class Input {
 			//splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(true), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitchMirror), new ToggleDrivePrecisionModeCommand()));
+			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchangefarswitchmirror")), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-			splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeMirror), new ToggleDrivePrecisionModeCommand()));
+			splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchangemirror")), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-			splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScaleMirror, 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
+			splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchangefarscalemirror"), 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
 		}
 		else{
 			//Button splineTeleopScale = new JoystickButton(driveJoystick, IOMapping.BUTTON_X);
 			//splineTeleopScale.whenPressed(new InlineCommandGroup(new ApproachScaleCommandGroup(false), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarSwitch = new JoystickButton(controlJoystick, IOMapping.BUTTON_X);
-			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarSwitch), new ToggleDrivePrecisionModeCommand()));
+			splineToExchangeFarSwitch.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchangefarswitch")), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchange = new JoystickButton(controlJoystick, IOMapping.BUTTON_Y);
-			splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchange), new ToggleDrivePrecisionModeCommand()));
+			splineToExchange.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchange")), new ToggleDrivePrecisionModeCommand()));
 			
 			Button splineToExchangeFarScale = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
-			splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.splinePathTeleopExchangeFarScale, 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
+			splineToExchangeFarScale.whenPressed(new InlineCommandGroup(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopexchangefarscale"), 25, 1.0, 1.0), new ToggleDrivePrecisionModeCommand()));
 		}
 		
 		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
@@ -140,9 +140,14 @@ public class Input {
     }
 	
 	public static double getIntakeSpeed() {
-        double forwardMotion = controlJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
-        double backwardMotion = -controlJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
-        return -(backwardMotion + forwardMotion);
+		if(controlJoystick.getRawButton(IOMapping.BUMPER_RIGHT)){
+			return -0.5;
+		}
+		else{
+			double forwardMotion = controlJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);
+			double backwardMotion = -controlJoystick.getRawAxis(IOMapping.LEFT_TRIGGER_AXIS);
+			return -(backwardMotion + forwardMotion);
+		}
     }
 	
     public static boolean getDebugPressed() {

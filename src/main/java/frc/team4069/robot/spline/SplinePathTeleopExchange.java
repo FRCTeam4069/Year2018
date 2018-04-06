@@ -13,7 +13,7 @@ public class SplinePathTeleopExchange extends SplinePath{
 		splinePoints.add(new DoublePoint(0.446, 4.4));
 		splinePoints.add(new DoublePoint(-0.054, 6.4));
 		splinePoints.add(new DoublePoint(0.446, 7.7));
-		super.setPoints(splinePoints);
+		super.setPoints(splinePoints, true);
 	}
 	
 }

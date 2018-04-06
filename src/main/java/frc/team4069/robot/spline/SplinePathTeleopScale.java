@@ -9,7 +9,7 @@ public class SplinePathTeleopScale extends SplinePath{
 		ArrayList<DoublePoint> splinePoints = new ArrayList<DoublePoint>();
 		splinePoints.add(new DoublePoint(0.0, 0.0));
 		splinePoints.add(new DoublePoint(-1.043, -0.479));
-		super.setPoints(splinePoints);
+		super.setPoints(splinePoints, true);
 	}
 	
 }

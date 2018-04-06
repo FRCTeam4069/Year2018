@@ -12,7 +12,7 @@ public class SplinePathTeleopExchangeFarSwitch extends SplinePath{
 		splinePoints.add(new DoublePoint(-2.002, 6.46));
 		splinePoints.add(new DoublePoint(-5.013, 6.713));
 		splinePoints.add(new DoublePoint(-6.66, 7.647));
-		super.setPoints(splinePoints);
+		super.setPoints(splinePoints, true);
 	}
 	
 }

@@ -1,6 +1,8 @@
 package frc.team4069.robot.spline;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.File;
 
 public class SplinePath{
 	
@@ -44,7 +46,7 @@ public class SplinePath{
 		splinePathLR1 = new SplinePathLR1();
 		splinePathLR2 = new SplinePathLR2();
 		splinePathRL1 = new SplinePathRL1();
-		splinePathRL1 = new SplinePathRL1Shifted();
+		splinePathRL1Shifted = new SplinePathRL1Shifted();
 		splinePathRL2 = new SplinePathRL2();
 		splinePathScaleLeft = new SplinePathScaleLeft();
 		splinePathScaleRight = new SplinePathScaleRight();
@@ -91,7 +93,7 @@ public class SplinePath{
 		SplineFileWriter.writeSpline("splinepathteleopscalemirror", splinePathTeleopScaleMirror);
 	}
 	
-	private static void readSplines(){
+	/*private static void readSplines(){
 		SplineFileReader spf = new SplineFileReader();
 		splinePathCircle = spf.readSpline("splinepathcircle");
 		splinePathCubeLeft = spf.readSpline("splinepathcubeleft");
@@ -115,15 +117,56 @@ public class SplinePath{
 		splinePathTeleopExchangeFarScaleMirror = spf.readSpline("splinepathteleopexchangefarscalemirror");
 		splinePathTeleopScale = spf.readSpline("splinepathteleopscale");
 		splinePathTeleopScaleMirror = spf.readSpline("splinepathteleopscalemirror");
+	}*/
+	
+	private static HashMap<String, SplinePath> splines = new HashMap<String, SplinePath>();
+	
+	private static void readSplinesAutomatically(){
+		SplineFileReader spf = new SplineFileReader();
+		File folder = new File("/home/lvuser/");
+		File[] files = folder.listFiles();
+		for(int i = 0; i < files.length; i++){
+			if(files[i].isFile()){
+				String name = files[i].getName().substring(0, files[i].getName().length() - 4);
+				String extension = files[i].getName().substring(files[i].getName().length() - 3);
+				if(extension.equals("spo")){
+					SplinePath sp = spf.readSpline(name);
+					splines.put(name, sp);
+				}
+				else if(extension.equals("spi")){
+					SplinePath sp = spf.readSplineInput(name);
+					SplineFileWriter.writeSpline(name, sp);
+					files[i].delete();
+					splines.put(name, sp);
+				}
+			}
+		}
+	}
+	
+	private static void clearInputSplines(){
+		SplineFileReader spf = new SplineFileReader();
+		File folder = new File("/home/lvuser/");
+		File[] files = folder.listFiles();
+		for(int i = 0; i < files.length; i++){
+			if(files[i].isFile()){
+				String name = files[i].getName().substring(0, files[i].getName().length() - 4);
+				String extension = files[i].getName().substring(files[i].getName().length() - 3);
+				if(extension.equals("spi")){
+					files[i].delete();
+				}
+			}
+		}
 	}
 	
 	static{
 		if(shouldGenerate){
 			generateSplines();
 			writeSplines();
+			clearInputSplines();
+			readSplinesAutomatically();
 		}
 		else{
-			readSplines();
+			readSplinesAutomatically();
 		}
 	}
 	
@@ -143,12 +186,14 @@ public class SplinePath{
 		spg.generateSpline(data);
 	}
 	
-	public SplinePath(ArrayList<DoublePoint> points, int startAngle, int endAngle, int angleWeight){
+	public SplinePath(ArrayList<DoublePoint> points, int startAngle, int endAngle, int angleWeight, boolean generate){
 		this.startAngle = startAngle;
 		this.endAngle = endAngle;
 		this.angleWeight = angleWeight;
 		this.points = points;
-		generate();
+		if(generate){
+			generate();
+		}
 	}
 	
 	public SplinePath(int startAngle, int endAngle, int angleWeight){
@@ -178,14 +223,14 @@ public class SplinePath{
 	
 	private void generate(){
 		spg = new SplinePathGenerator(0.55);
-		if(shouldGenerate){
-			spg.generateSpline(this);
-		}
+		spg.generateSpline(this);
 	}
 	
-	protected void setPoints(ArrayList<DoublePoint> points){
+	protected void setPoints(ArrayList<DoublePoint> points, boolean generate){
 		this.points = points;
-		generate();
+		if(generate){
+			generate();
+		}
 	}
 	
 	public ArrayList<DoublePoint> getPoints(){
@@ -194,6 +239,10 @@ public class SplinePath{
 	
 	public SplinePathGenerator getSpline(){
 		return spg;
+	}
+	
+	public static SplinePath getSplinePath(String name){
+		return splines.get(name);
 	}
 	
 }

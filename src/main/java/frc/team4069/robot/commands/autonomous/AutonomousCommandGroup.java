@@ -6,6 +6,7 @@ import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionSlowCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
 import frc.team4069.robot.commands.vacuum.StopVacuumCommand;
+import frc.team4069.robot.commands.vacuum.SetVacuumSpeedCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
 import frc.team4069.robot.commands.autonomous.DriveStraightForDistanceCommand;
 import frc.team4069.robot.commands.DelayCommand;
@@ -29,8 +30,8 @@ public class AutonomousCommandGroup extends CommandGroup {
 		gameInfo = gameData;
 		char switchSide = gameData.charAt(0);
 		char scaleSide = gameData.charAt(1);
-		if(switchSide == 'R'){
-			SplinePath path = SplinePath.splinePathRL1;
+		/*if(switchSide == 'R'){
+			SplinePath path = SplinePath.getSplinePath("splinepathrl1");
 			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
 			addSequential(new RotateToAngleWithGyroCommand(-90));
 			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
@@ -39,7 +40,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			//addSequential(new SetElevatorPositionCommand(0));
 		}
 		else if(switchSide == 'L'){
-			SplinePath path = SplinePath.splinePathLR1;
+			SplinePath path = SplinePath.getSplinePath("splinepathlr1");
 			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
 			addSequential(new RotateToAngleWithGyroCommand(90));
 			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
@@ -47,43 +48,80 @@ public class AutonomousCommandGroup extends CommandGroup {
 			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
 			//addSequential(new SetElevatorPositionCommand(0));
 		}
-		/*addSequential(new DelayCommand(11000));
+		addSequential(new DelayCommand(11000));
 		addSequential(new DriveStraightForDistanceCommand(4, 0.6));*/
-		/*addSequential(new StartVacuumCommand());
-		if(switchSide == 'R' && scaleSide == 'R'){
-			SplinePath path = SplinePath.splinePathSwitchRight;
-			addParallel(new RunWithDelayCommand(2500, new SetElevatorPositionCommand(-10000)));
+		/*if(switchSide == 'R' && scaleSide == 'R'){
+			SplinePath path = SplinePath.getSplinePath("splinepathswitchright");
+			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
 			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new StartVacuumCommand());
-			addSequential(new DriveStraightForDistanceCommand(-0.35, 0.8));
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(-86, 0.9));
-			addSequential(new DriveStraightForDistanceCommand(1.0, 0.5));
-			addSequential(new DriveStraightForDistanceCommand(-2.5, 0.5));
-			addSequential(new RotateToAngleWithGyroCommand(80, 0.6));
-			addParallel(new SetElevatorPositionSlowCommand(-29000));
-			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.75, 0.6)));
+			addSequential(new SetVacuumSpeedCommand(0.5));
+			addSequential(new DriveStraightForDistanceCommand(-1.55, 0.8));
 			addSequential(new StopVacuumCommand());
+			addParallel(new SetElevatorPositionCommand(0));
+			addSequential(new RotateToAngleWithGyroCommand(-50, 0.9));
+			addSequential(new SetVacuumSpeedCommand(-1));
+			addSequential(new DriveStraightForDistanceCommand(1.55, 0.5));
+			addSequential(new DriveStraightForDistanceCommand(-2.2, 0.5));
+			addSequential(new StopVacuumCommand());
+			addSequential(new RotateToAngleWithGyroCommand(70, 0.6));
+			addParallel(new SetElevatorPositionCommand(-29000));
+			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.75, 0.6)));
 		}
 		else if(switchSide == 'R' && scaleSide == 'L'){
-			SplinePath path = SplinePath.splinePathRL1;
-			SplinePath path2 = SplinePath.splinePathRL2;
+			SplinePath path = SplinePath.getSplinePath("splinepathrl1");
+			SplinePath path2 = SplinePath.getSplinePath("splinepathrl2");
 			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
 			addSequential(new RotateToAngleWithGyroCommand(-90));
-			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
-			addSequential(new SetElevatorPositionCommand(-13000));
+			//addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(-13000));
 			addSequential(new StartVacuumCommand());
-			addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
-			addSequential(new SetElevatorPositionCommand(0));
+			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(0));
 			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
+			addSequential(new StopVacuumCommand());
+			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
+			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
+			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
+			addSequential(new StopVacuumCommand());
+		}*/
+		if(switchSide == 'R' && scaleSide == 'R'){
+			SplinePath path = SplinePath.getSplinePath("splinepathswitchright");
+			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
+			addSequential(new FollowSplinePathCommand(path));
+			addSequential(new SetVacuumSpeedCommand(0.7));
+			addSequential(new DriveStraightForDistanceCommand(-0.3, 0.8));
+			addSequential(new StopVacuumCommand());
+			addParallel(new SetElevatorPositionCommand(0));
+			addSequential(new RotateToAngleWithGyroCommand(-90, 0.9));
+			addSequential(new SetVacuumSpeedCommand(-1));
+			addSequential(new DriveStraightForDistanceCommand(1.0, 0.5));
+			addSequential(new DriveStraightForDistanceCommand(-2.5, 0.5));
+			addSequential(new StopVacuumCommand());
+			addSequential(new RotateToAngleWithGyroCommand(80, 0.6));
+			addParallel(new SetElevatorPositionCommand(-29000));
+			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.6, 0.5)));
+			addSequential(new SetVacuumSpeedCommand(0.65));
+		}
+		else if(switchSide == 'R' && scaleSide == 'L'){
+			SplinePath path = SplinePath.getSplinePath("splinepathrl1");
+			SplinePath path2 = SplinePath.getSplinePath("splinepathrl2");
+			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
+			addSequential(new RotateToAngleWithGyroCommand(-90));
+			//addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(-13000));
+			addSequential(new StartVacuumCommand());
+			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
+			//addSequential(new SetElevatorPositionCommand(0));
+			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
+			addSequential(new StopVacuumCommand());
 			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
 			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
 			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
 			addSequential(new StopVacuumCommand());
 		}
 		else if(switchSide == 'L' && scaleSide == 'R'){
-			SplinePath path = SplinePath.splinePathLR1;
-			SplinePath path2 = SplinePath.splinePathLR2;
+			SplinePath path = SplinePath.getSplinePath("splinepathlr1");
+			SplinePath path2 = SplinePath.getSplinePath("splinepathlr2");
 			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
 			addSequential(new RotateToAngleWithGyroCommand(90));
 			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
@@ -98,7 +136,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			addSequential(new StopVacuumCommand());
 		}
 		else{
-			SplinePath path = SplinePath.splinePathLL1;
+			SplinePath path = SplinePath.getSplinePath("splinepathll1");
 			addParallel(new RunWithDelayCommand(2500, new SetElevatorPositionCommand(-10000)));
 			addSequential(new FollowSplinePathCommand(path));
 			addSequential(new StartVacuumCommand());
@@ -111,7 +149,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 			addParallel(new SetElevatorPositionSlowCommand(-29000));
 			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.75, 0.6)));
 			addSequential(new StopVacuumCommand());
-		}*/
+		}
     }
 
 	private String getGameData(){

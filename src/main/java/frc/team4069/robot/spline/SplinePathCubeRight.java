@@ -10,7 +10,7 @@ public class SplinePathCubeRight extends SplinePath{
 		splinePoints.add(new DoublePoint(0.0, 0.0));
 		splinePoints.add(new DoublePoint(-0.82, 0.253));
 		splinePoints.add(new DoublePoint(-1.42, 1.213));
-		super.setPoints(splinePoints);
+		super.setPoints(splinePoints, true);
 	}
 	
 }

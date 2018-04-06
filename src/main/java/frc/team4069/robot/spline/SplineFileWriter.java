@@ -18,7 +18,7 @@ public class SplineFileWriter{
 		}
 		byte[] bytes = splineData.getBytes();
 		try{
-			FileOutputStream fos = new FileOutputStream("/home/lvuser/" + name + ".dat");
+			FileOutputStream fos = new FileOutputStream("/home/lvuser/" + name + ".spo");
 			fos.write(bytes);
 		}
 		catch(Exception e){

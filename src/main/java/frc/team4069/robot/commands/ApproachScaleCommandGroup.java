@@ -19,10 +19,10 @@ public class ApproachScaleCommandGroup extends CommandGroup {
 	public ApproachScaleCommandGroup(boolean mirror){
 		addSequential(new SetElevatorPositionSlowCommand(-20000, 0.7, true, false));
 		if(mirror){
-			addSequential(new FollowSplinePathCommand(SplinePath.splinePathTeleopScaleMirror, 50, 3.0, 0.7));
+			addSequential(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopscalemirror"), 50, 3.0, 0.7));
 		}
 		else{
-			addSequential(new FollowSplinePathCommand(SplinePath.splinePathTeleopScale, 50, 3.0, 0.7));
+			addSequential(new FollowSplinePathCommand(SplinePath.getSplinePath("splinepathteleopscale"), 50, 3.0, 0.7));
 		}
 	}
 	

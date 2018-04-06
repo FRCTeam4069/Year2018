@@ -14,7 +14,7 @@ public class SplinePathTeleopExchangeFarScale extends SplinePath{
 		splinePoints.add(new DoublePoint(-5.933, 2.604));
 		splinePoints.add(new DoublePoint(-5.77, 6.698));
 		splinePoints.add(new DoublePoint(-6.66, 7.647));
-		super.setPoints(splinePoints);
+		super.setPoints(splinePoints, true);
 	}
 	
 }

@@ -22,7 +22,7 @@ public class VacuumSubsystem extends SubsystemBase {
 	}
 	
     public void start() {
-        talon.set(ControlMode.PercentOutput, 1);
+        talon.set(ControlMode.PercentOutput, -1);
     }
 
     @Override

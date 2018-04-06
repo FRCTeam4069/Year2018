@@ -34,7 +34,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     
     public void setConstantSpeed(double speed){
-		talon.setConstantSpeed(-speed);
+		talon.setConstantSpeed(speed);
 	}
 
 	public boolean isLimitSwitchPressed(){
