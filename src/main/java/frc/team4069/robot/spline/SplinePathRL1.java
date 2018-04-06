@@ -12,7 +12,7 @@ public class SplinePathRL1 extends SplinePath{
 		splinePoints.add(new DoublePoint(2.352, 2.561));
 		splinePoints.add(new DoublePoint(2.448, 4.17));
 		splinePoints.add(new DoublePoint(1.909, 5.047));
-		splinePoints.add(new DoublePoint(0.118, 5.047));
+		splinePoints.add(new DoublePoint(0.0, 5.047));
 		super.setPoints(splinePoints, true);
 	}
 	
