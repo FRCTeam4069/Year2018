@@ -50,7 +50,9 @@ public class FollowSplinePathCommand extends CommandBase{
 	private double forwardVelocityCap = 3.0;
 	
 	private int splineFinishedCounter = 25;
-	
+
+	private double terminationPoint = 1.0;
+
 	private boolean exitCommand = false;
 	
 	public FollowSplinePathCommand(SplinePath path){
@@ -66,7 +68,7 @@ public class FollowSplinePathCommand extends CommandBase{
 			leftPID.setTarget(spline.leftWheelIntegral[targetSplinePosition - 1]);
 			rightPID.setTarget(spline.rightWheelIntegral[targetSplinePosition - 1]);
 			gyroPID.setTarget(spline.splineAngles[targetSplinePosition - 1]);
-			distancePID.setTarget(spline.splineIntegral[spline.splineIntegral.length - 1]);
+			distancePID.setTarget(spline.splineIntegral[(int)((spline.splineIntegral.length - 1) * terminationPoint)]);
 		}
 		else{
 			exitCommand = true;
@@ -131,6 +133,7 @@ public class FollowSplinePathCommand extends CommandBase{
 	
 	@Override
 	protected void execute(){
+    	System.out.println("FOLLOWING SPLINE");
 		prevGyroscope = currentGyroscope;
         currentGyroscope = calculateDelta();
 		if(Robot.getOperatorControl() && (Math.abs(Input.getDriveSpeed()) > 0.1 || Math.abs(Input.getElevatorAxis()) > 0.1)){
@@ -142,13 +145,13 @@ public class FollowSplinePathCommand extends CommandBase{
         } else if (currentGyroscope - prevGyroscope < -180) {
             angleAccumulator += 360.0;
         }
-		if(splinePosition == spline.leftWheel.length - 1){
+		if(splinePosition == (int)((spline.leftWheel.length - 1) * terminationPoint)){
 			ticksWhileSplineFinished++;
 		}
 		distanceTravelledMeters = driveBase.getDisplacementTraveledMeters() - startDistance;
 		distanceTravelledMetersLeftWheel = driveBase.getDistanceTraveledMetersLeftWheel() - startDistanceLeftWheel;
 		distanceTravelledMetersRightWheel = driveBase.getDistanceTraveledMetersRightWheel() - startDistanceRightWheel;
-		while(splinePosition < spline.leftWheel.length - 1 && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
+		while(splinePosition < (int)((spline.leftWheel.length - 1) * terminationPoint) && distanceTravelledMeters >= spline.splineIntegral[splinePosition]){
 			splinePosition++;
 			if(spline.splineAngles[splinePosition] - spline.splineAngles[splinePosition - 1] >= 180.0){
 				splineAngleAccumulator -= 360.0;
@@ -211,6 +214,11 @@ public class FollowSplinePathCommand extends CommandBase{
 			rightWheelMotor = -1;
 		}
 		driveBase.driveUnfiltered(leftWheelMotor, rightWheelMotor);
+	}
+
+	public CommandBase terminate(double terminationPoint){
+    	this.terminationPoint = terminationPoint;
+    	return this;
 	}
 	
 	@Override

@@ -141,7 +141,7 @@ public class Input {
 	
 	public static double getIntakeSpeed() {
 		if(controlJoystick.getRawButton(IOMapping.BUMPER_RIGHT)){
-			return -0.5;
+			return 0.5;
 		}
 		else{
 			double forwardMotion = controlJoystick.getRawAxis(IOMapping.RIGHT_TRIGGER_AXIS);

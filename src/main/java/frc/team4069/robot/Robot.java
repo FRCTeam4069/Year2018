@@ -2,14 +2,15 @@ package frc.team4069.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4069.robot.commands.CommandBase;
 import frc.team4069.robot.commands.OperatorControlCommandGroup;
+import frc.team4069.robot.commands.autonomous.AutoMode;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.io.Input;
 import frc.team4069.robot.subsystems.ArmSubsystem;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
-import frc.team4069.robot.subsystems.ElevatorSubsystem;
 import frc.team4069.robot.subsystems.VacuumSubsystem;
 import frc.team4069.robot.subsystems.WinchSubsystem;
 import frc.team4069.robot.vision.ThreadArmCamera;
@@ -35,6 +36,10 @@ public class Robot extends IterativeRobot {
     private Scheduler scheduler;
 	
 	private static boolean isOperatorControl;
+
+	public static AutoMode autoMode = AutoMode.SWITCH_SCALE;
+
+	private SendableChooser<AutoMode> autoChooser;
 
     @Override
     public void robotInit() {
@@ -70,11 +75,24 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
         SmartDashboard.putBoolean("Vacuum enabled", false);
         SmartDashboard.putBoolean("Vacuum sealed", false);
+
+        autoChooser = new SendableChooser();
+        autoChooser.addObject("Switch Scale Autonomous", AutoMode.SWITCH_SCALE);
+        autoChooser.addDefault("Switch Half Scale Autonomous", AutoMode.SWITCH_HALF_SCALE);
+        autoChooser.addObject("Double Scale Right Autonomous", AutoMode.DOUBLE_SCALE_RIGHT);
+        autoChooser.addObject("Double Scale Left Autonomous", AutoMode.DOUBLE_SCALE_LEFT);
+        autoChooser.addObject("Double Scale Right Straight Only Autonomous", AutoMode.DOUBLE_SCALE_RIGHT_STRAIGHT_ONLY);
+        autoChooser.addObject("Double Scale Left Straight Only Autonomous", AutoMode.DOUBLE_SCALE_LEFT_STRAIGHT_ONLY);
+        autoChooser.addObject("Double Switch Autonomous", AutoMode.DOUBLE_SWITCH);
+        autoChooser.addObject("Drive Straight Autonomous", AutoMode.DRIVE_STRAIGHT);
+        autoChooser.addObject("Do Nothing Autonomous", AutoMode.DO_NOTHING);
+        SmartDashboard.putData("Autonomous Modes", autoChooser);
     }
 
     @Override
     public void autonomousInit() {
         super.autonomousInit();
+        autoMode = autoChooser.getSelected();
 		isOperatorControl = false;
         // Run the autonomous command group, which handles driving, elevator, and vacuum control
         scheduler.add(new AutonomousCommandGroup());

@@ -2,6 +2,7 @@ package frc.team4069.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.team4069.robot.Robot;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionSlowCommand;
 import frc.team4069.robot.commands.vacuum.StartVacuumCommand;
@@ -29,128 +30,30 @@ public class AutonomousCommandGroup extends CommandGroup {
     public AutonomousCommandGroup() {
 		String gameData = getGameData();
 		gameInfo = gameData;
-		char switchSide = gameData.charAt(0);
-		char scaleSide = gameData.charAt(1);
-		/*if(switchSide == 'R'){
-			SplinePath path = SplinePath.getSplinePath("splinepathrl1");
-			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
-			addSequential(new RotateToAngleWithGyroCommand(-90));
-			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(-13000));
-			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(0));
-		}
-		else if(switchSide == 'L'){
-			SplinePath path = SplinePath.getSplinePath("splinepathlr1");
-			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
-			addSequential(new RotateToAngleWithGyroCommand(90));
-			addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(-13000));
-			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(0));
-		}
-		addSequential(new DelayCommand(11000));
-		addSequential(new DriveStraightForDistanceCommand(4, 0.6));*/
-		/*if(switchSide == 'R' && scaleSide == 'R'){
-			SplinePath path = SplinePath.getSplinePath("splinepathswitchright");
-			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetVacuumSpeedCommand(0.5));
-			addSequential(new DriveStraightForDistanceCommand(-1.55, 0.8));
-			addSequential(new StopVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(-50, 0.9));
-			addSequential(new SetVacuumSpeedCommand(-1));
-			addSequential(new DriveStraightForDistanceCommand(1.55, 0.5));
-			addSequential(new DriveStraightForDistanceCommand(-2.2, 0.5));
-			addSequential(new StopVacuumCommand());
-			addSequential(new RotateToAngleWithGyroCommand(70, 0.6));
-			addParallel(new SetElevatorPositionCommand(-29000));
-			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.75, 0.6)));
-		}
-		else if(switchSide == 'R' && scaleSide == 'L'){
-			SplinePath path = SplinePath.getSplinePath("splinepathrl1");
-			SplinePath path2 = SplinePath.getSplinePath("splinepathrl2");
-			addSequential(new FollowSplinePathCommand(path, 10, 3.0, 0.8));
-			addSequential(new RotateToAngleWithGyroCommand(-90));
-			//addParallel(new DriveStraightForDistanceCommand(0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(-13000));
-			addSequential(new StartVacuumCommand());
-			//addParallel(new DriveStraightForDistanceCommand(-0.4, 0.5));
-			//addSequential(new SetElevatorPositionCommand(0));
-			addSequential(new DriveStraightForDistanceCommand(0.25, 0.5));
-			addSequential(new StopVacuumCommand());
-			addSequential(new RotateToAngleWithGyroCommand(90, 0.7));
-			addParallel(new RunWithDelayCommand(0, new FollowSplinePathCommand(path2)));
-			addSequential(new SetElevatorPositionSlowCommand(-29000, 0.7));
-			addSequential(new StopVacuumCommand());
-		}*/
-		if(switchSide == 'R' && scaleSide == 'R'){
-			SplinePath path = SplinePath.getSplinePath("splinepathswitchright");
-			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetVacuumSpeedCommand(0.7));
-			addSequential(new DriveStraightForDistanceCommand(-0.3, 0.8));
-			addSequential(new StopVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(-90, 0.9));
-			addSequential(new SetVacuumSpeedCommand(-1));
-			addSequential(new DriveStraightForDistanceCommand(1.0, 0.5));
-			addSequential(new DriveStraightForDistanceCommand(-2.5, 0.5));
-			addSequential(new StopVacuumCommand());
-			addSequential(new RotateToAngleWithGyroCommand(80, 0.6));
-			addParallel(new SetElevatorPositionCommand(-29000));
-			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.6, 0.5)));
-			addSequential(new SetVacuumSpeedCommand(0.65));
-		}
-		else if(switchSide == 'R' && scaleSide == 'L'){
-			SplinePath path = SplinePath.getSplinePath("splinepathswitchright");
-			SplinePath path2 = SplinePath.getSplinePath("rrr");
-			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetVacuumSpeedCommand(0.7));
-			addSequential(new DriveStraightForDistanceCommand(-0.3, 0.8));
-			addSequential(new StopVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(-90, 0.9));
-			addSequential(new SetVacuumSpeedCommand(-1));
-			addParallel(new InlineCommandGroup(new RunWithDelayCommand(2500, new StopVacuumCommand()), new SetElevatorPositionCommand(-29000)));
-			addSequential(new FollowSplinePathCommand(path2));
-			addSequential(new SetVacuumSpeedCommand(0.65));
-		}
-		else if(switchSide == 'L' && scaleSide == 'R'){
-			SplinePath path = SplinePath.getSplinePath("splinepathll1");
-			SplinePath path2 = SplinePath.getSplinePath("lll");
-			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetVacuumSpeedCommand(0.7));
-			addSequential(new DriveStraightForDistanceCommand(-0.3, 0.8));
-			addSequential(new StopVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(90, 0.9));
-			addSequential(new SetVacuumSpeedCommand(-1));
-			addParallel(new InlineCommandGroup(new RunWithDelayCommand(2500, new StopVacuumCommand()), new SetElevatorPositionCommand(-29000)));
-			addSequential(new FollowSplinePathCommand(path2));
-			addSequential(new SetVacuumSpeedCommand(0.65));
-		}
-		else{
-			SplinePath path = SplinePath.getSplinePath("splinepathll1");
-			addParallel(new RunWithDelayCommand(0, new SetElevatorPositionCommand(-12500)));
-			addSequential(new FollowSplinePathCommand(path));
-			addSequential(new SetVacuumSpeedCommand(0.7));
-			addSequential(new DriveStraightForDistanceCommand(-0.3, 0.8));
-			addSequential(new StopVacuumCommand());
-			addParallel(new SetElevatorPositionCommand(0));
-			addSequential(new RotateToAngleWithGyroCommand(90, 0.9));
-			addSequential(new SetVacuumSpeedCommand(-1));
-			addSequential(new DriveStraightForDistanceCommand(1.0, 0.5));
-			addSequential(new DriveStraightForDistanceCommand(-2.5, 0.5));
-			addSequential(new StopVacuumCommand());
-			addSequential(new RotateToAngleWithGyroCommand(-80, 0.6));
-			addParallel(new SetElevatorPositionCommand(-29000));
-			addSequential(new RunWithDelayCommand(0, new DriveStraightForDistanceCommand(4.6, 0.5)));
-			addSequential(new SetVacuumSpeedCommand(0.65));
-		}
+		if(Robot.autoMode == AutoMode.SWITCH_SCALE) {
+            addSequential(new SwitchScaleCommandGroup(gameData));
+        }
+        else if(Robot.autoMode == AutoMode.SWITCH_HALF_SCALE){
+		    addSequential(new SwitchHalfScaleCommandGroup(gameData));
+        }
+        else if(Robot.autoMode == AutoMode.DOUBLE_SCALE_RIGHT){
+		    addSequential(new DoubleScaleCommandGroup(gameData, true));
+        }
+        else if(Robot.autoMode == AutoMode.DOUBLE_SCALE_LEFT){
+		    addSequential(new DoubleScaleCommandGroup(gameData, false));
+        }
+        else if(Robot.autoMode == AutoMode.DOUBLE_SCALE_RIGHT_STRAIGHT_ONLY){
+		    addSequential(new DoubleScaleStraightOnlyCommandGroup(gameData, true));
+        }
+        else if(Robot.autoMode == AutoMode.DOUBLE_SCALE_LEFT_STRAIGHT_ONLY){
+		    addSequential(new DoubleScaleStraightOnlyCommandGroup(gameData, false));
+        }
+        else if(Robot.autoMode == AutoMode.DOUBLE_SWITCH){
+		    addSequential(new DoubleSwitchCommandGroup(gameData));
+        }
+        else if(Robot.autoMode == AutoMode.DRIVE_STRAIGHT) {
+            addSequential(new DriveStraightDelayCommandGroup(11000, 4));
+        }
     }
 
 	private String getGameData(){

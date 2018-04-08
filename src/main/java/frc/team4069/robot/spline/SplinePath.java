@@ -93,34 +93,10 @@ public class SplinePath{
 		SplineFileWriter.writeSpline("splinepathteleopscalemirror", splinePathTeleopScaleMirror);
 	}
 	
-	/*private static void readSplines(){
-		SplineFileReader spf = new SplineFileReader();
-		splinePathCircle = spf.readSpline("splinepathcircle");
-		splinePathCubeLeft = spf.readSpline("splinepathcubeleft");
-		splinePathCubeRight = spf.readSpline("splinepathcuberight");
-		splinePathLL1 = spf.readSpline("splinepathll1");
-		splinePathLR1 = spf.readSpline("splinepathlr1");
-		splinePathLR2 = spf.readSpline("splinepathlr2");
-		splinePathRL1 = spf.readSpline("splinepathrl1");
-		//splinePathRL1Shifted = spf.readSpline("splinepathrl1shifted");
-		splinePathRL2 = spf.readSpline("splinepathrl2");
-		splinePathScaleLeft = spf.readSpline("splinepathscaleleft");
-		splinePathSwitchLeft = spf.readSpline("splinepathswitchleft");
-		splinePathSwitchLeftOld = spf.readSpline("splinepathswitchleftold");
-		splinePathSwitchRight = spf.readSpline("splinepathswitchright");
-		//splinePathSwitchRightShifted = spf.readSpline("splinepathswitchrightshifted");
-		splinePathTeleopExchange = spf.readSpline("splinepathteleopexchange");
-		splinePathTeleopExchangeMirror = spf.readSpline("splinepathteleopexchangemirror");
-		splinePathTeleopExchangeFarSwitch = spf.readSpline("splinepathteleopexchangefarswitch");
-		splinePathTeleopExchangeFarSwitchMirror = spf.readSpline("splinepathteleopexchangefarswitchmirror");
-		splinePathTeleopExchangeFarScale = spf.readSpline("splinepathteleopexchangefarscale");
-		splinePathTeleopExchangeFarScaleMirror = spf.readSpline("splinepathteleopexchangefarscalemirror");
-		splinePathTeleopScale = spf.readSpline("splinepathteleopscale");
-		splinePathTeleopScaleMirror = spf.readSpline("splinepathteleopscalemirror");
-	}*/
-	
 	private static HashMap<String, SplinePath> splines = new HashMap<String, SplinePath>();
-	
+
+	private static String[] noDeleteInput = {/*"doublescaleright", "doublescaleleft", "doublescalerightmirror", "doublescaleleftmirror"*/};
+
 	private static void readSplinesAutomatically(){
 		SplineFileReader spf = new SplineFileReader();
 		File folder = new File("/home/lvuser/");
@@ -136,20 +112,29 @@ public class SplinePath{
 				else if(extension.equals("spi")){
 					SplinePath sp = spf.readSplineInput(name);
 					SplineFileWriter.writeSpline(name, sp);
-					files[i].delete();
+					if(shouldDeleteInputFile(name)) {
+						files[i].delete();
+					}
 					splines.put(name, sp);
 				}
 			}
 		}
 	}
+
+	private static boolean shouldDeleteInputFile(String name){
+		for(int i = 0; i < noDeleteInput.length; i++){
+			if(noDeleteInput[i].equals(name)){
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	private static void clearInputSplines(){
-		SplineFileReader spf = new SplineFileReader();
 		File folder = new File("/home/lvuser/");
 		File[] files = folder.listFiles();
 		for(int i = 0; i < files.length; i++){
 			if(files[i].isFile()){
-				String name = files[i].getName().substring(0, files[i].getName().length() - 4);
 				String extension = files[i].getName().substring(files[i].getName().length() - 3);
 				if(extension.equals("spi")){
 					files[i].delete();
