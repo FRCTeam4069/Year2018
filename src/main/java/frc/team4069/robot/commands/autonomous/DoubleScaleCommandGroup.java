@@ -53,6 +53,7 @@ public class DoubleScaleCommandGroup extends CommandGroup {
             if (scaleSide == 'R') {
                 SplinePath path = SplinePath.getSplinePath("doublescaleleftmirror");
                 addParallel(new SetElevatorPositionCommand(-29000));
+                addParallel(new RunWithDelayCommand(4000, new SetElevatorPositionCommand(-29000)));
                 addSequential(new FollowSplinePathCommand(path));
                 addSequential(new SetVacuumSpeedCommand(0.7));
                 addSequential(new DriveStraightForDistanceCommand(-0.65, 0.5));
@@ -66,24 +67,26 @@ public class DoubleScaleCommandGroup extends CommandGroup {
                 addParallel(new SetElevatorPositionCommand(-29000));
                 addSequential(new RotateToAngleWithGyroCommand(170));
                 addSequential(new DriveStraightForDistanceCommand(0.65, 0.5));
-                addSequential(new SetVacuumSpeedCommand(0.5));
+                addParallel(new RunWithDelayCommand(1000, new DriveStraightForDistanceCommand(-0.5, 0.5)));
+                addSequential(new SetVacuumSpeedCommand(0.7));
             }
             else if (scaleSide == 'L') {
                 SplinePath path = SplinePath.getSplinePath("doublescalerightmirror");
                 addParallel(new SetElevatorPositionCommand(-29000));
                 addSequential(new FollowSplinePathCommand(path));
-                addSequential(new SetVacuumSpeedCommand(0.7));
+                addSequential(new SetVacuumSpeedCommand(0.6));
                 addSequential(new DriveStraightForDistanceCommand(-0.964, 0.5));
                 addSequential(new DelayCommand(500));
-                addParallel(new RunWithDelayCommand(500, new SetElevatorPositionCommand(0)));
-                addSequential(new RotateToAngleWithGyroCommand(150));
+                addParallel(new RunWithDelayCommand(500, new SetElevatorPositionCommand(0).setDownSpeed(0.6)));
+                addSequential(new RotateToAngleWithGyroCommand(161).setCounterThreshold(20));
                 addSequential(new SetVacuumSpeedCommand(-1));
                 addSequential(new DriveStraightForDistanceCommand(0.5, 0.5));
                 addSequential(new DriveStraightForDistanceCommand(-0.5, 0.5));
                 addSequential(new StopVacuumCommand());
                 addParallel(new SetElevatorPositionCommand(-29000));
-                addSequential(new RotateToAngleWithGyroCommand(-150));
+                addSequential(new RotateToAngleWithGyroCommand(-161).setCounterThreshold(20));
                 addSequential(new DriveStraightForDistanceCommand(0.964, 0.5));
+                addParallel(new RunWithDelayCommand(1000, new DriveStraightForDistanceCommand(-0.5, 0.5)));
                 addSequential(new SetVacuumSpeedCommand(0.5));
             }
         }

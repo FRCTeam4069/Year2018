@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 	
 	private static boolean isOperatorControl;
 
-	public static AutoMode autoMode = AutoMode.SWITCH_SCALE;
+	public static AutoMode autoMode = AutoMode.DOUBLE_SWITCH;
 
 	private SendableChooser<AutoMode> autoChooser;
 
@@ -78,12 +78,12 @@ public class Robot extends IterativeRobot {
 
         autoChooser = new SendableChooser();
         autoChooser.addObject("Switch Scale Autonomous", AutoMode.SWITCH_SCALE);
-        autoChooser.addDefault("Switch Half Scale Autonomous", AutoMode.SWITCH_HALF_SCALE);
+        autoChooser.addObject("Switch Half Scale Autonomous", AutoMode.SWITCH_HALF_SCALE);
         autoChooser.addObject("Double Scale Right Autonomous", AutoMode.DOUBLE_SCALE_RIGHT);
         autoChooser.addObject("Double Scale Left Autonomous", AutoMode.DOUBLE_SCALE_LEFT);
         autoChooser.addObject("Double Scale Right Straight Only Autonomous", AutoMode.DOUBLE_SCALE_RIGHT_STRAIGHT_ONLY);
         autoChooser.addObject("Double Scale Left Straight Only Autonomous", AutoMode.DOUBLE_SCALE_LEFT_STRAIGHT_ONLY);
-        autoChooser.addObject("Double Switch Autonomous", AutoMode.DOUBLE_SWITCH);
+        autoChooser.addDefault("Double Switch Autonomous", AutoMode.DOUBLE_SWITCH);
         autoChooser.addObject("Drive Straight Autonomous", AutoMode.DRIVE_STRAIGHT);
         autoChooser.addObject("Do Nothing Autonomous", AutoMode.DO_NOTHING);
         SmartDashboard.putData("Autonomous Modes", autoChooser);

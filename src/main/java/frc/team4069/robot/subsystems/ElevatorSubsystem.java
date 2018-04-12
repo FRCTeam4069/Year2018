@@ -12,6 +12,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     // The number of ticks around the edges of the elevator's range in which it starts to slow down
     private static ElevatorSubsystem instance;
 
+    private double referencePoint = 0;
+
     // Motor to control
     private TalonSRXMotor talon;
 	
@@ -30,7 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getPosition() {
-        return talon.getDistanceTraveledTicks();
+        return talon.getDistanceTraveledTicks() - referencePoint;
     }
     
     public void setConstantSpeed(double speed){
@@ -42,13 +44,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 	}
 
     public void stop() {
-        talon.stop();
+        talon.setConstantSpeed(0);
     }
 
     @Override
     public void reset() {
-        talon.stop();
-        talon.setSelectedSensorPosition(0, 0, 0);
+        talon.setConstantSpeed(0);
+        referencePoint = talon.getDistanceTraveledTicks();
     }
 
     @Override

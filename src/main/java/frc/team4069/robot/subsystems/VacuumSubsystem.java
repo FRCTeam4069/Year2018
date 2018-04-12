@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.team4069.robot.commands.OperatorControlIntakeCommand;
 import frc.team4069.robot.io.IOMapping;
 import frc.team4069.robot.motors.TalonSRXMotor;
 
@@ -44,6 +45,11 @@ public class VacuumSubsystem extends SubsystemBase {
         }
 
         return instance;
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+        setDefaultCommand(new OperatorControlIntakeCommand());
     }
 
     @Override

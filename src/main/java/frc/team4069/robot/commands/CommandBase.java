@@ -30,7 +30,7 @@ public abstract class CommandBase extends Command {
         arm = ArmSubsystem.getInstance();
         vacuum = VacuumSubsystem.getInstance();
         winch = WinchSubsystem.getInstance();
-		elevator.reset();
+        elevator.reset();
     }
 
     // Accessor for the gyro angle

@@ -4,22 +4,18 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.team4069.robot.commands.ElevatorIntakeCommandGroup;
 import frc.team4069.robot.commands.arm.DeployArmCommand;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.drive.ToggleDrivePrecisionModeCommand;
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
-import frc.team4069.robot.commands.vacuum.ToggleVacuumCommand;
-import frc.team4069.robot.commands.vacuum.SetVacuumSpeedCommand;
+import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
 import frc.team4069.robot.commands.spline.FollowSplinePathCommand;
 import frc.team4069.robot.commands.DriveForwardVacuumCommandGroup;
-import frc.team4069.robot.commands.ApproachScaleCommandGroup;
 import frc.team4069.robot.commands.InlineCommandGroup;
 import frc.team4069.robot.subsystems.DriveBaseSubsystem;
-import frc.team4069.robot.subsystems.ElevatorSubsystem.Position;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
 import frc.team4069.robot.spline.SplinePath;
 
@@ -75,7 +71,10 @@ public class Input {
 		
 		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
 		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217, true, false));
-		
+
+		Button elevatorSafetyDisable = new JoystickButton(controlJoystick, IOMapping.BUTTON_BACK);
+		elevatorSafetyDisable.whenPressed(new ZeroElevatorCommand());
+
         // Stop the vacuum when the start button is pressed
         /*Button vacuumForward = new JoystickButton(controlJoystick, IOMapping.BUMPER_RIGHT);
         vacuumForward.whenPressed(new SetVacuumSpeedCommand(0.5));

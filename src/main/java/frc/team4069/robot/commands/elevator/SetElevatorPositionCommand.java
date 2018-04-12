@@ -51,6 +51,11 @@ public class SetElevatorPositionCommand extends CommandBase {
 		this(position.getTicks());
 	}
 
+	public CommandBase setDownSpeed(double downSpeed){
+    	maxSpeedDown = downSpeed;
+    	return this;
+	}
+
     @Override
     protected void initialize() {
         double currentPosition = elevator.getPosition();

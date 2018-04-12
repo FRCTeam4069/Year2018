@@ -8,7 +8,7 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
     // Max turn speed
     private double turnSpeedAbsolute = 0.7;
     // How many ticks does the gyroscope angle have to be in range for until the command finishes
-    private final int counterThreshold = 10;
+    private int counterThreshold = 10;
     // Timeout the command after this many milliseconds
     private final int timeout = 4000;
     // Lower derivativeMultiplier -> derivative has lesser effect on turning speed
@@ -126,6 +126,11 @@ public class RotateToAngleWithGyroCommand extends CommandBase {
         } else {
             inRangeCounter = 0;
         }
+    }
+
+    public CommandBase setCounterThreshold(int threshold){
+        counterThreshold = threshold;
+        return this;
     }
 
     protected boolean isFinished() {

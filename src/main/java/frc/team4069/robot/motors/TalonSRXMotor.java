@@ -50,7 +50,7 @@ public class TalonSRXMotor extends TalonSRX {
     }
 
     public void stop() {
-        this.neutralOutput();
+        this.setConstantSpeed(0);
     }
 
     public void setConstantSpeed(double speed) {
@@ -60,7 +60,6 @@ public class TalonSRXMotor extends TalonSRX {
         if (speed > 1) {
             speed = 1;
         }
-
         set(ControlMode.PercentOutput, speed);
     }
 
