@@ -56,6 +56,11 @@ public class SetElevatorPositionCommand extends CommandBase {
     	return this;
 	}
 
+	public CommandBase setUpSpeed(double upSpeed){
+		maxSpeedUp = upSpeed;
+		return this;
+	}
+
     @Override
     protected void initialize() {
         double currentPosition = elevator.getPosition();

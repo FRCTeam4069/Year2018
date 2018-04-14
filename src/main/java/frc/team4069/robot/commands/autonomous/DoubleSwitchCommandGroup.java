@@ -24,7 +24,7 @@ public class DoubleSwitchCommandGroup extends CommandGroup {
             addSequential(new DriveStraightForDistanceCommand(1.3, 0.5));
             addSequential(new DriveStraightForDistanceCommand(-1.3, 0.5));
             addSequential(new StopVacuumCommand());
-            addParallel(new SetElevatorPositionCommand(-12500));
+            addParallel(new SetElevatorPositionCommand(-12500).setUpSpeed(0.9));
             addSequential(new RotateToAngleWithGyroCommand(90, 0.9));
             addSequential(new DriveStraightForDistanceCommand(0.25, 0.8));
             addSequential(new SetVacuumSpeedCommand(0.7));
@@ -36,7 +36,7 @@ public class DoubleSwitchCommandGroup extends CommandGroup {
             addSequential(new DriveStraightForDistanceCommand(0.8, 0.5));
             addSequential(new DriveStraightForDistanceCommand(-0.8, 0.5));
             addSequential(new StopVacuumCommand());
-            addParallel(new SetElevatorPositionCommand(-12500));
+            addParallel(new SetElevatorPositionCommand(-12500).setUpSpeed(0.9));
             addSequential(new RotateToAngleWithGyroCommand(45, 0.9));
             addSequential(new DriveStraightForDistanceCommand(0.6, 0.8));
             addSequential(new SetVacuumSpeedCommand(0.7));
@@ -54,7 +54,7 @@ public class DoubleSwitchCommandGroup extends CommandGroup {
             addSequential(new DriveStraightForDistanceCommand(1.3, 0.5));
             addSequential(new DriveStraightForDistanceCommand(-1.3, 0.5));
             addSequential(new StopVacuumCommand());
-            addParallel(new SetElevatorPositionCommand(-12500));
+            addParallel(new SetElevatorPositionCommand(-12500).setUpSpeed(0.9));
             addSequential(new RotateToAngleWithGyroCommand(-90, 0.9));
             addSequential(new DriveStraightForDistanceCommand(0.25, 0.8));
             addSequential(new SetVacuumSpeedCommand(0.7));
@@ -66,7 +66,7 @@ public class DoubleSwitchCommandGroup extends CommandGroup {
             addSequential(new DriveStraightForDistanceCommand(0.8, 0.5));
             addSequential(new DriveStraightForDistanceCommand(-0.8, 0.5));
             addSequential(new StopVacuumCommand());
-            addParallel(new SetElevatorPositionCommand(-12500));
+            addParallel(new SetElevatorPositionCommand(-12500).setUpSpeed(0.9));
             addSequential(new RotateToAngleWithGyroCommand(-45, 0.9));
             addSequential(new DriveStraightForDistanceCommand(0.6, 0.8));
             addSequential(new SetVacuumSpeedCommand(0.7));

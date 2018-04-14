@@ -1,5 +1,6 @@
 package frc.team4069.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -60,17 +61,20 @@ public class Robot extends IterativeRobot {
         threadLIDARInstance = new ThreadLIDAR();
         threadLIDARHandle = new Thread(threadLIDARInstance);
         threadLIDARHandle.start();
-        threadVideoCaptureInstance = new ThreadVideoCapture();
-        threadVideoCaptureHandle = new Thread(threadVideoCaptureInstance);
-        threadVideoCaptureHandle.start();
-        threadVideoCaptureInstance.Enable();
-        threadVisionProcessorInstance = new ThreadVisionProcessor(threadVideoCaptureInstance,
-                threadVideoCaptureHandle, this);
-        threadVisionProcessorHandle = new Thread(threadVisionProcessorInstance);
-        threadVisionProcessorHandle.start();
+//        threadVideoCaptureInstance = new ThreadVideoCapture();
+//        threadVideoCaptureHandle = new Thread(threadVideoCaptureInstance);
+//        threadVideoCaptureHandle.start();
+//        threadVideoCaptureInstance.Enable();
+//        threadVisionProcessorInstance = new ThreadVisionProcessor(threadVideoCaptureInstance,
+//                threadVideoCaptureHandle, this);
+//        threadVisionProcessorHandle = new Thread(threadVisionProcessorInstance);
+//        threadVisionProcessorHandle.start();
 //        threadArmCamera = new ThreadArmCamera();
 //        threadArmCameraHandle = new Thread(threadArmCamera);
 //        threadArmCameraHandle.start();
+
+        // Send the camera feed through networktables
+        CameraServer.getInstance().startAutomaticCapture(0);
 
         SmartDashboard.putNumber("Distance along wall (metres)", 5);
         SmartDashboard.putBoolean("Vacuum enabled", false);
@@ -122,7 +126,7 @@ public class Robot extends IterativeRobot {
 
     // During all phases, run the command scheduler
     private void universalPeriodic() {
-        sendDataToSmartDashboard();
+//        sendDataToSmartDashboard();
         scheduler.run();
     }
 
