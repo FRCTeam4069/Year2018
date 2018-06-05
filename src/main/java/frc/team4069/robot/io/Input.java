@@ -8,7 +8,6 @@ import frc.team4069.robot.commands.arm.DeployArmCommand;
 import frc.team4069.robot.commands.arm.StartArmCommand;
 import frc.team4069.robot.commands.arm.StopArmCommand;
 import frc.team4069.robot.commands.autonomous.AutonomousCommandGroup;
-import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand;
 import frc.team4069.robot.commands.elevator.ZeroElevatorCommand;
 import frc.team4069.robot.commands.winch.StartWinchCommand;
 import frc.team4069.robot.commands.winch.StopWinchCommand;
@@ -33,12 +32,13 @@ public class Input {
         driveJoystick = new XboxController(IOMapping.DRIVE_JOYSTICK);
         controlJoystick = new XboxController(IOMapping.CONTROL_JOYSTICK);
 		
-        Button startWinch = new JoystickButton(controlJoystick, IOMapping.BUMPER_LEFT);
+        Button startWinch = new JoystickButton(controlJoystick, IOMapping.BUTTON_A);
         startWinch.whenPressed(new StartWinchCommand());
         startWinch.whenReleased(new StopWinchCommand());
 
-		Button elevatorPortal = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
-		elevatorPortal.whenPressed(new SetElevatorPositionCommand(-7217, true, false));
+		Button winchDown = new JoystickButton(controlJoystick, IOMapping.BUTTON_B);
+	    winchDown.whenPressed(new StartWinchCommand(true));
+	    winchDown.whenReleased(new StopWinchCommand());
 
 		Button elevatorSafetyDisable = new JoystickButton(controlJoystick, IOMapping.BUTTON_START);
 		elevatorSafetyDisable.whenPressed(new ZeroElevatorCommand());
@@ -91,7 +91,7 @@ public class Input {
     }
 	
 	public static double getIntakeSpeed() {
-		if(controlJoystick.getRawButton(IOMapping.BUMPER_RIGHT)){
+		if(controlJoystick.getRawButton(IOMapping.BUMPER_LEFT)){
 			return 0.5;
 		}
 		else{
