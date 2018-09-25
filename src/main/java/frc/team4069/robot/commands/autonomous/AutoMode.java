@@ -1,0 +1,13 @@
+package frc.team4069.robot.commands.autonomous;
+
+public enum AutoMode {
+    SWITCH_SCALE,
+    SWITCH_HALF_SCALE,
+    DOUBLE_SCALE_RIGHT,
+    DOUBLE_SCALE_LEFT,
+    DOUBLE_SCALE_RIGHT_STRAIGHT_ONLY,
+    DOUBLE_SCALE_LEFT_STRAIGHT_ONLY,
+    DOUBLE_SWITCH,
+    DRIVE_STRAIGHT,
+    DO_NOTHING
+}

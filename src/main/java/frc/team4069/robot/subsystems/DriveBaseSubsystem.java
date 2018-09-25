@@ -12,7 +12,7 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
     // The lateral distance between the robot's wheels in meters
     public static final double ROBOT_TRACK_WIDTH_METERS = 0.6;
-    public static final double SLOW_SPEED = 0.2;
+    public static final double SLOW_SPEED = 0.5;
     // A singleton instance of the drive base subsystem
     private static DriveBaseSubsystem instance;
     // The number of meters each wheel travels per motor rotation
@@ -54,7 +54,18 @@ public class DriveBaseSubsystem extends SubsystemBase {
 
         return instance;
     }
-
+	
+	public double getDisplacementTraveledMeters(){
+        // Get the absolute values of the positions of each of the motors and calculate the average
+        double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
+        double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
+        double averageRotationsTraveled =
+                (leftWheelRotationsTraveled + rightWheelRotationsTraveled) / 2;
+        // Multiply the average rotations by the number of wheels per rotation to get the average
+        // distance traveled in meters
+        return averageRotationsTraveled * METERS_PER_ROTATION;
+	}
+	
     // A public getter for the distance traveled in meters
     public double getDistanceTraveledMeters() {
         // Get the absolute values of the positions of each of the motors and calculate the average
@@ -69,6 +80,16 @@ public class DriveBaseSubsystem extends SubsystemBase {
         return averageRotationsTraveled * METERS_PER_ROTATION;
     }
 
+    public double getDistanceTraveledMetersLeftWheel() {
+        double leftWheelRotationsTraveled = -leftEncoder.getDistanceTraveledRotations();
+        return leftWheelRotationsTraveled * METERS_PER_ROTATION;
+    }
+
+    public double getDistanceTraveledMetersRightWheel() {
+        double rightWheelRotationsTraveled = rightEncoder.getDistanceTraveledRotations();
+        return rightWheelRotationsTraveled * METERS_PER_ROTATION;
+    }
+
     // Stop moving immediately
     public void stop() {
         // Set the motor speeds to zero
@@ -81,6 +102,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
     }
 
     public void driveContinuousSpeed(double turn, double speed) {
+        // Invert steering if we're going backwards
+        if (speed < 0) {
+            turn = -turn;
+        }
+
         driveContinuousSpeed(turn, speed, false);
     }
 
@@ -88,11 +114,11 @@ public class DriveBaseSubsystem extends SubsystemBase {
     public void driveContinuousSpeed(double turn, double speed, boolean auto) {
         // If the speed is zero, turn on the spot
         if (speed == 0) {
-            rotate(turn * 0.6);
+            rotate(turn * 0.8);
         }
         // Otherwise, use the regular algorithm
         else {
-            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.4, speed);
+            WheelSpeeds wheelSpeeds = generalizedCheesyDrive(turn * 0.5, speed);
             driveFiltered(wheelSpeeds, auto);
         }
     }
@@ -103,9 +129,14 @@ public class DriveBaseSubsystem extends SubsystemBase {
         driveUnfiltered(speeds);
     }
 
-    private void driveUnfiltered(WheelSpeeds speeds) {
+    public void driveUnfiltered(WheelSpeeds speeds) {
         leftDrive.setConstantSpeed(speeds.leftWheelSpeed);
         rightDrive.setConstantSpeed(speeds.rightWheelSpeed);
+    }
+
+    public void driveUnfiltered(double leftWheelSpeed, double rightWheelSpeed) {
+        leftDrive.setConstantSpeed(leftWheelSpeed);
+        rightDrive.setConstantSpeed(rightWheelSpeed);
     }
 
     // Drive at the given wheel speeds, applying a low pass filter

@@ -158,7 +158,7 @@ public class ThreadVideoCapture implements Runnable {
 
         while ((!vcap.open(videoStreamAddress)) && (mKeepRunning == 1)) {
 
-            System.out.println("Error connecting to camera stream, retrying " + count);
+            //System.out.println("Error connecting to camera stream, retrying " + count);
             count++;
             try {
                 Thread.sleep(1000);

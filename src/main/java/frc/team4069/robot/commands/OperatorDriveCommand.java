@@ -33,9 +33,11 @@ public class OperatorDriveCommand extends CommandBase {
         double elevatorPosition = Math.abs(elevator.getPosition()) - Math.abs(
                 ElevatorSubsystem.MAX_POSITION_TICKS);
 
+		System.out.println("Left wheel encoder: " + driveBase.getDistanceTraveledMetersLeftWheel());
+		System.out.println("Right wheel encoder: " + driveBase.getDistanceTraveledMetersRightWheel());
         // Dampen the drive base input if the elevator is raised ~halfway
         // TODO: Check the values here
-        if (Math.abs(elevatorPosition) <= 16000 && elevatorPosition > 0) {
+        /*if (Math.abs(elevatorPosition) <= 16000 && elevatorPosition > 0) {
             speed *= 0.5;
             turningCoefficient *= 0.5;
         }
@@ -74,7 +76,7 @@ public class OperatorDriveCommand extends CommandBase {
                 // Disable quick turn
                 quickTurnDistanceMeters = 0;
             }
-        }
+        }*/
 
         // If the driver is using the regular controls or if quick turn is disabled
         if (Math.abs(turningCoefficient) >= 0.2

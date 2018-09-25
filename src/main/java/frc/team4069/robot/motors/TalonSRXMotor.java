@@ -33,6 +33,10 @@ public class TalonSRXMotor extends TalonSRX {
         this(deviceNumber, encoderTicksPerRotation, false);
     }
 
+    public TalonSRXMotor(int deviceNumber, int encoderTicksPerRotation, int[] slaves) {
+        this(deviceNumber, encoderTicksPerRotation, false, slaves);
+    }
+
     public TalonSRXMotor(int deviceNumber, int... slaves) {
         this(deviceNumber, 4096, false, slaves);
     }
@@ -46,7 +50,7 @@ public class TalonSRXMotor extends TalonSRX {
     }
 
     public void stop() {
-        this.neutralOutput();
+        this.setConstantSpeed(0);
     }
 
     public void setConstantSpeed(double speed) {
@@ -56,7 +60,6 @@ public class TalonSRXMotor extends TalonSRX {
         if (speed > 1) {
             speed = 1;
         }
-
         set(ControlMode.PercentOutput, speed);
     }
 
@@ -65,4 +68,8 @@ public class TalonSRXMotor extends TalonSRX {
 		System.out.println(quadPosition / encoderTicksPerRotation);
         return quadPosition / encoderTicksPerRotation;
     }
+	
+	public double getDistanceTraveledTicks(){
+		return getSensorCollection().getQuadraturePosition();
+	}
 }

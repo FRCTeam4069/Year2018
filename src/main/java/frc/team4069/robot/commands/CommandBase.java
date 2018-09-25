@@ -23,13 +23,14 @@ public abstract class CommandBase extends Command {
     // A function that handles initialization of subsystems
     public static void init(Robot robot) {
         mRobot = robot;
-
+		System.out.println("COMMAND BASE INIT REACHED");
         // Get the singleton instance of each of the subsystems
         driveBase = DriveBaseSubsystem.getInstance();
         elevator = ElevatorSubsystem.getInstance();
         arm = ArmSubsystem.getInstance();
         vacuum = VacuumSubsystem.getInstance();
         winch = WinchSubsystem.getInstance();
+        elevator.reset();
     }
 
     // Accessor for the gyro angle
